@@ -1,0 +1,299 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\Pichau\\OneDrive\\Estudo\\Geral\\.NET\\GestaoFacil\\net\\GestaoFacil\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{9AC621A8-CC4B-4AB1-8876-71D32B266FAD}|GestaoFacil.Server\\GestaoFacil.Server.csproj|c:\\users\\pichau\\onedrive\\estudo\\geral\\.net\\gestaofacil\\net\\gestaofacil\\gestaofacil.server\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{9AC621A8-CC4B-4AB1-8876-71D32B266FAD}|GestaoFacil.Server\\GestaoFacil.Server.csproj|solutionrelative:gestaofacil.server\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{03D5E60C-EE7C-4C8D-B8FB-D234F05F0CCD}|GestaoFacil.Shared\\GestaoFacil.Shared.csproj|c:\\users\\pichau\\onedrive\\estudo\\geral\\.net\\gestaofacil\\net\\gestaofacil\\gestaofacil.shared\\gestaofacil.shared.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{03D5E60C-EE7C-4C8D-B8FB-D234F05F0CCD}|GestaoFacil.Shared\\GestaoFacil.Shared.csproj|solutionrelative:gestaofacil.shared\\gestaofacil.shared.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9AC621A8-CC4B-4AB1-8876-71D32B266FAD}|GestaoFacil.Server\\GestaoFacil.Server.csproj|c:\\users\\pichau\\onedrive\\estudo\\geral\\.net\\gestaofacil\\net\\gestaofacil\\gestaofacil.server\\controllers\\despesacontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9AC621A8-CC4B-4AB1-8876-71D32B266FAD}|GestaoFacil.Server\\GestaoFacil.Server.csproj|solutionrelative:gestaofacil.server\\controllers\\despesacontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9AC621A8-CC4B-4AB1-8876-71D32B266FAD}|GestaoFacil.Server\\GestaoFacil.Server.csproj|c:\\users\\pichau\\onedrive\\estudo\\geral\\.net\\gestaofacil\\net\\gestaofacil\\gestaofacil.server\\services\\despesaservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9AC621A8-CC4B-4AB1-8876-71D32B266FAD}|GestaoFacil.Server\\GestaoFacil.Server.csproj|solutionrelative:gestaofacil.server\\services\\despesaservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9AC621A8-CC4B-4AB1-8876-71D32B266FAD}|GestaoFacil.Server\\GestaoFacil.Server.csproj|c:\\users\\pichau\\onedrive\\estudo\\geral\\.net\\gestaofacil\\net\\gestaofacil\\gestaofacil.server\\services\\idespesaservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9AC621A8-CC4B-4AB1-8876-71D32B266FAD}|GestaoFacil.Server\\GestaoFacil.Server.csproj|solutionrelative:gestaofacil.server\\services\\idespesaservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9AC621A8-CC4B-4AB1-8876-71D32B266FAD}|GestaoFacil.Server\\GestaoFacil.Server.csproj|c:\\users\\pichau\\onedrive\\estudo\\geral\\.net\\gestaofacil\\net\\gestaofacil\\gestaofacil.server\\repositories\\despesarepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9AC621A8-CC4B-4AB1-8876-71D32B266FAD}|GestaoFacil.Server\\GestaoFacil.Server.csproj|solutionrelative:gestaofacil.server\\repositories\\despesarepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9AC621A8-CC4B-4AB1-8876-71D32B266FAD}|GestaoFacil.Server\\GestaoFacil.Server.csproj|c:\\users\\pichau\\onedrive\\estudo\\geral\\.net\\gestaofacil\\net\\gestaofacil\\gestaofacil.server\\repositories\\idespesarepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9AC621A8-CC4B-4AB1-8876-71D32B266FAD}|GestaoFacil.Server\\GestaoFacil.Server.csproj|solutionrelative:gestaofacil.server\\repositories\\idespesarepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9AC621A8-CC4B-4AB1-8876-71D32B266FAD}|GestaoFacil.Server\\GestaoFacil.Server.csproj|c:\\users\\pichau\\onedrive\\estudo\\geral\\.net\\gestaofacil\\net\\gestaofacil\\gestaofacil.server\\data\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9AC621A8-CC4B-4AB1-8876-71D32B266FAD}|GestaoFacil.Server\\GestaoFacil.Server.csproj|solutionrelative:gestaofacil.server\\data\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9AC621A8-CC4B-4AB1-8876-71D32B266FAD}|GestaoFacil.Server\\GestaoFacil.Server.csproj|c:\\users\\pichau\\onedrive\\estudo\\geral\\.net\\gestaofacil\\net\\gestaofacil\\gestaofacil.server\\models\\despesa.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9AC621A8-CC4B-4AB1-8876-71D32B266FAD}|GestaoFacil.Server\\GestaoFacil.Server.csproj|solutionrelative:gestaofacil.server\\models\\despesa.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9AC621A8-CC4B-4AB1-8876-71D32B266FAD}|GestaoFacil.Server\\GestaoFacil.Server.csproj|c:\\users\\pichau\\onedrive\\estudo\\geral\\.net\\gestaofacil\\net\\gestaofacil\\gestaofacil.server\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9AC621A8-CC4B-4AB1-8876-71D32B266FAD}|GestaoFacil.Server\\GestaoFacil.Server.csproj|solutionrelative:gestaofacil.server\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{03D5E60C-EE7C-4C8D-B8FB-D234F05F0CCD}|GestaoFacil.Shared\\GestaoFacil.Shared.csproj|c:\\users\\pichau\\onedrive\\estudo\\geral\\.net\\gestaofacil\\net\\gestaofacil\\gestaofacil.shared\\dtos\\funcoes\\despesadto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{03D5E60C-EE7C-4C8D-B8FB-D234F05F0CCD}|GestaoFacil.Shared\\GestaoFacil.Shared.csproj|solutionrelative:gestaofacil.shared\\dtos\\funcoes\\despesadto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{03D5E60C-EE7C-4C8D-B8FB-D234F05F0CCD}|GestaoFacil.Shared\\GestaoFacil.Shared.csproj|c:\\users\\pichau\\onedrive\\estudo\\geral\\.net\\gestaofacil\\net\\gestaofacil\\gestaofacil.shared\\enums\\categoria.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{03D5E60C-EE7C-4C8D-B8FB-D234F05F0CCD}|GestaoFacil.Shared\\GestaoFacil.Shared.csproj|solutionrelative:gestaofacil.shared\\enums\\categoria.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{03D5E60C-EE7C-4C8D-B8FB-D234F05F0CCD}|GestaoFacil.Shared\\GestaoFacil.Shared.csproj|c:\\users\\pichau\\onedrive\\estudo\\geral\\.net\\gestaofacil\\net\\gestaofacil\\gestaofacil.shared\\enums\\formapagamento.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{03D5E60C-EE7C-4C8D-B8FB-D234F05F0CCD}|GestaoFacil.Shared\\GestaoFacil.Shared.csproj|solutionrelative:gestaofacil.shared\\enums\\formapagamento.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9AC621A8-CC4B-4AB1-8876-71D32B266FAD}|GestaoFacil.Server\\GestaoFacil.Server.csproj|c:\\users\\pichau\\onedrive\\estudo\\geral\\.net\\gestaofacil\\net\\gestaofacil\\gestaofacil.server\\models\\receita.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9AC621A8-CC4B-4AB1-8876-71D32B266FAD}|GestaoFacil.Server\\GestaoFacil.Server.csproj|solutionrelative:gestaofacil.server\\models\\receita.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{03D5E60C-EE7C-4C8D-B8FB-D234F05F0CCD}|GestaoFacil.Shared\\GestaoFacil.Shared.csproj|c:\\users\\pichau\\onedrive\\estudo\\geral\\.net\\gestaofacil\\net\\gestaofacil\\gestaofacil.shared\\dtos\\auth\\loginrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{03D5E60C-EE7C-4C8D-B8FB-D234F05F0CCD}|GestaoFacil.Shared\\GestaoFacil.Shared.csproj|solutionrelative:gestaofacil.shared\\dtos\\auth\\loginrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{03D5E60C-EE7C-4C8D-B8FB-D234F05F0CCD}|GestaoFacil.Shared\\GestaoFacil.Shared.csproj|c:\\users\\pichau\\onedrive\\estudo\\geral\\.net\\gestaofacil\\net\\gestaofacil\\gestaofacil.shared\\dtos\\auth\\loginresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{03D5E60C-EE7C-4C8D-B8FB-D234F05F0CCD}|GestaoFacil.Shared\\GestaoFacil.Shared.csproj|solutionrelative:gestaofacil.shared\\dtos\\auth\\loginresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{03D5E60C-EE7C-4C8D-B8FB-D234F05F0CCD}|GestaoFacil.Shared\\GestaoFacil.Shared.csproj|c:\\users\\pichau\\onedrive\\estudo\\geral\\.net\\gestaofacil\\net\\gestaofacil\\gestaofacil.shared\\dtos\\auth\\registerrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{03D5E60C-EE7C-4C8D-B8FB-D234F05F0CCD}|GestaoFacil.Shared\\GestaoFacil.Shared.csproj|solutionrelative:gestaofacil.shared\\dtos\\auth\\registerrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\Pichau\\OneDrive\\Estudo\\Geral\\.NET\\GestaoFacil\\net\\GestaoFacil\\GestaoFacil.Server\\appsettings.json",
+              "RelativeDocumentMoniker": "GestaoFacil.Server\\appsettings.json",
+              "ToolTip": "C:\\Users\\Pichau\\OneDrive\\Estudo\\Geral\\.NET\\GestaoFacil\\net\\GestaoFacil\\GestaoFacil.Server\\appsettings.json",
+              "RelativeToolTip": "GestaoFacil.Server\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-07-10T03:17:55.621Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "GestaoFacil.Shared",
+              "DocumentMoniker": "C:\\Users\\Pichau\\OneDrive\\Estudo\\Geral\\.NET\\GestaoFacil\\net\\GestaoFacil\\GestaoFacil.Shared\\GestaoFacil.Shared.csproj",
+              "RelativeDocumentMoniker": "GestaoFacil.Shared\\GestaoFacil.Shared.csproj",
+              "ToolTip": "C:\\Users\\Pichau\\OneDrive\\Estudo\\Geral\\.NET\\GestaoFacil\\net\\GestaoFacil\\GestaoFacil.Shared\\GestaoFacil.Shared.csproj",
+              "RelativeToolTip": "GestaoFacil.Shared\\GestaoFacil.Shared.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-07-10T03:17:53.469Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "IDespesaService.cs",
+              "DocumentMoniker": "C:\\Users\\Pichau\\OneDrive\\Estudo\\Geral\\.NET\\GestaoFacil\\net\\GestaoFacil\\GestaoFacil.Server\\Services\\IDespesaService.cs",
+              "RelativeDocumentMoniker": "GestaoFacil.Server\\Services\\IDespesaService.cs",
+              "ToolTip": "C:\\Users\\Pichau\\OneDrive\\Estudo\\Geral\\.NET\\GestaoFacil\\net\\GestaoFacil\\GestaoFacil.Server\\Services\\IDespesaService.cs",
+              "RelativeToolTip": "GestaoFacil.Server\\Services\\IDespesaService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-10T00:04:03.005Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "IDespesaRepository.cs",
+              "DocumentMoniker": "C:\\Users\\Pichau\\OneDrive\\Estudo\\Geral\\.NET\\GestaoFacil\\net\\GestaoFacil\\GestaoFacil.Server\\Repositories\\IDespesaRepository.cs",
+              "RelativeDocumentMoniker": "GestaoFacil.Server\\Repositories\\IDespesaRepository.cs",
+              "ToolTip": "C:\\Users\\Pichau\\OneDrive\\Estudo\\Geral\\.NET\\GestaoFacil\\net\\GestaoFacil\\GestaoFacil.Server\\Repositories\\IDespesaRepository.cs",
+              "RelativeToolTip": "GestaoFacil.Server\\Repositories\\IDespesaRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-10T00:03:52.529Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "DespesaService.cs",
+              "DocumentMoniker": "C:\\Users\\Pichau\\OneDrive\\Estudo\\Geral\\.NET\\GestaoFacil\\net\\GestaoFacil\\GestaoFacil.Server\\Services\\DespesaService.cs",
+              "RelativeDocumentMoniker": "GestaoFacil.Server\\Services\\DespesaService.cs",
+              "ToolTip": "C:\\Users\\Pichau\\OneDrive\\Estudo\\Geral\\.NET\\GestaoFacil\\net\\GestaoFacil\\GestaoFacil.Server\\Services\\DespesaService.cs",
+              "RelativeToolTip": "GestaoFacil.Server\\Services\\DespesaService.cs",
+              "ViewState": "AgIAAB8AAAAAAAAAAAAgwEEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-09T23:55:52.695Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "DespesaRepository.cs",
+              "DocumentMoniker": "C:\\Users\\Pichau\\OneDrive\\Estudo\\Geral\\.NET\\GestaoFacil\\net\\GestaoFacil\\GestaoFacil.Server\\Repositories\\DespesaRepository.cs",
+              "RelativeDocumentMoniker": "GestaoFacil.Server\\Repositories\\DespesaRepository.cs",
+              "ToolTip": "C:\\Users\\Pichau\\OneDrive\\Estudo\\Geral\\.NET\\GestaoFacil\\net\\GestaoFacil\\GestaoFacil.Server\\Repositories\\DespesaRepository.cs",
+              "RelativeToolTip": "GestaoFacil.Server\\Repositories\\DespesaRepository.cs",
+              "ViewState": "AgIAABYAAAAAAAAAAAAAADYAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-09T23:55:47.544Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "Despesa.cs",
+              "DocumentMoniker": "C:\\Users\\Pichau\\OneDrive\\Estudo\\Geral\\.NET\\GestaoFacil\\net\\GestaoFacil\\GestaoFacil.Server\\Models\\Despesa.cs",
+              "RelativeDocumentMoniker": "GestaoFacil.Server\\Models\\Despesa.cs",
+              "ToolTip": "C:\\Users\\Pichau\\OneDrive\\Estudo\\Geral\\.NET\\GestaoFacil\\net\\GestaoFacil\\GestaoFacil.Server\\Models\\Despesa.cs",
+              "RelativeToolTip": "GestaoFacil.Server\\Models\\Despesa.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-09T23:46:06.463Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "DespesaDto.cs",
+              "DocumentMoniker": "C:\\Users\\Pichau\\OneDrive\\Estudo\\Geral\\.NET\\GestaoFacil\\net\\GestaoFacil\\GestaoFacil.Shared\\DTOs\\Funcoes\\DespesaDto.cs",
+              "RelativeDocumentMoniker": "GestaoFacil.Shared\\DTOs\\Funcoes\\DespesaDto.cs",
+              "ToolTip": "C:\\Users\\Pichau\\OneDrive\\Estudo\\Geral\\.NET\\GestaoFacil\\net\\GestaoFacil\\GestaoFacil.Shared\\DTOs\\Funcoes\\DespesaDto.cs",
+              "RelativeToolTip": "GestaoFacil.Shared\\DTOs\\Funcoes\\DespesaDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-09T23:44:25.592Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "AppDbContext.cs",
+              "DocumentMoniker": "C:\\Users\\Pichau\\OneDrive\\Estudo\\Geral\\.NET\\GestaoFacil\\net\\GestaoFacil\\GestaoFacil.Server\\Data\\AppDbContext.cs",
+              "RelativeDocumentMoniker": "GestaoFacil.Server\\Data\\AppDbContext.cs",
+              "ToolTip": "C:\\Users\\Pichau\\OneDrive\\Estudo\\Geral\\.NET\\GestaoFacil\\net\\GestaoFacil\\GestaoFacil.Server\\Data\\AppDbContext.cs",
+              "RelativeToolTip": "GestaoFacil.Server\\Data\\AppDbContext.cs",
+              "ViewState": "AgIAABAAAAAAAAAAAAAIwDQAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-09T23:38:19.062Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "FormaPagamento.cs",
+              "DocumentMoniker": "C:\\Users\\Pichau\\OneDrive\\Estudo\\Geral\\.NET\\GestaoFacil\\net\\GestaoFacil\\GestaoFacil.Shared\\Enums\\FormaPagamento.cs",
+              "RelativeDocumentMoniker": "GestaoFacil.Shared\\Enums\\FormaPagamento.cs",
+              "ToolTip": "C:\\Users\\Pichau\\OneDrive\\Estudo\\Geral\\.NET\\GestaoFacil\\net\\GestaoFacil\\GestaoFacil.Shared\\Enums\\FormaPagamento.cs",
+              "RelativeToolTip": "GestaoFacil.Shared\\Enums\\FormaPagamento.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-09T23:38:00.348Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "Categoria.cs",
+              "DocumentMoniker": "C:\\Users\\Pichau\\OneDrive\\Estudo\\Geral\\.NET\\GestaoFacil\\net\\GestaoFacil\\GestaoFacil.Shared\\Enums\\Categoria.cs",
+              "RelativeDocumentMoniker": "GestaoFacil.Shared\\Enums\\Categoria.cs",
+              "ToolTip": "C:\\Users\\Pichau\\OneDrive\\Estudo\\Geral\\.NET\\GestaoFacil\\net\\GestaoFacil\\GestaoFacil.Shared\\Enums\\Categoria.cs",
+              "RelativeToolTip": "GestaoFacil.Shared\\Enums\\Categoria.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-09T23:37:59.479Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "Receita.cs",
+              "DocumentMoniker": "C:\\Users\\Pichau\\OneDrive\\Estudo\\Geral\\.NET\\GestaoFacil\\net\\GestaoFacil\\GestaoFacil.Server\\Models\\Receita.cs",
+              "RelativeDocumentMoniker": "GestaoFacil.Server\\Models\\Receita.cs",
+              "ToolTip": "C:\\Users\\Pichau\\OneDrive\\Estudo\\Geral\\.NET\\GestaoFacil\\net\\GestaoFacil\\GestaoFacil.Server\\Models\\Receita.cs",
+              "RelativeToolTip": "GestaoFacil.Server\\Models\\Receita.cs",
+              "ViewState": "AgIAABIAAAAAAAAAAAAowAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-09T23:37:48.286Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "LoginResponse.cs",
+              "DocumentMoniker": "C:\\Users\\Pichau\\OneDrive\\Estudo\\Geral\\.NET\\GestaoFacil\\net\\GestaoFacil\\GestaoFacil.Shared\\DTOs\\Auth\\LoginResponse.cs",
+              "RelativeDocumentMoniker": "GestaoFacil.Shared\\DTOs\\Auth\\LoginResponse.cs",
+              "ToolTip": "C:\\Users\\Pichau\\OneDrive\\Estudo\\Geral\\.NET\\GestaoFacil\\net\\GestaoFacil\\GestaoFacil.Shared\\DTOs\\Auth\\LoginResponse.cs",
+              "RelativeToolTip": "GestaoFacil.Shared\\DTOs\\Auth\\LoginResponse.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-09T23:35:25.736Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "RegisterRequest.cs",
+              "DocumentMoniker": "C:\\Users\\Pichau\\OneDrive\\Estudo\\Geral\\.NET\\GestaoFacil\\net\\GestaoFacil\\GestaoFacil.Shared\\DTOs\\Auth\\RegisterRequest.cs",
+              "RelativeDocumentMoniker": "GestaoFacil.Shared\\DTOs\\Auth\\RegisterRequest.cs",
+              "ToolTip": "C:\\Users\\Pichau\\OneDrive\\Estudo\\Geral\\.NET\\GestaoFacil\\net\\GestaoFacil\\GestaoFacil.Shared\\DTOs\\Auth\\RegisterRequest.cs",
+              "RelativeToolTip": "GestaoFacil.Shared\\DTOs\\Auth\\RegisterRequest.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-09T23:35:24.242Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "LoginRequest.cs",
+              "DocumentMoniker": "C:\\Users\\Pichau\\OneDrive\\Estudo\\Geral\\.NET\\GestaoFacil\\net\\GestaoFacil\\GestaoFacil.Shared\\DTOs\\Auth\\LoginRequest.cs",
+              "RelativeDocumentMoniker": "GestaoFacil.Shared\\DTOs\\Auth\\LoginRequest.cs",
+              "ToolTip": "C:\\Users\\Pichau\\OneDrive\\Estudo\\Geral\\.NET\\GestaoFacil\\net\\GestaoFacil\\GestaoFacil.Shared\\DTOs\\Auth\\LoginRequest.cs",
+              "RelativeToolTip": "GestaoFacil.Shared\\DTOs\\Auth\\LoginRequest.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAA1AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-09T23:35:23.303Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "DespesaController.cs",
+              "DocumentMoniker": "C:\\Users\\Pichau\\OneDrive\\Estudo\\Geral\\.NET\\GestaoFacil\\net\\GestaoFacil\\GestaoFacil.Server\\Controllers\\DespesaController.cs",
+              "RelativeDocumentMoniker": "GestaoFacil.Server\\Controllers\\DespesaController.cs",
+              "ToolTip": "C:\\Users\\Pichau\\OneDrive\\Estudo\\Geral\\.NET\\GestaoFacil\\net\\GestaoFacil\\GestaoFacil.Server\\Controllers\\DespesaController.cs",
+              "RelativeToolTip": "GestaoFacil.Server\\Controllers\\DespesaController.cs",
+              "ViewState": "AgIAABkAAAAAAAAAAAAAAFAAAAA2AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-09T23:28:11.855Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "AuthController.cs",
+              "DocumentMoniker": "C:\\Users\\Pichau\\OneDrive\\Estudo\\Geral\\.NET\\GestaoFacil\\net\\GestaoFacil\\GestaoFacil.Server\\Controllers\\AuthController.cs",
+              "RelativeDocumentMoniker": "GestaoFacil.Server\\Controllers\\AuthController.cs",
+              "ToolTip": "C:\\Users\\Pichau\\OneDrive\\Estudo\\Geral\\.NET\\GestaoFacil\\net\\GestaoFacil\\GestaoFacil.Server\\Controllers\\AuthController.cs",
+              "RelativeToolTip": "GestaoFacil.Server\\Controllers\\AuthController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-09T23:28:09.159Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

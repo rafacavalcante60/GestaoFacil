@@ -1,0 +1,12 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\GestaoFacil.Server",
+    "\\GestaoFacil.Server\\Controllers",
+    "\\GestaoFacil.Shared",
+    "\\GestaoFacil.Shared\\DTOs",
+    "\\GestaoFacil.Shared\\DTOs\\Auth",
+    "\\GestaoFacil.Shared\\DTOs\\Funcoes"
+  ],
+  "PreviewInSolutionExplorer": false
+}
