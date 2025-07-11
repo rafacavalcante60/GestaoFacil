@@ -34,7 +34,7 @@ namespace GestaoFacil.Server.Data
 
             modelBuilder.Entity<Usuario>()
                 .Property(u => u.TipoUsuario)
-                .HasConversion<string>(); //salva enum como string
+                .HasConversion<string>();
 
             //relacionamento usuario -> receita e usuario -> despesa
             modelBuilder.Entity<Usuario>()

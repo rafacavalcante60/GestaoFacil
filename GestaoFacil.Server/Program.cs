@@ -9,7 +9,7 @@ using GestaoFacil.Server.Repositories;
 using Microsoft.OpenApi.Models;
 
 
-var builder = WebApplication.CreateBuilder(args); //BLOCO do container de injecao de dependencia
+var builder = WebApplication.CreateBuilder(args); //bloco do container de injecao de dependencia
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -48,18 +48,22 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-
 //Config Banco
 var connectionString = builder.Configuration.GetConnectionString("AppDbConnectionString");
 builder.Services.AddDbContext<AppDbContext>(options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
-// injecao de services
+//injecao de services
 builder.Services.AddScoped<IDespesaService, DespesaService>();
 builder.Services.AddScoped<IReceitaService, ReceitaService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 
 //injecao de repositories
 builder.Services.AddScoped<IDespesaRepository, DespesaRepository>();
 builder.Services.AddScoped<IReceitaRepository, ReceitaRepository>();
+builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+
+// injecao automapper
+builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 
 //Config JWT
 var key = Encoding.ASCII.GetBytes("2f5a8e3d7c1b9a4f6e8d2c5a7b3e9f1a2d4e6f8c3b5a7d9e1f2a3b4c5d6e7f8a9b0");
@@ -84,14 +88,14 @@ builder.Services.AddAuthentication(options =>
 });
 builder.Services.AddAuthorization();
 builder.Services.AddScoped<TokenService>();
-builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 
 //Ilogger
 builder.Logging.ClearProviders(); // Limpa provedores padrão (opcional)
 builder.Logging.AddConsole(); // Adiciona logs no console
 builder.Logging.AddDebug(); // Adiciona logs no Debug do Visual Studio
 
-var app = builder.Build(); //BLOCO dos middlewares
+//bloco dos middlewares
+var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

@@ -9,6 +9,5 @@ namespace GestaoFacil.Server.Repositories
         Task AddAsync(Despesa despesa);
         Task UpdateAsync(Despesa despesa);
         Task DeleteAsync(Despesa despesa);
-        Task<bool> ExistsAsync(int id, int usuarioId);
     }
 }

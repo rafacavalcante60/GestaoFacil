@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "571A2E7VIls=",
+  "dgSpecHash": "E1Nuq+X6Gos=",
   "success": true,
   "projectFilePath": "C:\\Users\\Pichau\\OneDrive\\Estudo\\Geral\\.NET\\GestaoFacil\\net\\GestaoFacil\\GestaoFacil.Client\\GestaoFacil.Client.csproj",
   "expectedPackageFiles": [
@@ -28,8 +28,8 @@
     "C:\\Users\\Pichau\\.nuget\\packages\\microsoft.extensions.primitives\\8.0.0\\microsoft.extensions.primitives.8.0.0.nupkg.sha512",
     "C:\\Users\\Pichau\\.nuget\\packages\\microsoft.jsinterop\\8.0.14\\microsoft.jsinterop.8.0.14.nupkg.sha512",
     "C:\\Users\\Pichau\\.nuget\\packages\\microsoft.jsinterop.webassembly\\8.0.14\\microsoft.jsinterop.webassembly.8.0.14.nupkg.sha512",
-    "C:\\Users\\Pichau\\.nuget\\packages\\microsoft.net.illink.tasks\\8.0.14\\microsoft.net.illink.tasks.8.0.14.nupkg.sha512",
-    "C:\\Users\\Pichau\\.nuget\\packages\\microsoft.net.sdk.webassembly.pack\\9.0.3\\microsoft.net.sdk.webassembly.pack.9.0.3.nupkg.sha512",
+    "C:\\Users\\Pichau\\.nuget\\packages\\microsoft.net.illink.tasks\\8.0.18\\microsoft.net.illink.tasks.8.0.18.nupkg.sha512",
+    "C:\\Users\\Pichau\\.nuget\\packages\\microsoft.net.sdk.webassembly.pack\\9.0.7\\microsoft.net.sdk.webassembly.pack.9.0.7.nupkg.sha512",
     "C:\\Users\\Pichau\\.nuget\\packages\\system.io.pipelines\\8.0.0\\system.io.pipelines.8.0.0.nupkg.sha512"
   ],
   "logs": []

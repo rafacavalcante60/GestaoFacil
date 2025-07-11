@@ -22,12 +22,12 @@ namespace GestaoFacil.Server.Controllers
             _context = context;
         }
 
-        private async Task<int?> GetUsuarioIdAsync() //metodo que descobre qual usuário está fazendo a requisição
+        private async Task<int?> GetUsuarioIdAsync()
         {
-            var email = User.FindFirstValue(ClaimTypes.Name); //extrai o e-mail do usuário logado do token JWT.
+            var email = User.FindFirstValue(ClaimTypes.Name);
             if (string.IsNullOrEmpty(email)) return null;
 
-            var usuario = await _context.Usuarios.FirstOrDefaultAsync(u => u.Email == email); //busca o usuario no banco
+            var usuario = await _context.Usuarios.FirstOrDefaultAsync(u => u.Email == email);
             return usuario?.Id;
         }
 
@@ -54,8 +54,10 @@ namespace GestaoFacil.Server.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<DespesaDto>> Create(DespesaCreateDto dto)
+        public async Task<ActionResult<DespesaDto>> Create([FromBody] DespesaCreateDto dto)
         {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
             var usuarioId = await GetUsuarioIdAsync();
             if (usuarioId == null) return Unauthorized();
 
@@ -64,8 +66,12 @@ namespace GestaoFacil.Server.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, DespesaUpdateDto dto)
+        public async Task<IActionResult> Update(int id, [FromBody] DespesaUpdateDto dto)
         {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            if (id != dto.Id) return BadRequest("ID do recurso diferente do corpo da requisição.");
+
             var usuarioId = await GetUsuarioIdAsync();
             if (usuarioId == null) return Unauthorized();
 

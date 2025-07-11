@@ -45,10 +45,5 @@ namespace GestaoFacil.Server.Repositories
             _context.Despesas.Remove(despesa);
             await _context.SaveChangesAsync();
         }
-
-        public async Task<bool> ExistsAsync(int id, int usuarioId)
-        {
-            return await _context.Despesas.AnyAsync(d => d.Id == id && d.UsuarioId == usuarioId);
-        }
     }
 }
