@@ -3137,9 +3137,9 @@ C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFac
 C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Client\obj\Debug\net8.0\compressed\19emj51ud4-quoocm7eja.gz
 C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Client\obj\Debug\net8.0\compressed\rr1c69x0g9-rpaqpfejam.gz
 C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Client\obj\Debug\net8.0\compressed\8hftihggle-d3mc8ysewi.gz
-C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Client\obj\Debug\net8.0\compressed\lte3srd5ft-8fgerkiz91.gz
-C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Client\obj\Debug\net8.0\compressed\svsn4qxwgu-qpsykqklqx.gz
-C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Client\obj\Debug\net8.0\compressed\yx5bmfontk-8ygcohxrdn.gz
-C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Client\obj\Debug\net8.0\compressed\bas0fvb6xb-xare5k6qf7.gz
-C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Client\obj\Debug\net8.0\compressed\t2dnqw8lxk-6144t117lh.gz
 C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Client\obj\Debug\net8.0\staticwebassets.build.json.cache
+C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Client\obj\Debug\net8.0\compressed\lte3srd5ft-rhflh1u6f6.gz
+C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Client\obj\Debug\net8.0\compressed\svsn4qxwgu-q28pv5vlgo.gz
+C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Client\obj\Debug\net8.0\compressed\yx5bmfontk-mckr0rbr8t.gz
+C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Client\obj\Debug\net8.0\compressed\bas0fvb6xb-xp1azsos96.gz
+C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Client\obj\Debug\net8.0\compressed\t2dnqw8lxk-5prj09mlqj.gz

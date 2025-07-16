@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using GestaoFacil.Server.Models;
-using GestaoFacil.Shared.Dtos;
+using GestaoFacil.Server.Models.Principais;
 
 namespace GestaoFacil.Server.Data
 {
@@ -8,46 +8,62 @@ namespace GestaoFacil.Server.Data
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
-        //tabelas
-        public DbSet<Usuario> Usuarios { get; set; }
-        public DbSet<Receita> Receitas { get; set; }
-        public DbSet<Despesa> Despesas { get; set; }
+        public DbSet<UsuarioModel> Usuarios { get; set; }
+        public DbSet<ReceitaModel> Receitas { get; set; }
+        public DbSet<DespesaModel> Despesas { get; set; }
+
+        public DbSet<FormaPagamentoModel> FormasPagamento { get; set; }
+        public DbSet<CategoriaDespesaModel> CategoriasDespesa { get; set; }
+        public DbSet<CategoriaReceitaModel> CategoriasReceita { get; set; }
+        public DbSet<TipoUsuarioModel> TiposUsuario { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //converter enums para string no bd
-            modelBuilder.Entity<Receita>()
-                .Property(r => r.FormaPagamento)
-                .HasConversion<string>(); 
-
-            modelBuilder.Entity<Receita>()
-                .Property(r => r.Categoria)
-                .HasConversion<string>();
-
-            modelBuilder.Entity<Despesa>()
-                .Property(d => d.FormaPagamento)
-                .HasConversion<string>(); 
-
-            modelBuilder.Entity<Receita>()
-                .Property(r => r.Categoria)
-                .HasConversion<string>();
-
-            modelBuilder.Entity<Usuario>()
-                .Property(u => u.TipoUsuario)
-                .HasConversion<string>();
-
-            //relacionamento usuario -> receita e usuario -> despesa
-            modelBuilder.Entity<Usuario>()
+            modelBuilder.Entity<UsuarioModel>()
                 .HasMany(u => u.Receitas)
                 .WithOne(r => r.Usuario)
                 .HasForeignKey(r => r.UsuarioId)
-                .OnDelete(DeleteBehavior.Cascade); //usuario excluido = receitas vinculadas excluidas
+                .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<Usuario>()
+            modelBuilder.Entity<UsuarioModel>()
                 .HasMany(u => u.Despesas)
                 .WithOne(d => d.Usuario)
                 .HasForeignKey(d => d.UsuarioId)
-                .OnDelete(DeleteBehavior.Cascade); //usuario excluido = despesas vinculadas excluidas
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<FormaPagamentoModel>()
+                .HasMany(fp => fp.Receitas)
+                .WithOne(r => r.FormaPagamento)
+                .HasForeignKey(r => r.FormaPagamentoId)
+                .OnDelete(DeleteBehavior.Restrict); 
+
+            modelBuilder.Entity<FormaPagamentoModel>()
+                .HasMany(fp => fp.Despesas)
+                .WithOne(d => d.FormaPagamento)
+                .HasForeignKey(d => d.FormaPagamentoId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<CategoriaDespesaModel>()
+                .HasMany(cd => cd.Despesas)
+                .WithOne(d => d.CategoriaDespesa)
+                .HasForeignKey(d => d.CategoriaDespesaId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<CategoriaReceitaModel>()
+                .HasMany(cr => cr.Receitas)
+                .WithOne(r => r.CategoriaReceita)
+                .HasForeignKey(r => r.CategoriaReceitaId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<TipoUsuarioModel>()
+                .HasMany(tu => tu.Usuarios)
+                .WithOne(u => u.TipoUsuario)
+                .HasForeignKey(u => u.TipoUsuarioId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            
+            //nao usa mas pode deixar pra segurança futura
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

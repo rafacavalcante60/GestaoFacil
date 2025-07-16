@@ -78,26 +78,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/DespesaDto"
-                  }
+                  "$ref": "#/components/schemas/DespesaDtoListResponseModel"
                 }
               },
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/DespesaDto"
-                  }
+                  "$ref": "#/components/schemas/DespesaDtoListResponseModel"
                 }
               },
               "text/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/DespesaDto"
-                  }
+                  "$ref": "#/components/schemas/DespesaDtoListResponseModel"
                 }
               }
             }
@@ -133,17 +124,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/DespesaDto"
+                  "$ref": "#/components/schemas/DespesaDtoResponseModel"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DespesaDto"
+                  "$ref": "#/components/schemas/DespesaDtoResponseModel"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DespesaDto"
+                  "$ref": "#/components/schemas/DespesaDtoResponseModel"
                 }
               }
             }
@@ -173,17 +164,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/DespesaDto"
+                  "$ref": "#/components/schemas/DespesaDtoResponseModel"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DespesaDto"
+                  "$ref": "#/components/schemas/DespesaDtoResponseModel"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DespesaDto"
+                  "$ref": "#/components/schemas/DespesaDtoResponseModel"
                 }
               }
             }
@@ -226,7 +217,24 @@
         },
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/BooleanResponseModel"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BooleanResponseModel"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BooleanResponseModel"
+                }
+              }
+            }
           }
         }
       },
@@ -247,7 +255,24 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/BooleanResponseModel"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BooleanResponseModel"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BooleanResponseModel"
+                }
+              }
+            }
           }
         }
       }
@@ -263,26 +288,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/ReceitaDto"
-                  }
+                  "$ref": "#/components/schemas/ReceitaDtoListResponseModel"
                 }
               },
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/ReceitaDto"
-                  }
+                  "$ref": "#/components/schemas/ReceitaDtoListResponseModel"
                 }
               },
               "text/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/ReceitaDto"
-                  }
+                  "$ref": "#/components/schemas/ReceitaDtoListResponseModel"
                 }
               }
             }
@@ -318,17 +334,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/ReceitaDto"
+                  "$ref": "#/components/schemas/ReceitaDtoResponseModel"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ReceitaDto"
+                  "$ref": "#/components/schemas/ReceitaDtoResponseModel"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ReceitaDto"
+                  "$ref": "#/components/schemas/ReceitaDtoResponseModel"
                 }
               }
             }
@@ -358,17 +374,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/ReceitaDto"
+                  "$ref": "#/components/schemas/ReceitaDtoResponseModel"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ReceitaDto"
+                  "$ref": "#/components/schemas/ReceitaDtoResponseModel"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ReceitaDto"
+                  "$ref": "#/components/schemas/ReceitaDtoResponseModel"
                 }
               }
             }
@@ -411,7 +427,24 @@
         },
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/BooleanResponseModel"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BooleanResponseModel"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BooleanResponseModel"
+                }
+              }
+            }
           }
         }
       },
@@ -432,7 +465,24 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/BooleanResponseModel"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BooleanResponseModel"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BooleanResponseModel"
+                }
+              }
+            }
           }
         }
       }
@@ -440,7 +490,23 @@
   },
   "components": {
     "schemas": {
-      "Categoria": {
+      "BooleanResponseModel": {
+        "type": "object",
+        "properties": {
+          "dados": {
+            "type": "boolean"
+          },
+          "mensagem": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CategoriaDespesa": {
         "enum": [
           1,
           2,
@@ -453,9 +519,20 @@
         "type": "integer",
         "format": "int32"
       },
+      "CategoriaReceita": {
+        "enum": [
+          1,
+          2,
+          3,
+          4,
+          99
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
       "DespesaCreateDto": {
         "required": [
-          "categoria",
+          "categoriaDespesa",
           "data",
           "formaPagamento",
           "nome",
@@ -478,8 +555,8 @@
             "type": "string",
             "nullable": true
           },
-          "categoria": {
-            "$ref": "#/components/schemas/Categoria"
+          "categoriaDespesa": {
+            "$ref": "#/components/schemas/CategoriaDespesa"
           },
           "valor": {
             "maximum": 999999,99,
@@ -512,8 +589,8 @@
             "type": "string",
             "nullable": true
           },
-          "categoria": {
-            "$ref": "#/components/schemas/Categoria"
+          "categoriaDespesa": {
+            "$ref": "#/components/schemas/CategoriaDespesa"
           },
           "valor": {
             "type": "number",
@@ -529,9 +606,45 @@
         },
         "additionalProperties": false
       },
+      "DespesaDtoListResponseModel": {
+        "type": "object",
+        "properties": {
+          "dados": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DespesaDto"
+            },
+            "nullable": true
+          },
+          "mensagem": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "DespesaDtoResponseModel": {
+        "type": "object",
+        "properties": {
+          "dados": {
+            "$ref": "#/components/schemas/DespesaDto"
+          },
+          "mensagem": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
       "DespesaUpdateDto": {
         "required": [
-          "categoria",
+          "categoriaDespesa",
           "data",
           "id",
           "nome"
@@ -557,8 +670,8 @@
             "type": "string",
             "nullable": true
           },
-          "categoria": {
-            "$ref": "#/components/schemas/Categoria"
+          "categoriaDespesa": {
+            "$ref": "#/components/schemas/CategoriaDespesa"
           },
           "valor": {
             "maximum": 999999,99,
@@ -601,7 +714,7 @@
       },
       "ReceitaCreateDto": {
         "required": [
-          "categoria",
+          "categoriaReceita",
           "data",
           "formaPagamento",
           "nome",
@@ -624,8 +737,8 @@
             "type": "string",
             "nullable": true
           },
-          "categoria": {
-            "$ref": "#/components/schemas/Categoria"
+          "categoriaReceita": {
+            "$ref": "#/components/schemas/CategoriaReceita"
           },
           "valor": {
             "maximum": 999999,99,
@@ -658,8 +771,8 @@
             "type": "string",
             "nullable": true
           },
-          "categoria": {
-            "$ref": "#/components/schemas/Categoria"
+          "categoriaReceita": {
+            "$ref": "#/components/schemas/CategoriaReceita"
           },
           "valor": {
             "type": "number",
@@ -675,9 +788,45 @@
         },
         "additionalProperties": false
       },
+      "ReceitaDtoListResponseModel": {
+        "type": "object",
+        "properties": {
+          "dados": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ReceitaDto"
+            },
+            "nullable": true
+          },
+          "mensagem": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ReceitaDtoResponseModel": {
+        "type": "object",
+        "properties": {
+          "dados": {
+            "$ref": "#/components/schemas/ReceitaDto"
+          },
+          "mensagem": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
       "ReceitaUpdateDto": {
         "required": [
-          "categoria",
+          "categoriaReceita",
           "data",
           "id",
           "nome"
@@ -703,8 +852,8 @@
             "type": "string",
             "nullable": true
           },
-          "categoria": {
-            "$ref": "#/components/schemas/Categoria"
+          "categoriaReceita": {
+            "$ref": "#/components/schemas/CategoriaReceita"
           },
           "valor": {
             "maximum": 999999,99,
