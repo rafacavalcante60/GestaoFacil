@@ -22,7 +22,7 @@ namespace GestaoFacil.Server.Migrations
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
-            modelBuilder.Entity("GestaoFacil.Server.Models.Despesa", b =>
+            modelBuilder.Entity("GestaoFacil.Server.Models.CategoriaDespesaModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -30,7 +30,70 @@ namespace GestaoFacil.Server.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("Categoria")
+                    b.Property<bool>("Ativo")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CategoriasDespesa");
+                });
+
+            modelBuilder.Entity("GestaoFacil.Server.Models.CategoriaReceitaModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Ativo")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CategoriasReceita");
+                });
+
+            modelBuilder.Entity("GestaoFacil.Server.Models.FormaPagamentoModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Ativo")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FormasPagamento");
+                });
+
+            modelBuilder.Entity("GestaoFacil.Server.Models.Principais.DespesaModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CategoriaDespesaId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("Data")
@@ -39,9 +102,8 @@ namespace GestaoFacil.Server.Migrations
                     b.Property<string>("Descricao")
                         .HasColumnType("longtext");
 
-                    b.Property<string>("FormaPagamento")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.Property<int>("FormaPagamentoId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Nome")
                         .IsRequired()
@@ -54,13 +116,17 @@ namespace GestaoFacil.Server.Migrations
                         .HasColumnType("decimal(10, 2)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CategoriaDespesaId");
+
+                    b.HasIndex("FormaPagamentoId");
 
                     b.HasIndex("UsuarioId");
 
                     b.ToTable("Despesas");
                 });
 
-            modelBuilder.Entity("GestaoFacil.Server.Models.Receita", b =>
+            modelBuilder.Entity("GestaoFacil.Server.Models.Principais.ReceitaModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -68,24 +134,21 @@ namespace GestaoFacil.Server.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("Categoria")
+                    b.Property<int>("CategoriaReceitaId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("Data")
                         .HasColumnType("datetime");
 
                     b.Property<string>("Descricao")
-                        .HasMaxLength(200)
-                        .HasColumnType("varchar(200)");
-
-                    b.Property<string>("FormaPagamento")
-                        .IsRequired()
                         .HasColumnType("longtext");
+
+                    b.Property<int>("FormaPagamentoId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Nome")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
+                        .HasColumnType("longtext");
 
                     b.Property<int>("UsuarioId")
                         .HasColumnType("int");
@@ -95,12 +158,16 @@ namespace GestaoFacil.Server.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CategoriaReceitaId");
+
+                    b.HasIndex("FormaPagamentoId");
+
                     b.HasIndex("UsuarioId");
 
                     b.ToTable("Receitas");
                 });
 
-            modelBuilder.Entity("GestaoFacil.Server.Models.Usuario", b =>
+            modelBuilder.Entity("GestaoFacil.Server.Models.Principais.UsuarioModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -114,49 +181,135 @@ namespace GestaoFacil.Server.Migrations
 
                     b.Property<string>("Nome")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("SenhaHash")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("TipoUsuario")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.Property<int>("TipoUsuarioId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("TipoUsuarioId");
 
                     b.ToTable("Usuarios");
                 });
 
-            modelBuilder.Entity("GestaoFacil.Server.Models.Despesa", b =>
+            modelBuilder.Entity("GestaoFacil.Server.Models.TipoUsuarioModel", b =>
                 {
-                    b.HasOne("GestaoFacil.Server.Models.Usuario", "Usuario")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Ativo")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TiposUsuario");
+                });
+
+            modelBuilder.Entity("GestaoFacil.Server.Models.Principais.DespesaModel", b =>
+                {
+                    b.HasOne("GestaoFacil.Server.Models.CategoriaDespesaModel", "CategoriaDespesa")
+                        .WithMany("Despesas")
+                        .HasForeignKey("CategoriaDespesaId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("GestaoFacil.Server.Models.FormaPagamentoModel", "FormaPagamento")
+                        .WithMany("Despesas")
+                        .HasForeignKey("FormaPagamentoId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("GestaoFacil.Server.Models.Principais.UsuarioModel", "Usuario")
                         .WithMany("Despesas")
                         .HasForeignKey("UsuarioId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("CategoriaDespesa");
+
+                    b.Navigation("FormaPagamento");
+
                     b.Navigation("Usuario");
                 });
 
-            modelBuilder.Entity("GestaoFacil.Server.Models.Receita", b =>
+            modelBuilder.Entity("GestaoFacil.Server.Models.Principais.ReceitaModel", b =>
                 {
-                    b.HasOne("GestaoFacil.Server.Models.Usuario", "Usuario")
+                    b.HasOne("GestaoFacil.Server.Models.CategoriaReceitaModel", "CategoriaReceita")
+                        .WithMany("Receitas")
+                        .HasForeignKey("CategoriaReceitaId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("GestaoFacil.Server.Models.FormaPagamentoModel", "FormaPagamento")
+                        .WithMany("Receitas")
+                        .HasForeignKey("FormaPagamentoId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("GestaoFacil.Server.Models.Principais.UsuarioModel", "Usuario")
                         .WithMany("Receitas")
                         .HasForeignKey("UsuarioId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("CategoriaReceita");
+
+                    b.Navigation("FormaPagamento");
+
                     b.Navigation("Usuario");
                 });
 
-            modelBuilder.Entity("GestaoFacil.Server.Models.Usuario", b =>
+            modelBuilder.Entity("GestaoFacil.Server.Models.Principais.UsuarioModel", b =>
+                {
+                    b.HasOne("GestaoFacil.Server.Models.TipoUsuarioModel", "TipoUsuario")
+                        .WithMany("Usuarios")
+                        .HasForeignKey("TipoUsuarioId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("TipoUsuario");
+                });
+
+            modelBuilder.Entity("GestaoFacil.Server.Models.CategoriaDespesaModel", b =>
+                {
+                    b.Navigation("Despesas");
+                });
+
+            modelBuilder.Entity("GestaoFacil.Server.Models.CategoriaReceitaModel", b =>
+                {
+                    b.Navigation("Receitas");
+                });
+
+            modelBuilder.Entity("GestaoFacil.Server.Models.FormaPagamentoModel", b =>
                 {
                     b.Navigation("Despesas");
 
                     b.Navigation("Receitas");
+                });
+
+            modelBuilder.Entity("GestaoFacil.Server.Models.Principais.UsuarioModel", b =>
+                {
+                    b.Navigation("Despesas");
+
+                    b.Navigation("Receitas");
+                });
+
+            modelBuilder.Entity("GestaoFacil.Server.Models.TipoUsuarioModel", b =>
+                {
+                    b.Navigation("Usuarios");
                 });
 #pragma warning restore 612, 618
         }

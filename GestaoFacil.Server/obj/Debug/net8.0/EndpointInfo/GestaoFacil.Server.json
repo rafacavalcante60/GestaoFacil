@@ -14,24 +14,41 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/LoginRequest"
+                "$ref": "#/components/schemas/UsuarioLoginDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/LoginRequest"
+                "$ref": "#/components/schemas/UsuarioLoginDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/LoginRequest"
+                "$ref": "#/components/schemas/UsuarioLoginDto"
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenDtoResponseModel"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenDtoResponseModel"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenDtoResponseModel"
+                }
+              }
+            }
           }
         }
       }
@@ -45,24 +62,41 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/RegisterRequest"
+                "$ref": "#/components/schemas/UsuarioRegisterDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/RegisterRequest"
+                "$ref": "#/components/schemas/UsuarioRegisterDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/RegisterRequest"
+                "$ref": "#/components/schemas/UsuarioRegisterDto"
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/StringResponseModel"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StringResponseModel"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StringResponseModel"
+                }
+              }
+            }
           }
         }
       }
@@ -486,6 +520,207 @@
           }
         }
       }
+    },
+    "/api/Usuario/perfil": {
+      "get": {
+        "tags": [
+          "Usuario"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/UsuarioDtoResponseModel"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UsuarioDtoResponseModel"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UsuarioDtoResponseModel"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Usuario"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UsuarioUpdateDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UsuarioUpdateDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UsuarioUpdateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/BooleanResponseModel"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BooleanResponseModel"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BooleanResponseModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Usuario": {
+      "get": {
+        "tags": [
+          "Usuario"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/UsuarioDtoListResponseModel"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UsuarioDtoListResponseModel"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UsuarioDtoListResponseModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Usuario/{id}": {
+      "put": {
+        "tags": [
+          "Usuario"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UsuarioAdminUpdateDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UsuarioAdminUpdateDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UsuarioAdminUpdateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/BooleanResponseModel"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BooleanResponseModel"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BooleanResponseModel"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Usuario"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/BooleanResponseModel"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BooleanResponseModel"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BooleanResponseModel"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -506,35 +741,11 @@
         },
         "additionalProperties": false
       },
-      "CategoriaDespesa": {
-        "enum": [
-          1,
-          2,
-          3,
-          4,
-          5,
-          6,
-          99
-        ],
-        "type": "integer",
-        "format": "int32"
-      },
-      "CategoriaReceita": {
-        "enum": [
-          1,
-          2,
-          3,
-          4,
-          99
-        ],
-        "type": "integer",
-        "format": "int32"
-      },
       "DespesaCreateDto": {
         "required": [
-          "categoriaDespesa",
+          "categoriaDespesaId",
           "data",
-          "formaPagamento",
+          "formaPagamentoId",
           "nome",
           "valor"
         ],
@@ -555,8 +766,11 @@
             "type": "string",
             "nullable": true
           },
-          "categoriaDespesa": {
-            "$ref": "#/components/schemas/CategoriaDespesa"
+          "categoriaDespesaId": {
+            "maximum": 2147483647,
+            "minimum": 1,
+            "type": "integer",
+            "format": "int32"
           },
           "valor": {
             "maximum": 999999,99,
@@ -564,8 +778,11 @@
             "type": "number",
             "format": "double"
           },
-          "formaPagamento": {
-            "$ref": "#/components/schemas/FormaPagamento"
+          "formaPagamentoId": {
+            "maximum": 2147483647,
+            "minimum": 1,
+            "type": "integer",
+            "format": "int32"
           }
         },
         "additionalProperties": false
@@ -589,15 +806,25 @@
             "type": "string",
             "nullable": true
           },
-          "categoriaDespesa": {
-            "$ref": "#/components/schemas/CategoriaDespesa"
+          "categoriaDespesaId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "categoriaDespesaNome": {
+            "type": "string",
+            "nullable": true
           },
           "valor": {
             "type": "number",
             "format": "double"
           },
-          "formaPagamento": {
-            "$ref": "#/components/schemas/FormaPagamento"
+          "formaPagamentoId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "formaPagamentoNome": {
+            "type": "string",
+            "nullable": true
           },
           "nomeUsuario": {
             "type": "string",
@@ -644,79 +871,10 @@
       },
       "DespesaUpdateDto": {
         "required": [
-          "categoriaDespesa",
+          "categoriaDespesaId",
           "data",
+          "formaPagamentoId",
           "id",
-          "nome"
-        ],
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "nome": {
-            "maxLength": 100,
-            "minLength": 0,
-            "type": "string"
-          },
-          "data": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "descricao": {
-            "maxLength": 200,
-            "minLength": 0,
-            "type": "string",
-            "nullable": true
-          },
-          "categoriaDespesa": {
-            "$ref": "#/components/schemas/CategoriaDespesa"
-          },
-          "valor": {
-            "maximum": 999999,99,
-            "minimum": 0,01,
-            "type": "number",
-            "format": "double"
-          },
-          "formaPagamento": {
-            "$ref": "#/components/schemas/FormaPagamento"
-          }
-        },
-        "additionalProperties": false
-      },
-      "FormaPagamento": {
-        "enum": [
-          1,
-          2,
-          3,
-          4,
-          5,
-          6,
-          99
-        ],
-        "type": "integer",
-        "format": "int32"
-      },
-      "LoginRequest": {
-        "type": "object",
-        "properties": {
-          "email": {
-            "type": "string",
-            "nullable": true
-          },
-          "senha": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "ReceitaCreateDto": {
-        "required": [
-          "categoriaReceita",
-          "data",
-          "formaPagamento",
           "nome",
           "valor"
         ],
@@ -737,8 +895,11 @@
             "type": "string",
             "nullable": true
           },
-          "categoriaReceita": {
-            "$ref": "#/components/schemas/CategoriaReceita"
+          "categoriaDespesaId": {
+            "maximum": 2147483647,
+            "minimum": 1,
+            "type": "integer",
+            "format": "int32"
           },
           "valor": {
             "maximum": 999999,99,
@@ -746,8 +907,61 @@
             "type": "number",
             "format": "double"
           },
-          "formaPagamento": {
-            "$ref": "#/components/schemas/FormaPagamento"
+          "formaPagamentoId": {
+            "maximum": 2147483647,
+            "minimum": 1,
+            "type": "integer",
+            "format": "int32"
+          },
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ReceitaCreateDto": {
+        "required": [
+          "categoriaReceitaId",
+          "data",
+          "formaPagamentoId",
+          "nome",
+          "valor"
+        ],
+        "type": "object",
+        "properties": {
+          "nome": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string"
+          },
+          "data": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "descricao": {
+            "maxLength": 200,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "categoriaReceitaId": {
+            "maximum": 2147483647,
+            "minimum": 1,
+            "type": "integer",
+            "format": "int32"
+          },
+          "valor": {
+            "maximum": 999999,99,
+            "minimum": 0,01,
+            "type": "number",
+            "format": "double"
+          },
+          "formaPagamentoId": {
+            "maximum": 2147483647,
+            "minimum": 1,
+            "type": "integer",
+            "format": "int32"
           }
         },
         "additionalProperties": false
@@ -771,15 +985,25 @@
             "type": "string",
             "nullable": true
           },
-          "categoriaReceita": {
-            "$ref": "#/components/schemas/CategoriaReceita"
+          "categoriaReceitaId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "categoriaReceitaNome": {
+            "type": "string",
+            "nullable": true
           },
           "valor": {
             "type": "number",
             "format": "double"
           },
-          "formaPagamento": {
-            "$ref": "#/components/schemas/FormaPagamento"
+          "formaPagamentoId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "formaPagamentoNome": {
+            "type": "string",
+            "nullable": true
           },
           "nomeUsuario": {
             "type": "string",
@@ -826,17 +1050,15 @@
       },
       "ReceitaUpdateDto": {
         "required": [
-          "categoriaReceita",
+          "categoriaReceitaId",
           "data",
+          "formaPagamentoId",
           "id",
-          "nome"
+          "nome",
+          "valor"
         ],
         "type": "object",
         "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int32"
-          },
           "nome": {
             "maxLength": 100,
             "minLength": 0,
@@ -852,8 +1074,11 @@
             "type": "string",
             "nullable": true
           },
-          "categoriaReceita": {
-            "$ref": "#/components/schemas/CategoriaReceita"
+          "categoriaReceitaId": {
+            "maximum": 2147483647,
+            "minimum": 1,
+            "type": "integer",
+            "format": "int32"
           },
           "valor": {
             "maximum": 999999,99,
@@ -861,15 +1086,105 @@
             "type": "number",
             "format": "double"
           },
-          "formaPagamento": {
-            "$ref": "#/components/schemas/FormaPagamento"
+          "formaPagamentoId": {
+            "maximum": 2147483647,
+            "minimum": 1,
+            "type": "integer",
+            "format": "int32"
+          },
+          "id": {
+            "type": "integer",
+            "format": "int32"
           }
         },
         "additionalProperties": false
       },
-      "RegisterRequest": {
+      "StringResponseModel": {
         "type": "object",
         "properties": {
+          "dados": {
+            "type": "string",
+            "nullable": true
+          },
+          "mensagem": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "TokenDto": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string",
+            "nullable": true
+          },
+          "expiraEm": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "TokenDtoResponseModel": {
+        "type": "object",
+        "properties": {
+          "dados": {
+            "$ref": "#/components/schemas/TokenDto"
+          },
+          "mensagem": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UsuarioAdminUpdateDto": {
+        "required": [
+          "email",
+          "id",
+          "nome",
+          "tipoUsuarioId"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nome": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string"
+          },
+          "email": {
+            "minLength": 1,
+            "type": "string",
+            "format": "email"
+          },
+          "tipoUsuarioId": {
+            "maximum": 2147483647,
+            "minimum": 1,
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UsuarioDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
           "nome": {
             "type": "string",
             "nullable": true
@@ -878,9 +1193,108 @@
             "type": "string",
             "nullable": true
           },
+          "tipoUsuarioId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "tipoUsuarioNome": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "UsuarioDtoListResponseModel": {
+        "type": "object",
+        "properties": {
+          "dados": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UsuarioDto"
+            },
+            "nullable": true
+          },
+          "mensagem": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UsuarioDtoResponseModel": {
+        "type": "object",
+        "properties": {
+          "dados": {
+            "$ref": "#/components/schemas/UsuarioDto"
+          },
+          "mensagem": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UsuarioLoginDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
           "senha": {
             "type": "string",
             "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "UsuarioRegisterDto": {
+        "required": [
+          "email",
+          "nome",
+          "senha"
+        ],
+        "type": "object",
+        "properties": {
+          "nome": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string"
+          },
+          "email": {
+            "minLength": 1,
+            "type": "string",
+            "format": "email"
+          },
+          "senha": {
+            "minLength": 6,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UsuarioUpdateDto": {
+        "required": [
+          "email",
+          "nome"
+        ],
+        "type": "object",
+        "properties": {
+          "nome": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string"
+          },
+          "email": {
+            "minLength": 1,
+            "type": "string",
+            "format": "email"
           }
         },
         "additionalProperties": false

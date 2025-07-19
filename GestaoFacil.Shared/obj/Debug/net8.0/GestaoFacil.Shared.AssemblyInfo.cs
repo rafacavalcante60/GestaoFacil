@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("GestaoFacil.Shared")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+cb4f7241a8caa4227d127cec379ac73d482d4b5d")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+16f729f4a23e000a7be8373e8a974082874ec537")]
 [assembly: System.Reflection.AssemblyProductAttribute("GestaoFacil.Shared")]
 [assembly: System.Reflection.AssemblyTitleAttribute("GestaoFacil.Shared")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

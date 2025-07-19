@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using GestaoFacil.Shared.DTOs.Auth;
-using Microsoft.Extensions.Logging;
-using System.Threading.Tasks;
 using GestaoFacil.Server.Services.Auth;
+using GestaoFacil.Shared.Responses;
 
 namespace GestaoFacil.Server.Controllers
 {
@@ -18,42 +17,39 @@ namespace GestaoFacil.Server.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginRequest request)
+        public async Task<ActionResult<ResponseModel<TokenDto>>> Login([FromBody] UsuarioLoginDto request)
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return BadRequest(ResponseHelper.Falha<TokenDto>("Dados de login inválidos."));
             }
 
             var result = await _authService.LoginAsync(request);
 
-            if (!result.Success)
+            if (!result.Status)
             {
-                return result.StatusCode != 0
-                    ? StatusCode(result.StatusCode, result.Message)
-                    : BadRequest(result.Message);
-
+                return Unauthorized(result);
             }
-            return Ok(result.Data);
+
+            return Ok(result);
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterRequest request)
+        public async Task<ActionResult<ResponseModel<string>>> Register([FromBody] UsuarioRegisterDto request)
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return BadRequest(ResponseHelper.Falha<string>("Dados de registro inválidos."));
             }
 
             var result = await _authService.RegisterAsync(request);
 
-            if (!result.Success)
+            if (!result.Status)
             {
-                return result.StatusCode != 0
-                    ? StatusCode(result.StatusCode, result.Message)
-                    : BadRequest(result.Message);
+                return BadRequest(result);
             }
-            return Ok(result.Message);
+
+            return Ok(result);
         }
     }
 }

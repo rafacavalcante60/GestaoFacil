@@ -1,13 +1,9 @@
 ﻿using AutoMapper;
-using GestaoFacil.Shared.DTOs.Despesa;
-using GestaoFacil.Shared.DTOs.Receita;
-using GestaoFacil.Shared.DTOs.Usuario;
-
-using AutoMapper;
-using GestaoFacil.Shared.DTOs.Despesa;
-using GestaoFacil.Shared.DTOs.Receita;
-using GestaoFacil.Shared.DTOs.Usuario;
 using GestaoFacil.Server.Models.Principais;
+using GestaoFacil.Shared.DTOs.Auth;
+using GestaoFacil.Shared.DTOs.Despesa;
+using GestaoFacil.Shared.DTOs.Receita;
+using GestaoFacil.Shared.DTOs.Usuario;
 
 namespace GestaoFacil.Server.Mappings
 {
@@ -41,20 +37,28 @@ namespace GestaoFacil.Server.Mappings
                 .ForMember(dest => dest.UsuarioId, opt => opt.Ignore())
                 .ForMember(dest => dest.Usuario, opt => opt.Ignore());
 
+            //usuario
             CreateMap<UsuarioModel, UsuarioDto>();
 
-            // Atualização do próprio usuário: pode editar nome e email, mas NÃO tipoUsuario nem Id
             CreateMap<UsuarioUpdateDto, UsuarioModel>()
                 .ForMember(dest => dest.Id, opt => opt.Ignore())
                 .ForMember(dest => dest.TipoUsuarioId, opt => opt.Ignore())
                 .ForMember(dest => dest.TipoUsuario, opt => opt.Ignore());
 
-            // Atualização feita pelo Admin: pode alterar nome, email e tipoUsuario (via Id)
             CreateMap<UsuarioAdminUpdateDto, UsuarioModel>()
-                .ForMember(dest => dest.Id, opt => opt.Ignore()) // Id deve vir via rota/parametro, não do DTO
-                .ForMember(dest => dest.TipoUsuario, opt => opt.Ignore()) // entidade não mapeia direto da string
-                .ForMember(dest => dest.TipoUsuarioId, opt => opt.MapFrom(src =>
-                    src.TipoUsuario.Equals("Admin", System.StringComparison.OrdinalIgnoreCase) ? 2 : 1));
+                .ForMember(dest => dest.Id, opt => opt.Ignore()) 
+                .ForMember(dest => dest.TipoUsuario, opt => opt.Ignore()); 
+
+            CreateMap<UsuarioRegisterDto, UsuarioModel>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore())
+                .ForMember(dest => dest.SenhaHash, opt => opt.Ignore()) 
+                .ForMember(dest => dest.TipoUsuario, opt => opt.Ignore());
+
+            CreateMap<UsuarioRegisterDto, UsuarioModel>()
+    .ForMember(dest => dest.Id, opt => opt.Ignore())          // Ignora o Id (gerado pelo DB)
+    .ForMember(dest => dest.SenhaHash, opt => opt.Ignore())   // Ignora a senha hash (vai setar manualmente no Service)
+    .ForMember(dest => dest.TipoUsuario, opt => opt.Ignore()); // Ignora a navegação TipoUsuario, será setado pelo TipoUsuarioId
+
         }
     }
 }

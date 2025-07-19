@@ -990,7 +990,6 @@ C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFac
 C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Server\obj\Debug\net8.0\staticwebassets.build.json
 C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Server\obj\Debug\net8.0\staticwebassets.development.json
 C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Server\obj\Debug\net8.0\staticwebassets.build.endpoints.json
-C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Server\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
 C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Server\obj\Debug\net8.0\GestaoFa.8A05E928.Up2Date
 C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Server\obj\Debug\net8.0\GestaoFacil.Server.genruntimeconfig.cache
 C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Server\obj\Debug\net8.0\ref\GestaoFacil.Server.dll
@@ -1000,3 +999,4 @@ C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFac
 C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Server\obj\Debug\net8.0\rjsmrazor.dswa.cache.json
 C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Server\obj\Debug\net8.0\rjsmcshtml.dswa.cache.json
 C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Server\obj\Debug\net8.0\staticwebassets.build.json.cache
+C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Server\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt

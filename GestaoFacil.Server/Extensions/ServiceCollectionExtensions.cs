@@ -5,6 +5,7 @@ using GestaoFacil.Server.Repositories.Usuario;
 using GestaoFacil.Server.Services.Auth;
 using GestaoFacil.Server.Services.Despesa;
 using GestaoFacil.Server.Services.Receita;
+using GestaoFacil.Server.Services.Usuario;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -18,6 +19,7 @@ namespace GestaoFacil.Server.Extensions
         {
             services.AddScoped<IDespesaService, DespesaService>();
             services.AddScoped<IReceitaService, ReceitaService>();
+            services.AddScoped<IUsuarioService, UsuarioService>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<TokenService>();
 

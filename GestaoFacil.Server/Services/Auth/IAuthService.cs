@@ -1,10 +1,11 @@
 ﻿using GestaoFacil.Shared.DTOs.Auth;
+using GestaoFacil.Shared.Responses;
 
 namespace GestaoFacil.Server.Services.Auth
 {
     public interface IAuthService
     {
-        Task<ServiceResult<LoginResponse>> LoginAsync(LoginRequest request);
-        Task<ServiceResult<string>> RegisterAsync(RegisterRequest request);
+        Task<ResponseModel<TokenDto>> LoginAsync(UsuarioLoginDto request);
+        Task<ResponseModel<string>> RegisterAsync(UsuarioRegisterDto request);
     }
 }

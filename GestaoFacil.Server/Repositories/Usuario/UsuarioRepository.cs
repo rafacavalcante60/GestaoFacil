@@ -14,11 +14,6 @@ namespace GestaoFacil.Server.Repositories.Usuario
             _context = context;
         }
 
-        public async Task<UsuarioModel?> GetByIdAsync(int id)
-        {
-            return await _context.Usuarios.FirstOrDefaultAsync(u => u.Id == id);
-        }
-
         public async Task<List<UsuarioModel>> GetAllAsync()
         {
             return await _context.Usuarios.ToListAsync();
@@ -42,9 +37,30 @@ namespace GestaoFacil.Server.Repositories.Usuario
             await _context.SaveChangesAsync();
         }
 
+        public async Task<UsuarioModel?> GetByIdAsync(int id)
+        {
+            var usuario = await _context.Usuarios
+                .Include(u => u.TipoUsuario)
+                .FirstOrDefaultAsync(u => u.Id == id);
+
+            return usuario;
+        }
+
+        public async Task<TipoUsuarioModel?> GetTipoUsuarioByNameAsync(string nome)
+        {
+            var tipo = await _context.TiposUsuario
+                .FirstOrDefaultAsync(t => t.Nome == nome && t.Ativo);
+
+            return tipo;
+        }
+
         public async Task<UsuarioModel?> GetByEmailAsync(string email)
         {
-            return await _context.Usuarios.FirstOrDefaultAsync(u => u.Email == email);
+            var usuario = await _context.Usuarios
+                                        .Include(u => u.TipoUsuario)
+                                        .FirstOrDefaultAsync(u => u.Email == email);
+
+            return usuario;
         }
 
         public async Task<bool> EmailExistsAsync(string email)
