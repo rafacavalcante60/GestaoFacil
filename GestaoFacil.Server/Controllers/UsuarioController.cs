@@ -19,27 +19,20 @@ namespace GestaoFacil.Server.Controllers
             _usuarioService = usuarioService;
         }
 
-        private int? GetUsuarioId()
+        private int GetUsuarioId()
         {
             var idClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (!int.TryParse(idClaim, out var id))
-            {
-                return null;
-            }
-
-            return id;
+            return int.TryParse(idClaim, out var id)
+                ? id
+                : throw new UnauthorizedAccessException("Usuário inválido.");
         }
 
         [HttpGet("perfil")]
         public async Task<ActionResult<ResponseModel<UsuarioDto>>> GetPerfil()
         {
             var usuarioId = GetUsuarioId();
-            if (usuarioId == null)
-            {
-                return Unauthorized();
-            }
 
-            var result = await _usuarioService.GetByIdAsync(usuarioId.Value);
+            var result = await _usuarioService.GetByIdAsync(usuarioId);
 
             if (!result.Status)
             {
@@ -58,12 +51,8 @@ namespace GestaoFacil.Server.Controllers
             }
 
             var usuarioId = GetUsuarioId();
-            if (usuarioId == null)
-            {
-                return Unauthorized();
-            }
 
-            var result = await _usuarioService.UpdatePerfilAsync(usuarioId.Value, dto);
+            var result = await _usuarioService.UpdatePerfilAsync(usuarioId, dto);
 
             if (!result.Status)
             {

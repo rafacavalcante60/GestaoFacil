@@ -19,28 +19,19 @@ namespace GestaoFacil.Server.Controllers
             _despesaService = despesaService;
         }
 
-        // obtem o ID do usuario logado a partir dos claims do token JWT
-        private int? GetUsuarioId()
+        // obtem id por meio de claims
+        private int GetUsuarioId()
         {
             var idClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (!int.TryParse(idClaim, out var id))
-            {
-                return null;
-            }
-
-            return id;
+            return int.TryParse(idClaim, out var id) ? id : throw new UnauthorizedAccessException("Usuário inválido.");
         }
 
         [HttpGet]
         public async Task<ActionResult<ResponseModel<List<DespesaDto>>>> GetAll()
         {
             var usuarioId = GetUsuarioId();
-            if (usuarioId == null)
-            {
-                return Unauthorized();
-            }
 
-            var result = await _despesaService.GetAllByUsuarioAsync(usuarioId.Value);
+            var result = await _despesaService.GetAllByUsuarioAsync(usuarioId);
 
             if (!result.Status)
             {
@@ -54,12 +45,8 @@ namespace GestaoFacil.Server.Controllers
         public async Task<ActionResult<ResponseModel<DespesaDto>>> GetById(int id)
         {
             var usuarioId = GetUsuarioId();
-            if (usuarioId == null)
-            {
-                return Unauthorized();
-            }
 
-            var result = await _despesaService.GetByIdAsync(id, usuarioId.Value);
+            var result = await _despesaService.GetByIdAsync(id, usuarioId);
 
             if (!result.Status)
             {
@@ -78,12 +65,8 @@ namespace GestaoFacil.Server.Controllers
             }
 
             var usuarioId = GetUsuarioId();
-            if (usuarioId == null)
-            {
-                return Unauthorized();
-            }
 
-            var result = await _despesaService.CreateAsync(dto, usuarioId.Value);
+            var result = await _despesaService.CreateAsync(dto, usuarioId);
 
             if (!result.Status)
             {
@@ -107,12 +90,8 @@ namespace GestaoFacil.Server.Controllers
             }
 
             var usuarioId = GetUsuarioId();
-            if (usuarioId == null)
-            {
-                return Unauthorized();
-            }
 
-            var result = await _despesaService.UpdateAsync(id, dto, usuarioId.Value);
+            var result = await _despesaService.UpdateAsync(id, dto, usuarioId);
 
             if (!result.Status)
             {
@@ -126,12 +105,8 @@ namespace GestaoFacil.Server.Controllers
         public async Task<ActionResult<ResponseModel<bool>>> Delete(int id)
         {
             var usuarioId = GetUsuarioId();
-            if (usuarioId == null)
-            {
-                return Unauthorized();
-            }
 
-            var result = await _despesaService.DeleteAsync(id, usuarioId.Value);
+            var result = await _despesaService.DeleteAsync(id, usuarioId);
 
             if (!result.Status)
             {
