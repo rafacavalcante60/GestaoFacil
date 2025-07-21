@@ -1,4 +1,4 @@
-﻿using GestaoFacil.Server.Models;
+﻿using GestaoFacil.Server.Models.Domain;
 
 namespace GestaoFacil.Server.Data
 {

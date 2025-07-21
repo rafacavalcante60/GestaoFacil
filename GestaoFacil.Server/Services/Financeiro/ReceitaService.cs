@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using GestaoFacil.Shared.Responses;
-using GestaoFacil.Server.Repositories.Receita;
-using GestaoFacil.Shared.DTOs.Receita;
 using GestaoFacil.Server.Models.Principais;
+using GestaoFacil.Server.Repositories.Financeiro;
+using GestaoFacil.Shared.DTOs.Financeiro;
 
-namespace GestaoFacil.Server.Services.Receita
+namespace GestaoFacil.Server.Services.Financeiro
 {
     public class ReceitaService : IReceitaService
     {
@@ -91,7 +91,7 @@ namespace GestaoFacil.Server.Services.Receita
             }
             catch (Exception ex)
             {
-                return ResponseHelper.Falha<bool>($"Erro ao atualizar receita: {ex.Message}", false);
+                return ResponseHelper.Falha($"Erro ao atualizar receita: {ex.Message}", false);
             }
         }
 
@@ -110,7 +110,7 @@ namespace GestaoFacil.Server.Services.Receita
             }
             catch (Exception ex)
             {
-                return ResponseHelper.Falha<bool>($"Erro ao remover receita: {ex.Message}", false);
+                return ResponseHelper.Falha($"Erro ao remover receita: {ex.Message}", false);
             }
         }
     }

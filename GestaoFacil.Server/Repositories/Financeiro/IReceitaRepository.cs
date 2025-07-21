@@ -1,6 +1,6 @@
 ﻿using GestaoFacil.Server.Models.Principais;
 
-namespace GestaoFacil.Server.Repositories.Receita
+namespace GestaoFacil.Server.Repositories.Financeiro
 {
     public interface IReceitaRepository
     {

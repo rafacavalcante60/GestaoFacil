@@ -3,14 +3,13 @@ using GestaoFacil.Server.Services.Despesa;
 using GestaoFacil.Shared.DTOs.Despesa;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
-namespace GestaoFacil.Server.Controllers
+namespace GestaoFacil.Server.Controllers.Financeiro
 {
     [Authorize]
     [ApiController]
     [Route("api/[controller]")]
-    public class DespesaController : ControllerBase
+    public class DespesaController : BaseController //herdando de BaseController
     {
         private readonly IDespesaService _despesaService;
 
@@ -19,19 +18,10 @@ namespace GestaoFacil.Server.Controllers
             _despesaService = despesaService;
         }
 
-        // obtem id por meio de claims
-        private int GetUsuarioId()
-        {
-            var idClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            return int.TryParse(idClaim, out var id) ? id : throw new UnauthorizedAccessException("Usuário inválido.");
-        }
-
         [HttpGet]
         public async Task<ActionResult<ResponseModel<List<DespesaDto>>>> GetAll()
         {
-            var usuarioId = GetUsuarioId();
-
-            var result = await _despesaService.GetAllByUsuarioAsync(usuarioId);
+            var result = await _despesaService.GetAllByUsuarioAsync(UsuarioId);
 
             if (!result.Status)
             {
@@ -44,9 +34,7 @@ namespace GestaoFacil.Server.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<ResponseModel<DespesaDto>>> GetById(int id)
         {
-            var usuarioId = GetUsuarioId();
-
-            var result = await _despesaService.GetByIdAsync(id, usuarioId);
+            var result = await _despesaService.GetByIdAsync(id, UsuarioId);
 
             if (!result.Status)
             {
@@ -59,14 +47,7 @@ namespace GestaoFacil.Server.Controllers
         [HttpPost]
         public async Task<ActionResult<ResponseModel<DespesaDto>>> Create([FromBody] DespesaCreateDto dto)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var usuarioId = GetUsuarioId();
-
-            var result = await _despesaService.CreateAsync(dto, usuarioId);
+            var result = await _despesaService.CreateAsync(dto, UsuarioId);
 
             if (!result.Status)
             {
@@ -79,19 +60,12 @@ namespace GestaoFacil.Server.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<ResponseModel<bool>>> Update(int id, [FromBody] DespesaUpdateDto dto)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             if (id != dto.Id)
             {
-                return BadRequest();
+                return BadRequest(ResponseHelper.Falha<bool>("O ID da rota não bate com o ID da despesa."));
             }
 
-            var usuarioId = GetUsuarioId();
-
-            var result = await _despesaService.UpdateAsync(id, dto, usuarioId);
+            var result = await _despesaService.UpdateAsync(id, dto, UsuarioId);
 
             if (!result.Status)
             {
@@ -104,9 +78,7 @@ namespace GestaoFacil.Server.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<ResponseModel<bool>>> Delete(int id)
         {
-            var usuarioId = GetUsuarioId();
-
-            var result = await _despesaService.DeleteAsync(id, usuarioId);
+            var result = await _despesaService.DeleteAsync(id, UsuarioId);
 
             if (!result.Status)
             {

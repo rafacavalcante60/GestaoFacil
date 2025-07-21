@@ -1,16 +1,15 @@
 ﻿using GestaoFacil.Shared.Responses;
-using GestaoFacil.Server.Services.Receita;
-using GestaoFacil.Shared.DTOs.Receita;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
+using GestaoFacil.Server.Services.Financeiro;
+using GestaoFacil.Shared.DTOs.Financeiro;
 
-namespace GestaoFacil.Server.Controllers
+namespace GestaoFacil.Server.Controllers.Financeiro
 {
     [Authorize]
     [ApiController]
     [Route("api/[controller]")]
-    public class ReceitaController : ControllerBase
+    public class ReceitaController : BaseController
     {
         private readonly IReceitaService _receitaService;
 
@@ -19,20 +18,10 @@ namespace GestaoFacil.Server.Controllers
             _receitaService = receitaService;
         }
 
-        private int GetUsuarioId()
-        {
-            var idClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            return int.TryParse(idClaim, out var id)
-                ? id
-                : throw new UnauthorizedAccessException("Usuário inválido.");
-        }
-
         [HttpGet]
         public async Task<ActionResult<ResponseModel<List<ReceitaDto>>>> GetAll()
         {
-            var usuarioId = GetUsuarioId();
-
-            var result = await _receitaService.GetAllByUsuarioAsync(usuarioId);
+            var result = await _receitaService.GetAllByUsuarioAsync(UsuarioId);
 
             if (!result.Status)
             {
@@ -45,9 +34,7 @@ namespace GestaoFacil.Server.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<ResponseModel<ReceitaDto>>> GetById(int id)
         {
-            var usuarioId = GetUsuarioId();
-
-            var result = await _receitaService.GetByIdAsync(id, usuarioId);
+            var result = await _receitaService.GetByIdAsync(id, UsuarioId);
 
             if (!result.Status)
             {
@@ -60,14 +47,7 @@ namespace GestaoFacil.Server.Controllers
         [HttpPost]
         public async Task<ActionResult<ResponseModel<ReceitaDto>>> Create([FromBody] ReceitaCreateDto dto)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var usuarioId = GetUsuarioId();
-
-            var result = await _receitaService.CreateAsync(dto, usuarioId);
+            var result = await _receitaService.CreateAsync(dto, UsuarioId);
 
             if (!result.Status)
             {
@@ -80,19 +60,12 @@ namespace GestaoFacil.Server.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<ResponseModel<bool>>> Update(int id, [FromBody] ReceitaUpdateDto dto)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             if (id != dto.Id)
             {
-                return BadRequest();
+                return BadRequest(ResponseHelper.Falha<bool>("O ID da rota não corresponde ao ID da receita."));
             }
 
-            var usuarioId = GetUsuarioId();
-
-            var result = await _receitaService.UpdateAsync(id, dto, usuarioId);
+            var result = await _receitaService.UpdateAsync(id, dto, UsuarioId);
 
             if (!result.Status)
             {
@@ -105,9 +78,7 @@ namespace GestaoFacil.Server.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<ResponseModel<bool>>> Delete(int id)
         {
-            var usuarioId = GetUsuarioId();
-
-            var result = await _receitaService.DeleteAsync(id, usuarioId);
+            var result = await _receitaService.DeleteAsync(id, UsuarioId);
 
             if (!result.Status)
             {

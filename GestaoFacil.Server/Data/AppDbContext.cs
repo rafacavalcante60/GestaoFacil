@@ -1,6 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using GestaoFacil.Server.Models;
+﻿using GestaoFacil.Server.Models.Auth;
+using GestaoFacil.Server.Models.Domain;
 using GestaoFacil.Server.Models.Principais;
+using Microsoft.EntityFrameworkCore;
 
 namespace GestaoFacil.Server.Data
 {
@@ -16,7 +17,7 @@ namespace GestaoFacil.Server.Data
         public DbSet<CategoriaDespesaModel> CategoriasDespesa { get; set; }
         public DbSet<CategoriaReceitaModel> CategoriasReceita { get; set; }
         public DbSet<TipoUsuarioModel> TiposUsuario { get; set; }
-
+        public DbSet<RefreshTokenModel> RefreshTokens { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<UsuarioModel>()
@@ -61,9 +62,10 @@ namespace GestaoFacil.Server.Data
                 .HasForeignKey(u => u.TipoUsuarioId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            
-            //nao usa mas pode deixar pra segurança futura
-            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<RefreshTokenModel>()
+                .HasOne(r => r.Usuario)
+                .WithMany()
+                .HasForeignKey(r => r.UsuarioId);
         }
     }
 }

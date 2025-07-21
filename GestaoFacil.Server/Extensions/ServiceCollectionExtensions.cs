@@ -1,10 +1,10 @@
 ﻿using GestaoFacil.Server.Mappings;
 using GestaoFacil.Server.Repositories.Despesa;
-using GestaoFacil.Server.Repositories.Receita;
+using GestaoFacil.Server.Repositories.Financeiro;
 using GestaoFacil.Server.Repositories.Usuario;
 using GestaoFacil.Server.Services.Auth;
 using GestaoFacil.Server.Services.Despesa;
-using GestaoFacil.Server.Services.Receita;
+using GestaoFacil.Server.Services.Financeiro;
 using GestaoFacil.Server.Services.Usuario;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;

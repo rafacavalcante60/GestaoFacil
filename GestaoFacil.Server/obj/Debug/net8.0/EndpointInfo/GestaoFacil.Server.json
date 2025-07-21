@@ -101,6 +101,102 @@
         }
       }
     },
+    "/api/Auth/refresh": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefreshTokenRequestDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefreshTokenRequestDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefreshTokenRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenDtoResponseModel"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenDtoResponseModel"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenDtoResponseModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Auth/logout": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefreshTokenRequestDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefreshTokenRequestDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefreshTokenRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/StringResponseModel"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StringResponseModel"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StringResponseModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Despesa": {
       "get": {
         "tags": [
@@ -746,7 +842,6 @@
           "categoriaDespesaId",
           "data",
           "formaPagamentoId",
-          "nome",
           "valor"
         ],
         "type": "object",
@@ -754,7 +849,8 @@
           "nome": {
             "maxLength": 100,
             "minLength": 0,
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "data": {
             "type": "string",
@@ -766,17 +862,17 @@
             "type": "string",
             "nullable": true
           },
-          "categoriaDespesaId": {
-            "maximum": 2147483647,
-            "minimum": 1,
-            "type": "integer",
-            "format": "int32"
-          },
           "valor": {
             "maximum": 999999,99,
             "minimum": 0,01,
             "type": "number",
             "format": "double"
+          },
+          "categoriaDespesaId": {
+            "maximum": 2147483647,
+            "minimum": 1,
+            "type": "integer",
+            "format": "int32"
           },
           "formaPagamentoId": {
             "maximum": 2147483647,
@@ -806,25 +902,17 @@
             "type": "string",
             "nullable": true
           },
-          "categoriaDespesaId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "categoriaDespesaNome": {
-            "type": "string",
-            "nullable": true
-          },
           "valor": {
             "type": "number",
             "format": "double"
           },
-          "formaPagamentoId": {
+          "categoriaDespesaId": {
             "type": "integer",
             "format": "int32"
           },
-          "formaPagamentoNome": {
-            "type": "string",
-            "nullable": true
+          "formaPagamentoId": {
+            "type": "integer",
+            "format": "int32"
           },
           "nomeUsuario": {
             "type": "string",
@@ -875,7 +963,6 @@
           "data",
           "formaPagamentoId",
           "id",
-          "nome",
           "valor"
         ],
         "type": "object",
@@ -883,7 +970,8 @@
           "nome": {
             "maxLength": 100,
             "minLength": 0,
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "data": {
             "type": "string",
@@ -895,17 +983,17 @@
             "type": "string",
             "nullable": true
           },
-          "categoriaDespesaId": {
-            "maximum": 2147483647,
-            "minimum": 1,
-            "type": "integer",
-            "format": "int32"
-          },
           "valor": {
             "maximum": 999999,99,
             "minimum": 0,01,
             "type": "number",
             "format": "double"
+          },
+          "categoriaDespesaId": {
+            "maximum": 2147483647,
+            "minimum": 1,
+            "type": "integer",
+            "format": "int32"
           },
           "formaPagamentoId": {
             "maximum": 2147483647,
@@ -925,7 +1013,6 @@
           "categoriaReceitaId",
           "data",
           "formaPagamentoId",
-          "nome",
           "valor"
         ],
         "type": "object",
@@ -933,7 +1020,8 @@
           "nome": {
             "maxLength": 100,
             "minLength": 0,
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "data": {
             "type": "string",
@@ -945,17 +1033,17 @@
             "type": "string",
             "nullable": true
           },
-          "categoriaReceitaId": {
-            "maximum": 2147483647,
-            "minimum": 1,
-            "type": "integer",
-            "format": "int32"
-          },
           "valor": {
             "maximum": 999999,99,
             "minimum": 0,01,
             "type": "number",
             "format": "double"
+          },
+          "categoriaReceitaId": {
+            "maximum": 2147483647,
+            "minimum": 1,
+            "type": "integer",
+            "format": "int32"
           },
           "formaPagamentoId": {
             "maximum": 2147483647,
@@ -985,25 +1073,17 @@
             "type": "string",
             "nullable": true
           },
-          "categoriaReceitaId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "categoriaReceitaNome": {
-            "type": "string",
-            "nullable": true
-          },
           "valor": {
             "type": "number",
             "format": "double"
           },
-          "formaPagamentoId": {
+          "categoriaReceitaId": {
             "type": "integer",
             "format": "int32"
           },
-          "formaPagamentoNome": {
-            "type": "string",
-            "nullable": true
+          "formaPagamentoId": {
+            "type": "integer",
+            "format": "int32"
           },
           "nomeUsuario": {
             "type": "string",
@@ -1054,7 +1134,6 @@
           "data",
           "formaPagamentoId",
           "id",
-          "nome",
           "valor"
         ],
         "type": "object",
@@ -1062,7 +1141,8 @@
           "nome": {
             "maxLength": 100,
             "minLength": 0,
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "data": {
             "type": "string",
@@ -1074,17 +1154,17 @@
             "type": "string",
             "nullable": true
           },
-          "categoriaReceitaId": {
-            "maximum": 2147483647,
-            "minimum": 1,
-            "type": "integer",
-            "format": "int32"
-          },
           "valor": {
             "maximum": 999999,99,
             "minimum": 0,01,
             "type": "number",
             "format": "double"
+          },
+          "categoriaReceitaId": {
+            "maximum": 2147483647,
+            "minimum": 1,
+            "type": "integer",
+            "format": "int32"
           },
           "formaPagamentoId": {
             "maximum": 2147483647,
@@ -1095,6 +1175,16 @@
           "id": {
             "type": "integer",
             "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "RefreshTokenRequestDto": {
+        "type": "object",
+        "properties": {
+          "refreshToken": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -1126,6 +1216,10 @@
           "expiraEm": {
             "type": "string",
             "format": "date-time"
+          },
+          "refreshToken": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false

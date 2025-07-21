@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace GestaoFacil.Shared.DTOs.Receita
+namespace GestaoFacil.Shared.DTOs.Financeiro
 {
     public class ReceitaUpdateDto : ReceitaCreateDto
     {

@@ -2,7 +2,7 @@
 using GestaoFacil.Server.Models.Principais;
 using GestaoFacil.Shared.DTOs.Auth;
 using GestaoFacil.Shared.DTOs.Despesa;
-using GestaoFacil.Shared.DTOs.Receita;
+using GestaoFacil.Shared.DTOs.Financeiro;
 using GestaoFacil.Shared.DTOs.Usuario;
 
 namespace GestaoFacil.Server.Mappings

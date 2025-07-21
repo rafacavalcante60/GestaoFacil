@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using GestaoFacil.Server.Models.Domain;
+using System.Collections.ObjectModel;
 
 namespace GestaoFacil.Server.Models.Principais
 {
@@ -16,7 +16,7 @@ namespace GestaoFacil.Server.Models.Principais
         public int TipoUsuarioId { get; set; }
         public TipoUsuarioModel TipoUsuario { get; set; } = null!;
 
-        public List<ReceitaModel> Receitas { get; set; } = new();
-        public List<DespesaModel> Despesas { get; set; } = new();
+        public ICollection<ReceitaModel> Receitas { get; set; } = new Collection<ReceitaModel>();
+        public ICollection<DespesaModel> Despesas { get; set; } = new Collection<DespesaModel>();
     }
 }

@@ -3,14 +3,13 @@ using GestaoFacil.Shared.DTOs.Usuario;
 using GestaoFacil.Server.Services.Usuario;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
-namespace GestaoFacil.Server.Controllers
+namespace GestaoFacil.Server.Controllers.Usuario
 {
     [Authorize]
     [ApiController]
     [Route("api/[controller]")]
-    public class UsuarioController : ControllerBase
+    public class UsuarioController : BaseController
     {
         private readonly IUsuarioService _usuarioService;
 
@@ -19,20 +18,10 @@ namespace GestaoFacil.Server.Controllers
             _usuarioService = usuarioService;
         }
 
-        private int GetUsuarioId()
-        {
-            var idClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            return int.TryParse(idClaim, out var id)
-                ? id
-                : throw new UnauthorizedAccessException("Usuário inválido.");
-        }
-
         [HttpGet("perfil")]
         public async Task<ActionResult<ResponseModel<UsuarioDto>>> GetPerfil()
         {
-            var usuarioId = GetUsuarioId();
-
-            var result = await _usuarioService.GetByIdAsync(usuarioId);
+            var result = await _usuarioService.GetByIdAsync(UsuarioId);
 
             if (!result.Status)
             {
@@ -45,14 +34,7 @@ namespace GestaoFacil.Server.Controllers
         [HttpPut("perfil")]
         public async Task<ActionResult<ResponseModel<bool>>> UpdatePerfil([FromBody] UsuarioUpdateDto dto)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var usuarioId = GetUsuarioId();
-
-            var result = await _usuarioService.UpdatePerfilAsync(usuarioId, dto);
+            var result = await _usuarioService.UpdatePerfilAsync(UsuarioId, dto);
 
             if (!result.Status)
             {
@@ -80,14 +62,9 @@ namespace GestaoFacil.Server.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<ResponseModel<bool>>> UpdateAdmin(int id, [FromBody] UsuarioAdminUpdateDto dto)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             if (id != dto.Id)
             {
-                return BadRequest();
+                return BadRequest(ResponseHelper.Falha<bool>("O ID da URL não corresponde ao ID do corpo."));
             }
 
             var result = await _usuarioService.UpdateAdminAsync(id, dto);

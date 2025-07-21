@@ -1,5 +1,5 @@
 ﻿using GestaoFacil.Server.Data;
-using GestaoFacil.Server.Models;
+using GestaoFacil.Server.Models.Domain;
 using GestaoFacil.Server.Models.Principais;
 using Microsoft.EntityFrameworkCore;
 

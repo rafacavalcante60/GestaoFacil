@@ -1,7 +1,7 @@
 ﻿using GestaoFacil.Shared.Responses;
-using GestaoFacil.Shared.DTOs.Receita;
+using GestaoFacil.Shared.DTOs.Financeiro;
 
-namespace GestaoFacil.Server.Services.Receita
+namespace GestaoFacil.Server.Services.Financeiro
 {
     public interface IReceitaService
     {

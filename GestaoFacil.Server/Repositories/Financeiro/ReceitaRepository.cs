@@ -2,7 +2,7 @@
 using GestaoFacil.Server.Models.Principais;
 using Microsoft.EntityFrameworkCore;
 
-namespace GestaoFacil.Server.Repositories.Receita
+namespace GestaoFacil.Server.Repositories.Financeiro
 {
     public class ReceitaRepository : IReceitaRepository
     {
