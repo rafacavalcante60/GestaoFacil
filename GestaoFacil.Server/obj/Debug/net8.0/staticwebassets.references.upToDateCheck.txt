@@ -117,3 +117,5 @@ C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFac
 C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Client\obj\Debug\net8.0\staticwebassets.build.json
 C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Client\obj\Debug\net8.0\staticwebassets.build.json
 C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Client\obj\Debug\net8.0\staticwebassets.build.json
+C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Client\obj\Debug\net8.0\staticwebassets.build.json
+C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Client\obj\Debug\net8.0\staticwebassets.build.json

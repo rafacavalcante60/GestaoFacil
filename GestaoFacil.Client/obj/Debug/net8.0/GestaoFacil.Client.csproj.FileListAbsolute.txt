@@ -3138,8 +3138,8 @@ C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFac
 C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Client\obj\Debug\net8.0\compressed\8hftihggle-d3mc8ysewi.gz
 C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Client\obj\Debug\net8.0\staticwebassets.build.json.cache
 C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Client\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
-C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Client\obj\Debug\net8.0\compressed\lte3srd5ft-3e7z6vlae7.gz
-C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Client\obj\Debug\net8.0\compressed\svsn4qxwgu-vf53ghssym.gz
-C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Client\obj\Debug\net8.0\compressed\yx5bmfontk-sg3de372d1.gz
-C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Client\obj\Debug\net8.0\compressed\bas0fvb6xb-yg1ph0qbdm.gz
-C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Client\obj\Debug\net8.0\compressed\t2dnqw8lxk-63m8xyespy.gz
+C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Client\obj\Debug\net8.0\compressed\lte3srd5ft-cc80go7vmf.gz
+C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Client\obj\Debug\net8.0\compressed\svsn4qxwgu-7f24tpu9bu.gz
+C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Client\obj\Debug\net8.0\compressed\yx5bmfontk-2bgb6xly91.gz
+C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Client\obj\Debug\net8.0\compressed\bas0fvb6xb-ljz4jxkz8w.gz
+C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Client\obj\Debug\net8.0\compressed\t2dnqw8lxk-38bdzvx8m1.gz

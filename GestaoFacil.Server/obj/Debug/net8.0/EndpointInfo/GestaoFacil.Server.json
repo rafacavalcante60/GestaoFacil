@@ -869,13 +869,13 @@
             "format": "double"
           },
           "categoriaDespesaId": {
-            "maximum": 2147483647,
+            "maximum": 7,
             "minimum": 1,
             "type": "integer",
             "format": "int32"
           },
           "formaPagamentoId": {
-            "maximum": 2147483647,
+            "maximum": 7,
             "minimum": 1,
             "type": "integer",
             "format": "int32"
@@ -990,13 +990,13 @@
             "format": "double"
           },
           "categoriaDespesaId": {
-            "maximum": 2147483647,
+            "maximum": 7,
             "minimum": 1,
             "type": "integer",
             "format": "int32"
           },
           "formaPagamentoId": {
-            "maximum": 2147483647,
+            "maximum": 7,
             "minimum": 1,
             "type": "integer",
             "format": "int32"
@@ -1040,13 +1040,13 @@
             "format": "double"
           },
           "categoriaReceitaId": {
-            "maximum": 2147483647,
+            "maximum": 5,
             "minimum": 1,
             "type": "integer",
             "format": "int32"
           },
           "formaPagamentoId": {
-            "maximum": 2147483647,
+            "maximum": 7,
             "minimum": 1,
             "type": "integer",
             "format": "int32"
@@ -1161,13 +1161,13 @@
             "format": "double"
           },
           "categoriaReceitaId": {
-            "maximum": 2147483647,
+            "maximum": 5,
             "minimum": 1,
             "type": "integer",
             "format": "int32"
           },
           "formaPagamentoId": {
-            "maximum": 2147483647,
+            "maximum": 7,
             "minimum": 1,
             "type": "integer",
             "format": "int32"
@@ -1264,7 +1264,7 @@
             "format": "email"
           },
           "tipoUsuarioId": {
-            "maximum": 2147483647,
+            "maximum": 2,
             "minimum": 1,
             "type": "integer",
             "format": "int32"
@@ -1290,10 +1290,6 @@
           "tipoUsuarioId": {
             "type": "integer",
             "format": "int32"
-          },
-          "tipoUsuarioNome": {
-            "type": "string",
-            "nullable": true
           }
         },
         "additionalProperties": false

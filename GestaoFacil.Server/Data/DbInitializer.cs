@@ -1,4 +1,5 @@
 ﻿using GestaoFacil.Server.Models.Domain;
+using GestaoFacil.Server.Models.Principais;
 
 namespace GestaoFacil.Server.Data
 {
@@ -67,6 +68,27 @@ namespace GestaoFacil.Server.Data
             if (saveNeeded)
             {
                 context.SaveChanges();
+            }
+
+            if (!context.Usuarios.Any(u => u.Email == "admin@gestaofacil.com"))
+            {
+                var tipoAdmin = context.TiposUsuario.FirstOrDefault(t => t.Nome == "Admin");
+                if (tipoAdmin != null)
+                {
+                    var senhaEmTexto = "Admin123";
+                    var senhaHash = BCrypt.Net.BCrypt.HashPassword(senhaEmTexto);
+
+                    var admin = new UsuarioModel
+                    {
+                        Nome = "Administrador",
+                        Email = "admin@gestaofacil.com",
+                        SenhaHash = senhaHash,
+                        TipoUsuarioId = tipoAdmin.Id
+                    };
+
+                    context.Usuarios.Add(admin);
+                    context.SaveChanges();
+                }
             }
         }
     }
