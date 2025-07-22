@@ -16,7 +16,7 @@ namespace GestaoFacil.Shared.DTOs.Usuario
         public string Email { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "O tipo do usuário é obrigatório.")]
-        [Range(1, int.MaxValue, ErrorMessage = "Tipo de usuário inválido.")]
+        [Range(1, 2, ErrorMessage = "Tipo de usuário inválido.")]
         public int TipoUsuarioId { get; set; }
     }
 }

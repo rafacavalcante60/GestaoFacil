@@ -16,16 +16,13 @@ namespace GestaoFacil.Server.Repositories.Financeiro
         public async Task<List<ReceitaModel>> GetAllByUsuarioAsync(int usuarioId)
         {
             return await _context.Receitas
-                .Include(r => r.Usuario)
                 .Where(r => r.UsuarioId == usuarioId)
                 .ToListAsync();
         }
 
         public async Task<ReceitaModel?> GetByIdAsync(int id, int usuarioId)
         {
-            return await _context.Receitas
-                .Include(r => r.Usuario)
-                .FirstOrDefaultAsync(r => r.Id == id && r.UsuarioId == usuarioId);
+            return await _context.Receitas.FirstOrDefaultAsync(r => r.Id == id && r.UsuarioId == usuarioId);
         }
 
         public async Task AddAsync(ReceitaModel receita)
@@ -44,11 +41,6 @@ namespace GestaoFacil.Server.Repositories.Financeiro
         {
             _context.Receitas.Remove(receita);
             await _context.SaveChangesAsync();
-        }
-
-        public async Task<bool> ExistsAsync(int id, int usuarioId)
-        {
-            return await _context.Receitas.AnyAsync(r => r.Id == id && r.UsuarioId == usuarioId);
         }
     }
 

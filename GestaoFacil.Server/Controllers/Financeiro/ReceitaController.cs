@@ -6,6 +6,7 @@ using GestaoFacil.Shared.DTOs.Financeiro;
 
 namespace GestaoFacil.Server.Controllers.Financeiro
 {
+    //sem uso de controller generico (com despesa) visando clareza e escalabilidade
     [Authorize]
     [ApiController]
     [Route("api/[controller]")]
@@ -45,7 +46,7 @@ namespace GestaoFacil.Server.Controllers.Financeiro
         }
 
         [HttpPost]
-        public async Task<ActionResult<ResponseModel<ReceitaDto>>> Create([FromBody] ReceitaCreateDto dto)
+        public async Task<ActionResult<ResponseModel<ReceitaDto>>> Create(ReceitaCreateDto dto)
         {
             var result = await _receitaService.CreateAsync(dto, UsuarioId);
 
@@ -58,7 +59,7 @@ namespace GestaoFacil.Server.Controllers.Financeiro
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<ResponseModel<bool>>> Update(int id, [FromBody] ReceitaUpdateDto dto)
+        public async Task<ActionResult<ResponseModel<bool>>> Update(int id, ReceitaUpdateDto dto)
         {
             if (id != dto.Id)
             {

@@ -3,6 +3,7 @@ using GestaoFacil.Server.Models;
 using GestaoFacil.Server.Repositories.Usuario;
 using GestaoFacil.Shared.DTOs.Usuario;
 using GestaoFacil.Shared.Responses;
+using Microsoft.Extensions.Logging;
 
 namespace GestaoFacil.Server.Services.Usuario
 {
@@ -10,11 +11,13 @@ namespace GestaoFacil.Server.Services.Usuario
     {
         private readonly IUsuarioRepository _repository;
         private readonly IMapper _mapper;
+        private readonly ILogger<UsuarioService> _logger;
 
-        public UsuarioService(IUsuarioRepository repository, IMapper mapper)
+        public UsuarioService(IUsuarioRepository repository, IMapper mapper, ILogger<UsuarioService> logger)
         {
             _repository = repository;
             _mapper = mapper;
+            _logger = logger;
         }
 
         public async Task<ResponseModel<UsuarioDto>> GetByIdAsync(int id)
@@ -22,6 +25,7 @@ namespace GestaoFacil.Server.Services.Usuario
             var usuario = await _repository.GetByIdAsync(id);
             if (usuario == null)
             {
+                _logger.LogWarning("Usuário {Id} não encontrado", id);
                 return ResponseHelper.Falha<UsuarioDto>("Usuário não encontrado.");
             }
 
@@ -41,12 +45,14 @@ namespace GestaoFacil.Server.Services.Usuario
             var usuario = await _repository.GetByIdAsync(id);
             if (usuario == null)
             {
+                _logger.LogWarning("Tentativa de atualizar perfil de usuário {Id} que não existe", id);
                 return ResponseHelper.Falha<bool>("Usuário não encontrado.");
             }
 
             _mapper.Map(dto, usuario);
             await _repository.UpdateAsync(usuario);
 
+            _logger.LogInformation("Perfil do usuário {Id} atualizado com sucesso", id);
             return ResponseHelper.Sucesso(true);
         }
 
@@ -55,12 +61,14 @@ namespace GestaoFacil.Server.Services.Usuario
             var usuario = await _repository.GetByIdAsync(id);
             if (usuario == null)
             {
+                _logger.LogWarning("Tentativa de admin atualizar usuário {Id} que não existe", id);
                 return ResponseHelper.Falha<bool>("Usuário não encontrado.");
             }
 
             _mapper.Map(dto, usuario);
             await _repository.UpdateAsync(usuario);
 
+            _logger.LogInformation("Usuário {Id} atualizado por administrador", id);
             return ResponseHelper.Sucesso(true);
         }
 
@@ -69,11 +77,13 @@ namespace GestaoFacil.Server.Services.Usuario
             var usuario = await _repository.GetByIdAsync(id);
             if (usuario == null)
             {
+                _logger.LogWarning("Tentativa de deletar usuário {Id} que não existe", id);
                 return ResponseHelper.Falha<bool>("Usuário não encontrado.");
             }
 
             await _repository.DeleteAsync(usuario);
 
+            _logger.LogInformation("Usuário {Id} deletado com sucesso", id);
             return ResponseHelper.Sucesso(true);
         }
     }

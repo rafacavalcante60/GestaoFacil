@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace GestaoFacil.Shared.DTOs.Financeiro
 {
@@ -19,11 +18,11 @@ namespace GestaoFacil.Shared.DTOs.Financeiro
         public decimal Valor { get; set; }
 
         [Required(ErrorMessage = "A categoria é obrigatória.")]
-        [Range(1, int.MaxValue, ErrorMessage = "Selecione uma categoria válida.")]
+        [Range(1, 5, ErrorMessage = "Selecione uma categoria válida.")]
         public int CategoriaReceitaId { get; set; }
 
         [Required(ErrorMessage = "A forma de pagamento é obrigatória.")]
-        [Range(1, int.MaxValue, ErrorMessage = "Selecione uma forma de pagamento válida.")]
+        [Range(1, 7, ErrorMessage = "Selecione uma forma de pagamento válida.")]
         public int FormaPagamentoId { get; set; }
     }
 }

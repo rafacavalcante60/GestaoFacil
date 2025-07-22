@@ -9,7 +9,5 @@ namespace GestaoFacil.Server.Repositories.Financeiro
             Task AddAsync(ReceitaModel receita);
             Task UpdateAsync(ReceitaModel receita);
             Task DeleteAsync(ReceitaModel receita);
-            Task<bool> ExistsAsync(int id, int usuarioId);
-        
     }
 }

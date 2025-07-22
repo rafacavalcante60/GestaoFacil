@@ -32,7 +32,7 @@ namespace GestaoFacil.Server.Controllers.Usuario
         }
 
         [HttpPut("perfil")]
-        public async Task<ActionResult<ResponseModel<bool>>> UpdatePerfil([FromBody] UsuarioUpdateDto dto)
+        public async Task<ActionResult<ResponseModel<bool>>> UpdatePerfil(UsuarioUpdateDto dto)
         {
             var result = await _usuarioService.UpdatePerfilAsync(UsuarioId, dto);
 
@@ -60,7 +60,7 @@ namespace GestaoFacil.Server.Controllers.Usuario
 
         [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
-        public async Task<ActionResult<ResponseModel<bool>>> UpdateAdmin(int id, [FromBody] UsuarioAdminUpdateDto dto)
+        public async Task<ActionResult<ResponseModel<bool>>> UpdateAdmin(int id, UsuarioAdminUpdateDto dto)
         {
             if (id != dto.Id)
             {

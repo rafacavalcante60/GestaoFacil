@@ -2,6 +2,7 @@
 
 namespace GestaoFacil.Server.Data
 {
+    //IMPORTANT: Se adicionar/remover um inicializador tem que trocar a range dos create Dto
     public static class DbInitializer
     {
         public static void Seed(AppDbContext context)

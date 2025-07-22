@@ -6,15 +6,16 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace GestaoFacil.Server.Controllers.Financeiro
 {
+    //sem uso de controller generico (com receita) visando clareza e escalabilidade
     [Authorize]
     [ApiController]
     [Route("api/[controller]")]
-    public class DespesaController : BaseController //herdando de BaseController
+    public class DespesaController : BaseController 
     {
         private readonly IDespesaService _despesaService;
 
         public DespesaController(IDespesaService despesaService)
-        {
+        {   
             _despesaService = despesaService;
         }
 
@@ -45,7 +46,7 @@ namespace GestaoFacil.Server.Controllers.Financeiro
         }
 
         [HttpPost]
-        public async Task<ActionResult<ResponseModel<DespesaDto>>> Create([FromBody] DespesaCreateDto dto)
+        public async Task<ActionResult<ResponseModel<DespesaDto>>> Create(DespesaCreateDto dto)
         {
             var result = await _despesaService.CreateAsync(dto, UsuarioId);
 
@@ -58,7 +59,7 @@ namespace GestaoFacil.Server.Controllers.Financeiro
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<ResponseModel<bool>>> Update(int id, [FromBody] DespesaUpdateDto dto)
+        public async Task<ActionResult<ResponseModel<bool>>> Update(int id,DespesaUpdateDto dto)
         {
             if (id != dto.Id)
             {
