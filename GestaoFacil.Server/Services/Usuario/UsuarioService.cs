@@ -33,9 +33,9 @@ namespace GestaoFacil.Server.Services.Usuario
             return ResponseHelper.Sucesso(dto);
         }
 
-        public async Task<ResponseModel<List<UsuarioDto>>> GetAllAsync()
+        public async Task<ResponseModel<List<UsuarioDto>>> GetRecentAsync()
         {
-            var usuarios = await _repository.GetAllAsync();
+            var usuarios = await _repository.GetRecentAsync();
             var dtos = _mapper.Map<List<UsuarioDto>>(usuarios);
             return ResponseHelper.Sucesso(dtos);
         }
@@ -72,7 +72,7 @@ namespace GestaoFacil.Server.Services.Usuario
             return ResponseHelper.Sucesso(true);
         }
 
-        public async Task<ResponseModel<bool>> DeleteAsync(int id)
+        public async Task<ResponseModel<bool>> DeleteAdminAsync(int id)
         {
             var usuario = await _repository.GetByIdAsync(id);
             if (usuario == null)

@@ -1331,21 +1331,27 @@
         "additionalProperties": false
       },
       "UsuarioLoginDto": {
+        "required": [
+          "email",
+          "senha"
+        ],
         "type": "object",
         "properties": {
           "email": {
+            "minLength": 1,
             "type": "string",
-            "nullable": true
+            "format": "email"
           },
           "senha": {
-            "type": "string",
-            "nullable": true
+            "minLength": 1,
+            "type": "string"
           }
         },
         "additionalProperties": false
       },
       "UsuarioRegisterDto": {
         "required": [
+          "confirmarSenha",
           "email",
           "nome",
           "senha"
@@ -1364,6 +1370,10 @@
           },
           "senha": {
             "minLength": 6,
+            "type": "string"
+          },
+          "confirmarSenha": {
+            "minLength": 1,
             "type": "string"
           }
         },

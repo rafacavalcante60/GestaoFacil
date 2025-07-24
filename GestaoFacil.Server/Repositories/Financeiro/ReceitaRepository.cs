@@ -13,16 +13,21 @@ namespace GestaoFacil.Server.Repositories.Financeiro
             _context = context;
         }
 
-        public async Task<List<ReceitaModel>> GetAllByUsuarioAsync(int usuarioId)
-        {
-            return await _context.Receitas
-                .Where(r => r.UsuarioId == usuarioId)
-                .ToListAsync();
-        }
-
         public async Task<ReceitaModel?> GetByIdAsync(int id, int usuarioId)
         {
-            return await _context.Receitas.FirstOrDefaultAsync(r => r.Id == id && r.UsuarioId == usuarioId);
+            return await _context.Receitas
+                .AsNoTracking()
+                .FirstOrDefaultAsync(r => r.Id == id && r.UsuarioId == usuarioId);
+        }
+
+        public async Task<List<ReceitaModel>> GetRecentByUsuarioAsync(int usuarioId)
+        {
+            return await _context.Receitas
+                .AsNoTracking()
+                .Where(r => r.UsuarioId == usuarioId)
+                .OrderByDescending(d => d.Data)
+                .Take(15)
+                .ToListAsync();
         }
 
         public async Task AddAsync(ReceitaModel receita)

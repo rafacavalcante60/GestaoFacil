@@ -20,9 +20,9 @@ namespace GestaoFacil.Server.Controllers.Financeiro
         }
 
         [HttpGet]
-        public async Task<ActionResult<ResponseModel<List<ReceitaDto>>>> GetAll()
+        public async Task<ActionResult<ResponseModel<List<ReceitaDto>>>> GetRecentByUsuario()
         {
-            var result = await _receitaService.GetAllByUsuarioAsync(UsuarioId);
+            var result = await _receitaService.GetRecentByUsuarioAsync(UsuarioId);
 
             if (!result.Status)
             {

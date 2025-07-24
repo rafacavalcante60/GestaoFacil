@@ -20,11 +20,11 @@ namespace GestaoFacil.Server.Services.Financeiro
             _logger = logger;
         }
 
-        public async Task<ResponseModel<List<ReceitaDto>>> GetAllByUsuarioAsync(int usuarioId)
+        public async Task<ResponseModel<List<ReceitaDto>>> GetRecentByUsuarioAsync(int usuarioId)
         {
             try
             {
-                var receitas = await _repository.GetAllByUsuarioAsync(usuarioId);
+                var receitas = await _repository.GetRecentByUsuarioAsync(usuarioId);
                 var dtos = _mapper.Map<List<ReceitaDto>>(receitas);
                 return ResponseHelper.Sucesso(dtos, "Receitas carregadas com sucesso.");
             }

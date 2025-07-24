@@ -13,16 +13,21 @@ namespace GestaoFacil.Server.Repositories.Despesa
             _context = context;
         }
 
-        public async Task<List<DespesaModel>> GetAllByUsuarioAsync(int usuarioId)
+        public async Task<List<DespesaModel>> GetRecentByUsuarioIdAsync(int usuarioId)
         {
             return await _context.Despesas
+                .AsNoTracking()
                 .Where(d => d.UsuarioId == usuarioId)
+                .OrderByDescending(d => d.Data)
+                .Take(15)
                 .ToListAsync();
         }
 
         public async Task<DespesaModel?> GetByIdAsync(int id, int usuarioId)
         {
-            return await _context.Despesas.FirstOrDefaultAsync(d => d.Id == id && d.UsuarioId == usuarioId);
+            return await _context.Despesas
+                .AsNoTracking()
+                .FirstOrDefaultAsync(d => d.Id == id && d.UsuarioId == usuarioId);
         }
 
         public async Task AddAsync(DespesaModel despesa)

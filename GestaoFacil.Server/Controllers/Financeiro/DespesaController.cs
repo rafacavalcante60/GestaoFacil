@@ -19,19 +19,6 @@ namespace GestaoFacil.Server.Controllers.Financeiro
             _despesaService = despesaService;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<ResponseModel<List<DespesaDto>>>> GetAll()
-        {
-            var result = await _despesaService.GetAllByUsuarioAsync(UsuarioId);
-
-            if (!result.Status)
-            {
-                return BadRequest(result);
-            }
-
-            return Ok(result);
-        }
-
         [HttpGet("{id}")]
         public async Task<ActionResult<ResponseModel<DespesaDto>>> GetById(int id)
         {
@@ -40,6 +27,19 @@ namespace GestaoFacil.Server.Controllers.Financeiro
             if (!result.Status)
             {
                 return NotFound(result);
+            }
+
+            return Ok(result);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<ResponseModel<List<DespesaDto>>>> GetRecentByUsuario()
+        {
+            var result = await _despesaService.GetRecentByUsuarioAsync(UsuarioId);
+
+            if (!result.Status)
+            {
+                return BadRequest(result);
             }
 
             return Ok(result);

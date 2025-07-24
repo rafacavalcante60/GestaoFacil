@@ -20,21 +20,6 @@ namespace GestaoFacil.Server.Services.Despesa
             _logger = logger;
         }
 
-        public async Task<ResponseModel<List<DespesaDto>>> GetAllByUsuarioAsync(int usuarioId)
-        {
-            try
-            {
-                var despesas = await _repository.GetAllByUsuarioAsync(usuarioId);
-                var dtos = _mapper.Map<List<DespesaDto>>(despesas);
-                return ResponseHelper.Sucesso(dtos, "Despesas carregadas com sucesso.");
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Erro ao buscar despesas para o usuário {UsuarioId}", usuarioId);
-                return ResponseHelper.Falha<List<DespesaDto>>($"Erro ao buscar despesas: {ex.Message}");
-            }
-        }
-
         public async Task<ResponseModel<DespesaDto?>> GetByIdAsync(int id, int usuarioId)
         {
             try
@@ -52,7 +37,22 @@ namespace GestaoFacil.Server.Services.Despesa
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Erro ao buscar despesa {Id} para o usuário {UsuarioId}", id, usuarioId);
-                return ResponseHelper.Falha<DespesaDto?>($"Erro ao buscar despesa: {ex.Message}");
+                return ResponseHelper.Falha<DespesaDto?>("Ocorreu um problema ao tratar a sua solicitação");
+            }
+        }
+
+        public async Task<ResponseModel<List<DespesaDto>>> GetRecentByUsuarioAsync(int usuarioId)
+        {
+            try
+            {
+                var despesas = await _repository.GetRecentByUsuarioIdAsync(usuarioId);
+                var dtos = _mapper.Map<List<DespesaDto>>(despesas);
+                return ResponseHelper.Sucesso(dtos, "Despesas carregadas com sucesso.");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Erro ao buscar despesas para o usuário {UsuarioId}", usuarioId);
+                return ResponseHelper.Falha<List<DespesaDto>>("Ocorreu um problema ao tratar a sua solicitação");
             }
         }
 
@@ -74,7 +74,7 @@ namespace GestaoFacil.Server.Services.Despesa
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Erro ao criar despesa para o usuário {UsuarioId}", usuarioId);
-                return ResponseHelper.Falha<DespesaDto>($"Erro ao criar despesa: {ex.Message}");
+                return ResponseHelper.Falha<DespesaDto>("Ocorreu um problema ao tratar a sua solicitação");
             }
         }
 
@@ -104,7 +104,7 @@ namespace GestaoFacil.Server.Services.Despesa
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Erro ao atualizar despesa {Id} para o usuário {UsuarioId}", id, usuarioId);
-                return ResponseHelper.Falha<bool>($"Erro ao atualizar despesa: {ex.Message}", false);
+                return ResponseHelper.Falha<bool>("Ocorreu um problema ao tratar a sua solicitação");
             }
         }
 
@@ -127,7 +127,7 @@ namespace GestaoFacil.Server.Services.Despesa
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Erro ao remover despesa {Id} para o usuário {UsuarioId}", id, usuarioId);
-                return ResponseHelper.Falha<bool>($"Erro ao remover despesa: {ex.Message}", false);
+                return ResponseHelper.Falha<bool>("Ocorreu um problema ao tratar a sua solicitação");
             }
         }
     }

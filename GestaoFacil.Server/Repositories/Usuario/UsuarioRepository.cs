@@ -14,9 +14,22 @@ namespace GestaoFacil.Server.Repositories.Usuario
             _context = context;
         }
 
-        public async Task<List<UsuarioModel>> GetAllAsync()
+        public async Task<UsuarioModel?> GetByIdAsync(int id)
         {
-            return await _context.Usuarios.ToListAsync();
+            var usuario = await _context.Usuarios
+                .AsNoTracking()
+                .Include(u => u.TipoUsuario)
+                .FirstOrDefaultAsync(u => u.Id == id);
+
+            return usuario;
+        }
+
+        public async Task<List<UsuarioModel>> GetRecentAsync()
+        {
+            return await _context.Usuarios
+                .AsNoTracking()
+                .Take(15)
+                .ToListAsync();
         }
 
         public async Task AddAsync(UsuarioModel usuario)
@@ -35,15 +48,6 @@ namespace GestaoFacil.Server.Repositories.Usuario
         {
             _context.Usuarios.Remove(usuario);
             await _context.SaveChangesAsync();
-        }
-
-        public async Task<UsuarioModel?> GetByIdAsync(int id)
-        {
-            var usuario = await _context.Usuarios
-                .Include(u => u.TipoUsuario)
-                .FirstOrDefaultAsync(u => u.Id == id);
-
-            return usuario;
         }
 
         public async Task<TipoUsuarioModel?> GetTipoUsuarioByNameAsync(string nome)

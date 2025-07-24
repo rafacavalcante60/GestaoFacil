@@ -75,7 +75,13 @@ namespace GestaoFacil.Server.Data
                 var tipoAdmin = context.TiposUsuario.FirstOrDefault(t => t.Nome == "Admin");
                 if (tipoAdmin != null)
                 {
-                    var senhaEmTexto = "Admin123";
+                    var senhaEmTexto = Environment.GetEnvironmentVariable("ADMIN_PASSWORD");
+
+                    if (string.IsNullOrEmpty(senhaEmTexto))
+                    {
+                        throw new Exception("Variável de ambiente ADMIN_PASSWORD não está configurada.");
+                    }
+
                     var senhaHash = BCrypt.Net.BCrypt.HashPassword(senhaEmTexto);
 
                     var admin = new UsuarioModel
@@ -90,6 +96,7 @@ namespace GestaoFacil.Server.Data
                     context.SaveChanges();
                 }
             }
+
         }
     }
 }

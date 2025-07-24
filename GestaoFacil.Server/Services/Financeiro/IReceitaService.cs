@@ -5,8 +5,8 @@ namespace GestaoFacil.Server.Services.Financeiro
 {
     public interface IReceitaService
     {
-        Task<ResponseModel<List<ReceitaDto>>> GetAllByUsuarioAsync(int usuarioId);
         Task<ResponseModel<ReceitaDto?>> GetByIdAsync(int id, int usuarioId);
+        Task<ResponseModel<List<ReceitaDto>>> GetRecentByUsuarioAsync(int usuarioId);
         Task<ResponseModel<ReceitaDto>> CreateAsync(ReceitaCreateDto dto, int usuarioId);
         Task<ResponseModel<bool>> UpdateAsync(int id, ReceitaUpdateDto dto, int usuarioId);
         Task<ResponseModel<bool>> DeleteAsync(int id, int usuarioId);

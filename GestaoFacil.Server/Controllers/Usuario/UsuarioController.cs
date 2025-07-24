@@ -46,9 +46,9 @@ namespace GestaoFacil.Server.Controllers.Usuario
 
         [Authorize(Roles = "Admin")]
         [HttpGet]
-        public async Task<ActionResult<ResponseModel<List<UsuarioDto>>>> GetAll()
+        public async Task<ActionResult<ResponseModel<List<UsuarioDto>>>> GetRecentAdmin()
         {
-            var result = await _usuarioService.GetAllAsync();
+            var result = await _usuarioService.GetRecentAsync();
 
             if (!result.Status)
             {
@@ -79,9 +79,9 @@ namespace GestaoFacil.Server.Controllers.Usuario
 
         [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
-        public async Task<ActionResult<ResponseModel<bool>>> Delete(int id)
+        public async Task<ActionResult<ResponseModel<bool>>> DeleteAdmin(int id)
         {
-            var result = await _usuarioService.DeleteAsync(id);
+            var result = await _usuarioService.DeleteAdminAsync(id);
 
             if (!result.Status)
             {

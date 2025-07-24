@@ -4,7 +4,7 @@ using GestaoFacil.Server.Models.Principais;
 public interface IUsuarioRepository
 {
     Task<UsuarioModel?> GetByIdAsync(int id);
-    Task<List<UsuarioModel>> GetAllAsync();
+    Task<List<UsuarioModel>> GetRecentAsync();
     Task AddAsync(UsuarioModel usuario);
     Task UpdateAsync(UsuarioModel usuario);
     Task DeleteAsync(UsuarioModel usuario);

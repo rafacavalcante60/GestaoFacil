@@ -17,7 +17,7 @@ namespace GestaoFacil.Server.Controllers.Auth
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<ResponseModel<TokenDto>>> Login([FromBody] UsuarioLoginDto request)
+        public async Task<ActionResult<ResponseModel<TokenDto>>> Login(UsuarioLoginDto request)
         {
             var result = await _authService.LoginAsync(request);
 
@@ -30,7 +30,7 @@ namespace GestaoFacil.Server.Controllers.Auth
         }
 
         [HttpPost("register")]
-        public async Task<ActionResult<ResponseModel<string>>> Register([FromBody] UsuarioRegisterDto request)
+        public async Task<ActionResult<ResponseModel<string>>> Register(UsuarioRegisterDto request)
         {
             var result = await _authService.RegisterAsync(request);
 
@@ -43,7 +43,7 @@ namespace GestaoFacil.Server.Controllers.Auth
         }
 
         [HttpPost("refresh")]
-        public async Task<ActionResult<ResponseModel<TokenDto>>> Refresh([FromBody] RefreshTokenRequestDto dto)
+        public async Task<ActionResult<ResponseModel<TokenDto>>> Refresh(RefreshTokenRequestDto dto)
         {
             var result = await _authService.RefreshTokenAsync(dto.RefreshToken);
 
@@ -56,7 +56,7 @@ namespace GestaoFacil.Server.Controllers.Auth
         }
 
         [HttpPost("logout")]
-        public async Task<ActionResult<ResponseModel<string>>> Logout([FromBody] RefreshTokenRequestDto dto)
+        public async Task<ActionResult<ResponseModel<string>>> Logout(RefreshTokenRequestDto dto)
         {
             var result = await _authService.LogoutAsync(dto.RefreshToken);
 

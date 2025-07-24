@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("GestaoFacil.Client")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7193af3ae9774a9239f4b33f1e19e64380eaeec1")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f8054428023aad3e1f4ba45cbf27f18c5ca256da")]
 [assembly: System.Reflection.AssemblyProductAttribute("GestaoFacil.Client")]
 [assembly: System.Reflection.AssemblyTitleAttribute("GestaoFacil.Client")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
