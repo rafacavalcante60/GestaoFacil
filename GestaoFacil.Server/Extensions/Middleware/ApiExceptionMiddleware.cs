@@ -13,7 +13,7 @@ namespace GestaoFacil.Server.Extensions.Middleware
             {
                 appError.Run(async context =>
                 {
-                    var env = app.ApplicationServices.GetRequiredService<IWebHostEnvironment>();
+                    var env = app.ApplicationServices.GetRequiredService<IWebHostEnvironment>(); //pega ambiente atual
                     var logger = app.ApplicationServices.GetRequiredService<ILoggerFactory>()
                                                         .CreateLogger("GlobalExceptionHandler");
 

@@ -1,4 +1,4 @@
-﻿using GestaoFacil.Server.Models.Principais;
+﻿using GestaoFacil.Server.Models.Usuario;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;

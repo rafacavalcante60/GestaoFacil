@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace GestaoFacil.Server.Controllers.Financeiro
 {
     //sem uso de controller generico (com receita) visando clareza e escalabilidade
-    //[Authorize]
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class DespesaController : BaseController 

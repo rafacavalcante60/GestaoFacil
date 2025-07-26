@@ -1,9 +1,10 @@
 ﻿using GestaoFacil.Server.Models.Domain;
+using GestaoFacil.Server.Models.Usuario;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GestaoFacil.Server.Models.Principais
 {
-    public class ReceitaModel
+    public class DespesaModel
     {
         public int Id { get; init; }
 
@@ -17,8 +18,8 @@ namespace GestaoFacil.Server.Models.Principais
         [Column(TypeName = "decimal(10, 2)")]
         public decimal Valor { get; set; }
 
-        public int CategoriaReceitaId { get; set; }
-        public CategoriaReceitaModel CategoriaReceita { get; set; } = null!;
+        public int CategoriaDespesaId { get; set; }
+        public CategoriaDespesaModel CategoriaDespesa { get; set; } = null!;
 
         public int FormaPagamentoId { get; set; }
         public FormaPagamentoModel FormaPagamento { get; set; } = null!;
@@ -26,4 +27,5 @@ namespace GestaoFacil.Server.Models.Principais
         public int UsuarioId { get; set; }
         public UsuarioModel Usuario { get; set; } = null!;
     }
+
 }

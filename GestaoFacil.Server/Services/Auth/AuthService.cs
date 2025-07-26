@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using GestaoFacil.Server.Data;
 using GestaoFacil.Server.Models.Auth;
-using GestaoFacil.Server.Models.Principais;
+using GestaoFacil.Server.Models.Usuario;
 using GestaoFacil.Shared.DTOs.Auth;
 using GestaoFacil.Shared.Responses;
 using Microsoft.EntityFrameworkCore;

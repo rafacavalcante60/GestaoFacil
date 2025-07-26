@@ -1,6 +1,7 @@
 ﻿using GestaoFacil.Server.Models.Auth;
 using GestaoFacil.Server.Models.Domain;
 using GestaoFacil.Server.Models.Principais;
+using GestaoFacil.Server.Models.Usuario;
 using Microsoft.EntityFrameworkCore;
 
 namespace GestaoFacil.Server.Data
