@@ -105,7 +105,7 @@
   },
   {
     "ContainingType": "GestaoFacil.Server.Controllers.Financeiro.DespesaController",
-    "Method": "GetAll",
+    "Method": "GetRecentByUsuario",
     "RelativePath": "api/Despesa",
     "HttpMethod": "GET",
     "IsController": true,
@@ -234,7 +234,7 @@
   },
   {
     "ContainingType": "GestaoFacil.Server.Controllers.Financeiro.ReceitaController",
-    "Method": "GetAll",
+    "Method": "GetRecentByUsuario",
     "RelativePath": "api/Receita",
     "HttpMethod": "GET",
     "IsController": true,
@@ -363,7 +363,7 @@
   },
   {
     "ContainingType": "GestaoFacil.Server.Controllers.Usuario.UsuarioController",
-    "Method": "GetAll",
+    "Method": "GetRecentAdmin",
     "RelativePath": "api/Usuario",
     "HttpMethod": "GET",
     "IsController": true,
@@ -414,7 +414,7 @@
   },
   {
     "ContainingType": "GestaoFacil.Server.Controllers.Usuario.UsuarioController",
-    "Method": "Delete",
+    "Method": "DeleteAdmin",
     "RelativePath": "api/Usuario/{id}",
     "HttpMethod": "DELETE",
     "IsController": true,

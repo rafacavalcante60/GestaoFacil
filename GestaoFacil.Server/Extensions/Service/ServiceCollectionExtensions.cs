@@ -11,7 +11,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 
-namespace GestaoFacil.Server.Extensions
+namespace GestaoFacil.Server.Extensions.Service
 {
     public static class ServiceCollectionExtensions
     {
