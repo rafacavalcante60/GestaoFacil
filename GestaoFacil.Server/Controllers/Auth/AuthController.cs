@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using GestaoFacil.Shared.DTOs.Auth;
+using GestaoFacil.Server.DTOs.Auth;
 using GestaoFacil.Server.Services.Auth;
-using GestaoFacil.Shared.Responses;
+using GestaoFacil.Server.Responses;
 
 namespace GestaoFacil.Server.Controllers.Auth
 {

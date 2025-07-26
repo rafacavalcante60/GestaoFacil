@@ -1,8 +1,8 @@
-﻿using GestaoFacil.Shared.Responses;
+﻿using GestaoFacil.Server.Responses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using GestaoFacil.Server.Services.Financeiro;
-using GestaoFacil.Shared.DTOs.Financeiro;
+using GestaoFacil.Server.DTOs.Financeiro;
 
 namespace GestaoFacil.Server.Controllers.Financeiro
 {

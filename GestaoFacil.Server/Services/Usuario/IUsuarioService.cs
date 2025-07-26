@@ -1,5 +1,5 @@
-﻿using GestaoFacil.Shared.DTOs.Usuario;
-using GestaoFacil.Shared.Responses;
+﻿using GestaoFacil.Server.DTOs.Usuario;
+using GestaoFacil.Server.Responses;
 
 namespace GestaoFacil.Server.Services.Usuario
 {

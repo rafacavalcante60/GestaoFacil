@@ -1,4 +1,4 @@
-﻿using GestaoFacil.Shared.Responses;
+﻿using GestaoFacil.Server.Responses;
 using Microsoft.AspNetCore.Diagnostics;
 using System.Net;
 using System.Text.Json;

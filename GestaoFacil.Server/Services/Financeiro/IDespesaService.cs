@@ -1,5 +1,5 @@
-﻿using GestaoFacil.Shared.DTOs.Despesa;
-using GestaoFacil.Shared.Responses;
+﻿using GestaoFacil.Server.DTOs.Despesa;
+using GestaoFacil.Server.Responses;
 
 namespace GestaoFacil.Server.Services.Despesa
 {

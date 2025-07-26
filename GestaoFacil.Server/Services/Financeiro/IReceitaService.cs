@@ -1,5 +1,5 @@
-﻿using GestaoFacil.Shared.Responses;
-using GestaoFacil.Shared.DTOs.Financeiro;
+﻿using GestaoFacil.Server.Responses;
+using GestaoFacil.Server.DTOs.Financeiro;
 
 namespace GestaoFacil.Server.Services.Financeiro
 {
