@@ -19,8 +19,6 @@ Próximas etapas:
 - Relatórios financeiros 
 - Desenvolvimento do **frontend em Blazor WebAssembly**
 - Integração com:
-  - **Redis** (cache)
-  - **Kafka ou RabbitMQ** (mensageria)
   - **xUnit + Moq** (testes automatizados)
 - **Containerização com Docker** e orquestração via **Kubernetes**
 - Deploy contínuo na **AWS**, com CI/CD via **Azure DevOps** ou **GitHub Actions**
