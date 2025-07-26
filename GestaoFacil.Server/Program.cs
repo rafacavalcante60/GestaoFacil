@@ -1,5 +1,6 @@
 using GestaoFacil.Server.Data;
-using GestaoFacil.Server.Extensions;
+using GestaoFacil.Server.Extensions.Middleware;
+using GestaoFacil.Server.Extensions.Service;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -35,22 +36,25 @@ using (var scope = app.Services.CreateScope())
     DbInitializer.Seed(context);
 }
 
-
 // middlewares
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
     app.UseWebAssemblyDebugging();
+    app.ConfigureExceptionHandler();
 }
 
 app.UseHttpsRedirection();
+
 app.UseBlazorFrameworkFiles();
 app.UseStaticFiles();
+
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapRazorPages();
 app.MapControllers();
 app.MapFallbackToFile("Index.html");
+
 app.Run();

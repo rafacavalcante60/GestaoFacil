@@ -678,7 +678,6 @@ C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFac
 C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Server\obj\Debug\net8.0\GestaoFacil.Server.dll
 C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Server\obj\Debug\net8.0\refint\GestaoFacil.Server.dll
 C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Server\obj\Debug\net8.0\GestaoFacil.Server.pdb
-C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Server\bin\Debug\net8.0\appsettings.Development.json
 C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Server\bin\Debug\net8.0\appsettings.json
 C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Server\bin\Debug\net8.0\BlazorDebugProxy\BrowserDebugHost.dll
 C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Server\bin\Debug\net8.0\BlazorDebugProxy\BrowserDebugHost.runtimeconfig.json
@@ -1000,3 +999,4 @@ C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFac
 C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Server\obj\Debug\net8.0\rjsmcshtml.dswa.cache.json
 C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Server\obj\Debug\net8.0\staticwebassets.build.json.cache
 C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Server\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
+C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Server\bin\Debug\net8.0\appsettings.Development.json
