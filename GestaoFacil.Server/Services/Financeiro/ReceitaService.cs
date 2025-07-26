@@ -1,9 +1,8 @@
 ﻿using AutoMapper;
-using GestaoFacil.Shared.Responses;
+using GestaoFacil.Server.Responses;
 using GestaoFacil.Server.Models.Principais;
 using GestaoFacil.Server.Repositories.Financeiro;
-using GestaoFacil.Shared.DTOs.Financeiro;
-using Microsoft.Extensions.Logging;
+using GestaoFacil.Server.DTOs.Financeiro;
 
 namespace GestaoFacil.Server.Services.Financeiro
 {

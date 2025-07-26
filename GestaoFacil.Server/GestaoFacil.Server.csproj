@@ -26,9 +26,4 @@
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.7.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\GestaoFacil.Client\GestaoFacil.Client.csproj" />
-    <ProjectReference Include="..\GestaoFacil.Shared\GestaoFacil.Shared.csproj" />
-  </ItemGroup>
-
 </Project>

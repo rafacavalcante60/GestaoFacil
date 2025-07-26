@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using GestaoFacil.Server.Models.Principais;
 using GestaoFacil.Server.Models.Usuario;
-using GestaoFacil.Shared.DTOs.Auth;
-using GestaoFacil.Shared.DTOs.Despesa;
-using GestaoFacil.Shared.DTOs.Financeiro;
-using GestaoFacil.Shared.DTOs.Usuario;
+using GestaoFacil.Server.DTOs.Auth;
+using GestaoFacil.Server.DTOs.Despesa;
+using GestaoFacil.Server.DTOs.Financeiro;
+using GestaoFacil.Server.DTOs.Usuario;
 
 namespace GestaoFacil.Server.Mappings
 {

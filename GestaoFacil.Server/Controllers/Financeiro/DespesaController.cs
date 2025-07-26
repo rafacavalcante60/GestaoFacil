@@ -1,6 +1,6 @@
-﻿using GestaoFacil.Shared.Responses;
+﻿using GestaoFacil.Server.Responses;
 using GestaoFacil.Server.Services.Despesa;
-using GestaoFacil.Shared.DTOs.Despesa;
+using GestaoFacil.Server.DTOs.Despesa;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

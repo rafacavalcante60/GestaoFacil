@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using GestaoFacil.Server.Models;
 using GestaoFacil.Server.Repositories.Usuario;
-using GestaoFacil.Shared.DTOs.Usuario;
-using GestaoFacil.Shared.Responses;
+using GestaoFacil.Server.DTOs.Usuario;
+using GestaoFacil.Server.Responses;
 using Microsoft.Extensions.Logging;
 
 namespace GestaoFacil.Server.Services.Usuario

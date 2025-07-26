@@ -690,8 +690,6 @@ C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFac
 C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Server\bin\Debug\net8.0\BlazorDebugProxy\Microsoft.NET.WebAssembly.Webcil.dll
 C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Server\bin\Debug\net8.0\BlazorDebugProxy\Microsoft.SymbolStore.dll
 C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Server\bin\Debug\net8.0\BlazorDebugProxy\Newtonsoft.Json.dll
-C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Server\bin\Debug\net8.0\GestaoFacil.Client.staticwebassets.runtime.json
-C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Server\bin\Debug\net8.0\GestaoFacil.Client.staticwebassets.endpoints.json
 C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Server\bin\Debug\net8.0\GestaoFacil.Server.staticwebassets.runtime.json
 C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Server\bin\Debug\net8.0\GestaoFacil.Server.staticwebassets.endpoints.json
 C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Server\bin\Debug\net8.0\GestaoFacil.Server.exe
@@ -712,7 +710,6 @@ C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFac
 C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Server\bin\Debug\net8.0\Microsoft.AspNetCore.Components.QuickGrid.dll
 C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Server\bin\Debug\net8.0\Microsoft.AspNetCore.Components.QuickGrid.EntityFrameworkAdapter.dll
 C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Server\bin\Debug\net8.0\Microsoft.AspNetCore.Components.Web.dll
-C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Server\bin\Debug\net8.0\Microsoft.AspNetCore.Components.WebAssembly.dll
 C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Server\bin\Debug\net8.0\Microsoft.AspNetCore.Components.WebAssembly.Server.dll
 C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Server\bin\Debug\net8.0\Microsoft.AspNetCore.Cryptography.Internal.dll
 C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Server\bin\Debug\net8.0\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
@@ -748,9 +745,6 @@ C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFac
 C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Server\bin\Debug\net8.0\Microsoft.Extensions.Caching.Abstractions.dll
 C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Server\bin\Debug\net8.0\Microsoft.Extensions.Caching.Memory.dll
 C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Server\bin\Debug\net8.0\Microsoft.Extensions.Configuration.Abstractions.dll
-C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Server\bin\Debug\net8.0\Microsoft.Extensions.Configuration.Binder.dll
-C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Server\bin\Debug\net8.0\Microsoft.Extensions.Configuration.FileExtensions.dll
-C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Server\bin\Debug\net8.0\Microsoft.Extensions.Configuration.Json.dll
 C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Server\bin\Debug\net8.0\Microsoft.Extensions.DependencyInjection.dll
 C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Server\bin\Debug\net8.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
 C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Server\bin\Debug\net8.0\Microsoft.Extensions.DependencyModel.dll
@@ -769,7 +763,6 @@ C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFac
 C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Server\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Server\bin\Debug\net8.0\Microsoft.IdentityModel.Tokens.dll
 C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Server\bin\Debug\net8.0\Microsoft.JSInterop.dll
-C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Server\bin\Debug\net8.0\Microsoft.JSInterop.WebAssembly.dll
 C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Server\bin\Debug\net8.0\Microsoft.NET.StringTools.dll
 C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Server\bin\Debug\net8.0\Microsoft.OpenApi.dll
 C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Server\bin\Debug\net8.0\Microsoft.SqlServer.Server.dll
@@ -981,10 +974,6 @@ C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFac
 C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Server\bin\Debug\net8.0\runtimes\win\lib\net7.0\System.Security.Cryptography.ProtectedData.dll
 C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Server\bin\Debug\net8.0\runtimes\browser\lib\net8.0\System.Text.Encodings.Web.dll
 C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Server\bin\Debug\net8.0\runtimes\win\lib\net7.0\System.Windows.Extensions.dll
-C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Server\bin\Debug\net8.0\GestaoFacil.Client.dll
-C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Server\bin\Debug\net8.0\GestaoFacil.Shared.dll
-C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Server\bin\Debug\net8.0\GestaoFacil.Client.pdb
-C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Server\bin\Debug\net8.0\GestaoFacil.Shared.pdb
 C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Server\obj\Debug\net8.0\scopedcss\bundle\GestaoFacil.Server.styles.css
 C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Server\obj\Debug\net8.0\staticwebassets.build.json
 C:\Users\Pichau\OneDrive\Estudo\Geral\.NET\GestaoFacil\net\GestaoFacil\GestaoFacil.Server\obj\Debug\net8.0\staticwebassets.development.json

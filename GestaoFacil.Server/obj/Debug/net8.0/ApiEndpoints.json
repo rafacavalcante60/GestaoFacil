@@ -15,7 +15,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "GestaoFacil.Shared.Responses.ResponseModel\u00601[[GestaoFacil.Shared.DTOs.Auth.TokenDto, GestaoFacil.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "GestaoFacil.Shared.Responses.ResponseModel\u00601[[GestaoFacil.Shared.DTOs.Auth.TokenDto, GestaoFacil.Server, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -67,7 +67,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "GestaoFacil.Shared.Responses.ResponseModel\u00601[[GestaoFacil.Shared.DTOs.Auth.TokenDto, GestaoFacil.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "GestaoFacil.Shared.Responses.ResponseModel\u00601[[GestaoFacil.Shared.DTOs.Auth.TokenDto, GestaoFacil.Server, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -113,7 +113,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "GestaoFacil.Shared.Responses.ResponseModel\u00601[[System.Collections.Generic.List\u00601[[GestaoFacil.Shared.DTOs.Despesa.DespesaDto, GestaoFacil.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "Type": "GestaoFacil.Shared.Responses.ResponseModel\u00601[[System.Collections.Generic.List\u00601[[GestaoFacil.Shared.DTOs.Despesa.DespesaDto, GestaoFacil.Server, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -139,7 +139,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "GestaoFacil.Shared.Responses.ResponseModel\u00601[[GestaoFacil.Shared.DTOs.Despesa.DespesaDto, GestaoFacil.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "GestaoFacil.Shared.Responses.ResponseModel\u00601[[GestaoFacil.Shared.DTOs.Despesa.DespesaDto, GestaoFacil.Server, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -165,7 +165,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "GestaoFacil.Shared.Responses.ResponseModel\u00601[[GestaoFacil.Shared.DTOs.Despesa.DespesaDto, GestaoFacil.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "GestaoFacil.Shared.Responses.ResponseModel\u00601[[GestaoFacil.Shared.DTOs.Despesa.DespesaDto, GestaoFacil.Server, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -242,7 +242,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "GestaoFacil.Shared.Responses.ResponseModel\u00601[[System.Collections.Generic.List\u00601[[GestaoFacil.Shared.DTOs.Financeiro.ReceitaDto, GestaoFacil.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "Type": "GestaoFacil.Shared.Responses.ResponseModel\u00601[[System.Collections.Generic.List\u00601[[GestaoFacil.Shared.DTOs.Financeiro.ReceitaDto, GestaoFacil.Server, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -268,7 +268,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "GestaoFacil.Shared.Responses.ResponseModel\u00601[[GestaoFacil.Shared.DTOs.Financeiro.ReceitaDto, GestaoFacil.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "GestaoFacil.Shared.Responses.ResponseModel\u00601[[GestaoFacil.Shared.DTOs.Financeiro.ReceitaDto, GestaoFacil.Server, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -294,7 +294,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "GestaoFacil.Shared.Responses.ResponseModel\u00601[[GestaoFacil.Shared.DTOs.Financeiro.ReceitaDto, GestaoFacil.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "GestaoFacil.Shared.Responses.ResponseModel\u00601[[GestaoFacil.Shared.DTOs.Financeiro.ReceitaDto, GestaoFacil.Server, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -371,7 +371,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "GestaoFacil.Shared.Responses.ResponseModel\u00601[[System.Collections.Generic.List\u00601[[GestaoFacil.Shared.DTOs.Usuario.UsuarioDto, GestaoFacil.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "Type": "GestaoFacil.Shared.Responses.ResponseModel\u00601[[System.Collections.Generic.List\u00601[[GestaoFacil.Shared.DTOs.Usuario.UsuarioDto, GestaoFacil.Server, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -448,7 +448,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "GestaoFacil.Shared.Responses.ResponseModel\u00601[[GestaoFacil.Shared.DTOs.Usuario.UsuarioDto, GestaoFacil.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "GestaoFacil.Shared.Responses.ResponseModel\u00601[[GestaoFacil.Shared.DTOs.Usuario.UsuarioDto, GestaoFacil.Server, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",

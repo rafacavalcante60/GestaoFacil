@@ -1,5 +1,5 @@
-﻿using GestaoFacil.Shared.Responses;
-using GestaoFacil.Shared.DTOs.Usuario;
+﻿using GestaoFacil.Server.Responses;
+using GestaoFacil.Server.DTOs.Usuario;
 using GestaoFacil.Server.Services.Usuario;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

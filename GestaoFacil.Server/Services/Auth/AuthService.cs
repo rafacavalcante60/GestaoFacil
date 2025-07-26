@@ -2,8 +2,8 @@
 using GestaoFacil.Server.Data;
 using GestaoFacil.Server.Models.Auth;
 using GestaoFacil.Server.Models.Usuario;
-using GestaoFacil.Shared.DTOs.Auth;
-using GestaoFacil.Shared.Responses;
+using GestaoFacil.Server.DTOs.Auth;
+using GestaoFacil.Server.Responses;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 

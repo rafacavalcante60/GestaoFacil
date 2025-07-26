@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("GestaoFacil.Server")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d3302929af69b067fa38cf7140350b54ca4bd3c3")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+462f714a9147cf483bce95bbfbc6669d5d190749")]
 [assembly: System.Reflection.AssemblyProductAttribute("GestaoFacil.Server")]
 [assembly: System.Reflection.AssemblyTitleAttribute("GestaoFacil.Server")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

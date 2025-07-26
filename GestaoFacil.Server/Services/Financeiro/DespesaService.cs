@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using GestaoFacil.Server.Models.Principais;
 using GestaoFacil.Server.Repositories.Despesa;
-using GestaoFacil.Shared.DTOs.Despesa;
-using GestaoFacil.Shared.Responses;
+using GestaoFacil.Server.DTOs.Despesa;
+using GestaoFacil.Server.Responses;
 using Microsoft.Extensions.Logging;
 
 namespace GestaoFacil.Server.Services.Despesa
