@@ -17,8 +17,7 @@ Backend:
 
 Próximas etapas:
 - Relatórios financeiros 
+- **xUnit + Moq** (testes automatizados)
+- **Serilog** (Monitorar logging)
 - Desenvolvimento do **frontend em Blazor WebAssembly**
-- Integração com:
-  - **xUnit + Moq** (testes automatizados)
-- **Containerização com Docker** e orquestração via **Kubernetes**
 - Deploy contínuo na **AWS**, com CI/CD via **Azure DevOps** ou **GitHub Actions**
