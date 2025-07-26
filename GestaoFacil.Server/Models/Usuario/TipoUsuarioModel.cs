@@ -1,7 +1,6 @@
-﻿using GestaoFacil.Server.Models.Principais;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 
-namespace GestaoFacil.Server.Models.Domain
+namespace GestaoFacil.Server.Models.Usuario
 {
     public class TipoUsuarioModel
     {

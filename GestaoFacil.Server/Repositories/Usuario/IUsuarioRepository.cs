@@ -1,5 +1,4 @@
-﻿using GestaoFacil.Server.Models.Domain;
-using GestaoFacil.Server.Models.Principais;
+﻿using GestaoFacil.Server.Models.Usuario;
 
 public interface IUsuarioRepository
 {

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using GestaoFacil.Server.Models.Principais;
+using GestaoFacil.Server.Models.Usuario;
 using GestaoFacil.Shared.DTOs.Auth;
 using GestaoFacil.Shared.DTOs.Despesa;
 using GestaoFacil.Shared.DTOs.Financeiro;

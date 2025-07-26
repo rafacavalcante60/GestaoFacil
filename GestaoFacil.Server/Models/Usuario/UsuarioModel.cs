@@ -1,7 +1,7 @@
-﻿using GestaoFacil.Server.Models.Domain;
+﻿using GestaoFacil.Server.Models.Principais;
 using System.Collections.ObjectModel;
 
-namespace GestaoFacil.Server.Models.Principais
+namespace GestaoFacil.Server.Models.Usuario
 {
     public class UsuarioModel
     {

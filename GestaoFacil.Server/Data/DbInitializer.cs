@@ -1,5 +1,6 @@
 ﻿using GestaoFacil.Server.Models.Domain;
 using GestaoFacil.Server.Models.Principais;
+using GestaoFacil.Server.Models.Usuario;
 
 namespace GestaoFacil.Server.Data
 {
