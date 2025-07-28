@@ -31,10 +31,11 @@ namespace GestaoFacil.Server.Repositories.Usuario
                 .ToListAsync();
         }
 
-        public async Task AddAsync(UsuarioModel usuario)
+        public async Task<UsuarioModel> AddAsync(UsuarioModel usuario)
         {
             _context.Usuarios.Add(usuario);
             await _context.SaveChangesAsync();
+            return usuario;
         }
 
         public async Task UpdateAsync(UsuarioModel usuario)

@@ -22,8 +22,6 @@ namespace GestaoFacil.Server.Services.Usuario
 
         public async Task<ResponseModel<UsuarioDto>> GetByIdAsync(int id)
         {
-            try
-            {
                 var usuario = await _repository.GetByIdAsync(id);
                 if (usuario == null)
                 {
@@ -34,32 +32,16 @@ namespace GestaoFacil.Server.Services.Usuario
                 var dto = _mapper.Map<UsuarioDto>(usuario);
                 return ResponseHelper.Sucesso(dto);
             }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Erro ao buscar usuário {Id}", id);
-                return ResponseHelper.Falha<UsuarioDto>("Ocorreu um erro ao processar a solicitação.");
-            }
-        }
 
         public async Task<ResponseModel<List<UsuarioDto>>> GetRecentAsync()
         {
-            try
-            {
                 var usuarios = await _repository.GetRecentAsync();
                 var dtos = _mapper.Map<List<UsuarioDto>>(usuarios);
                 return ResponseHelper.Sucesso(dtos);
             }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Erro ao buscar usuários recentes");
-                return ResponseHelper.Falha<List<UsuarioDto>>("Ocorreu um erro ao processar a solicitação.");
-            }
-        }
 
         public async Task<ResponseModel<bool>> UpdatePerfilAsync(int id, UsuarioUpdateDto dto)
         {
-            try
-            {
                 var usuario = await _repository.GetByIdAsync(id);
                 if (usuario == null)
                 {
@@ -73,17 +55,9 @@ namespace GestaoFacil.Server.Services.Usuario
                 _logger.LogInformation("Perfil do usuário {Id} atualizado com sucesso", id);
                 return ResponseHelper.Sucesso(true);
             }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Erro ao atualizar perfil do usuário {Id}", id);
-                return ResponseHelper.Falha<bool>("Ocorreu um erro ao processar a solicitação.");
-            }
-        }
 
         public async Task<ResponseModel<bool>> UpdateAdminAsync(int id, UsuarioAdminUpdateDto dto)
         {
-            try
-            {
                 var usuario = await _repository.GetByIdAsync(id);
                 if (usuario == null)
                 {
@@ -97,17 +71,9 @@ namespace GestaoFacil.Server.Services.Usuario
                 _logger.LogInformation("Usuário {Id} atualizado por administrador", id);
                 return ResponseHelper.Sucesso(true);
             }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Erro ao atualizar usuário {Id} por administrador", id);
-                return ResponseHelper.Falha<bool>("Ocorreu um erro ao processar a solicitação.");
-            }
-        }
 
         public async Task<ResponseModel<bool>> DeleteAdminAsync(int id)
         {
-            try
-            {
                 var usuario = await _repository.GetByIdAsync(id);
                 if (usuario == null)
                 {
@@ -120,11 +86,5 @@ namespace GestaoFacil.Server.Services.Usuario
                 _logger.LogInformation("Usuário {Id} deletado com sucesso", id);
                 return ResponseHelper.Sucesso(true);
             }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Erro ao deletar usuário {Id}", id);
-                return ResponseHelper.Falha<bool>("Ocorreu um erro ao processar a solicitação.");
-            }
-        }
     }
 }
