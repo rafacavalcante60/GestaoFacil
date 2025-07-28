@@ -88,11 +88,12 @@ namespace GestaoFacil.Server.Services.Auth
             usuario.SenhaHash = BCrypt.Net.BCrypt.HashPassword(dto.Senha);
             usuario.TipoUsuarioId = tipoComum.Id;
 
-            await _usuarioRepository.AddAsync(usuario);
+            var criado = await _usuarioRepository.AddAsync(usuario);
 
-            _logger.LogInformation("Usuário registrado com sucesso: {Email}", dto.Email);
+            _logger.LogInformation("Usuário registrado com sucesso. Id: {Id}, Email: {Email}", criado.Id, criado.Email);
             return ResponseHelper.Sucesso("Usuário registrado com sucesso.");
         }
+
 
         public async Task<ResponseModel<string>> LogoutAsync(string refreshToken)
         {

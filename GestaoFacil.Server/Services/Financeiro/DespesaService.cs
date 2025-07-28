@@ -22,113 +22,74 @@ namespace GestaoFacil.Server.Services.Despesa
 
         public async Task<ResponseModel<DespesaDto?>> GetByIdAsync(int id, int usuarioId)
         {
-            try
+            var despesa = await _repository.GetByIdAsync(id, usuarioId);
+            if (despesa == null)
             {
-                var despesa = await _repository.GetByIdAsync(id, usuarioId);
-                if (despesa == null)
-                {
-                    _logger.LogWarning("Despesa {Id} não encontrada para o usuário {UsuarioId}", id, usuarioId);
-                    return ResponseHelper.Falha<DespesaDto?>("Despesa não encontrada.");
-                }
+                _logger.LogWarning("Despesa {Id} não encontrada para o usuário {UsuarioId}", id, usuarioId);
+                return ResponseHelper.Falha<DespesaDto?>("Despesa não encontrada.");
+            }
 
-                var dto = _mapper.Map<DespesaDto>(despesa);
-                return ResponseHelper.Sucesso<DespesaDto?>(dto, "Despesa localizada com sucesso.");
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Erro ao buscar despesa {Id} para o usuário {UsuarioId}", id, usuarioId);
-                return ResponseHelper.Falha<DespesaDto?>("Ocorreu um problema ao tratar a sua solicitação");
-            }
+            var dto = _mapper.Map<DespesaDto>(despesa);
+            return ResponseHelper.Sucesso<DespesaDto?>(dto, "Despesa localizada com sucesso.");
         }
 
         public async Task<ResponseModel<List<DespesaDto>>> GetRecentByUsuarioAsync(int usuarioId)
         {
-            try
             {
                 var despesas = await _repository.GetRecentByUsuarioIdAsync(usuarioId);
                 var dtos = _mapper.Map<List<DespesaDto>>(despesas);
                 return ResponseHelper.Sucesso(dtos, "Despesas carregadas com sucesso.");
             }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Erro ao buscar despesas para o usuário {UsuarioId}", usuarioId);
-                return ResponseHelper.Falha<List<DespesaDto>>("Ocorreu um problema ao tratar a sua solicitação");
-            }
         }
-
         public async Task<ResponseModel<DespesaDto>> CreateAsync(DespesaCreateDto dto, int usuarioId)
         {
-            try
-            {
-                var despesa = _mapper.Map<DespesaModel>(dto);
-                despesa.UsuarioId = usuarioId;
+            var despesa = _mapper.Map<DespesaModel>(dto);
+            despesa.UsuarioId = usuarioId;
 
-                await _repository.AddAsync(despesa);
-                var criada = await _repository.GetByIdAsync(despesa.Id, usuarioId);
+            var criada = await _repository.AddAsync(despesa);
 
-                var dtoResult = _mapper.Map<DespesaDto>(criada);
+            var dtoResult = _mapper.Map<DespesaDto>(criada);
 
-                _logger.LogInformation("Despesa criada com ID {Id} para o usuário {UsuarioId}", despesa.Id, usuarioId);
-                return ResponseHelper.Sucesso(dtoResult, "Despesa criada com sucesso.");
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Erro ao criar despesa para o usuário {UsuarioId}", usuarioId);
-                return ResponseHelper.Falha<DespesaDto>("Ocorreu um problema ao tratar a sua solicitação");
-            }
+            _logger.LogInformation("Despesa criada com ID {Id} para o usuário {UsuarioId}", criada.Id, usuarioId);
+            return ResponseHelper.Sucesso(dtoResult, "Despesa criada com sucesso.");
         }
+
 
         public async Task<ResponseModel<bool>> UpdateAsync(int id, DespesaUpdateDto dto, int usuarioId)
         {
-            try
+            if (id != dto.Id)
             {
-                if (id != dto.Id)
-                {
-                    _logger.LogWarning("ID do corpo ({BodyId}) não bate com ID da rota ({RouteId})", dto.Id, id);
-                    return ResponseHelper.Falha<bool>("ID da despesa inválido.");
-                }
-
-                var despesa = await _repository.GetByIdAsync(id, usuarioId);
-                if (despesa == null)
-                {
-                    _logger.LogWarning("Despesa {Id} não encontrada para o usuário {UsuarioId}", id, usuarioId);
-                    return ResponseHelper.Falha<bool>("Despesa não encontrada.");
-                }
-
-                _mapper.Map(dto, despesa);
-                await _repository.UpdateAsync(despesa);
-
-                _logger.LogInformation("Despesa {Id} atualizada para o usuário {UsuarioId}", id, usuarioId);
-                return ResponseHelper.Sucesso(true, "Despesa atualizada com sucesso.");
+                _logger.LogWarning("ID do corpo ({BodyId}) não bate com ID da rota ({RouteId})", dto.Id, id);
+                return ResponseHelper.Falha<bool>("ID da despesa inválido.");
             }
-            catch (Exception ex)
+
+            var despesa = await _repository.GetByIdAsync(id, usuarioId);
+            if (despesa == null)
             {
-                _logger.LogError(ex, "Erro ao atualizar despesa {Id} para o usuário {UsuarioId}", id, usuarioId);
-                return ResponseHelper.Falha<bool>("Ocorreu um problema ao tratar a sua solicitação");
+                _logger.LogWarning("Despesa {Id} não encontrada para o usuário {UsuarioId}", id, usuarioId);
+                return ResponseHelper.Falha<bool>("Despesa não encontrada.");
             }
+
+            _mapper.Map(dto, despesa);
+            await _repository.UpdateAsync(despesa);
+
+            _logger.LogInformation("Despesa {Id} atualizada para o usuário {UsuarioId}", id, usuarioId);
+            return ResponseHelper.Sucesso(true, "Despesa atualizada com sucesso.");
         }
 
         public async Task<ResponseModel<bool>> DeleteAsync(int id, int usuarioId)
         {
-            try
+            var despesa = await _repository.GetByIdAsync(id, usuarioId);
+            if (despesa == null)
             {
-                var despesa = await _repository.GetByIdAsync(id, usuarioId);
-                if (despesa == null)
-                {
-                    _logger.LogWarning("Tentativa de remover despesa {Id} não encontrada para o usuário {UsuarioId}", id, usuarioId);
-                    return ResponseHelper.Falha<bool>("Despesa não encontrada.");
-                }
-
-                await _repository.DeleteAsync(despesa);
-
-                _logger.LogInformation("Despesa {Id} removida para o usuário {UsuarioId}", id, usuarioId);
-                return ResponseHelper.Sucesso(true, "Despesa removida com sucesso.");
+                _logger.LogWarning("Tentativa de remover despesa {Id} não encontrada para o usuário {UsuarioId}", id, usuarioId);
+                return ResponseHelper.Falha<bool>("Despesa não encontrada.");
             }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Erro ao remover despesa {Id} para o usuário {UsuarioId}", id, usuarioId);
-                return ResponseHelper.Falha<bool>("Ocorreu um problema ao tratar a sua solicitação");
-            }
+
+            await _repository.DeleteAsync(despesa);
+
+            _logger.LogInformation("Despesa {Id} removida para o usuário {UsuarioId}", id, usuarioId);
+            return ResponseHelper.Sucesso(true, "Despesa removida com sucesso.");
         }
     }
 }

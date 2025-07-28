@@ -30,10 +30,11 @@ namespace GestaoFacil.Server.Repositories.Despesa
                 .FirstOrDefaultAsync(d => d.Id == id && d.UsuarioId == usuarioId);
         }
 
-        public async Task AddAsync(DespesaModel despesa)
+        public async Task<DespesaModel> AddAsync(DespesaModel despesa)
         {
             _context.Despesas.Add(despesa);
             await _context.SaveChangesAsync();
+            return despesa;
         }
 
         public async Task UpdateAsync(DespesaModel despesa)

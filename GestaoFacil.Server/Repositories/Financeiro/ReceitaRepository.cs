@@ -30,10 +30,11 @@ namespace GestaoFacil.Server.Repositories.Financeiro
                 .ToListAsync();
         }
 
-        public async Task AddAsync(ReceitaModel receita)
+        public async Task<ReceitaModel> AddAsync(ReceitaModel receita)
         {
             _context.Receitas.Add(receita);
             await _context.SaveChangesAsync();
+            return receita;
         }
 
         public async Task UpdateAsync(ReceitaModel receita)
