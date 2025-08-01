@@ -1,4 +1,5 @@
-﻿using GestaoFacil.Server.Models.Principais;
+﻿using GestaoFacil.Server.DTOs.Filtro;
+using GestaoFacil.Server.Models.Principais;
 
 namespace GestaoFacil.Server.Repositories.Financeiro
 {
@@ -9,5 +10,6 @@ namespace GestaoFacil.Server.Repositories.Financeiro
         Task<ReceitaModel> AddAsync(ReceitaModel receita);
         Task UpdateAsync(ReceitaModel receita);
         Task DeleteAsync(ReceitaModel receita);
+        Task<List<ReceitaModel>> FiltrarAsync(ReceitaFiltroDto filtro, int usuarioId);
     }
 }

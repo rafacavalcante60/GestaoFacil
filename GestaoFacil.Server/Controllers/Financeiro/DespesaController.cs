@@ -1,6 +1,7 @@
-﻿using GestaoFacil.Server.Responses;
+﻿using GestaoFacil.Server.DTOs.Despesa;
+using GestaoFacil.Server.DTOs.Filtro;
+using GestaoFacil.Server.Responses;
 using GestaoFacil.Server.Services.Despesa;
-using GestaoFacil.Server.DTOs.Despesa;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -84,6 +85,19 @@ namespace GestaoFacil.Server.Controllers.Financeiro
             if (!result.Status)
             {
                 return NotFound(result);
+            }
+
+            return Ok(result);
+        }
+
+        [HttpPost("filtrar")]
+        public async Task<ActionResult<ResponseModel<List<DespesaDto>>>> Filtrar(DespesaFiltroDto filtro)
+        {
+            var result = await _despesaService.FiltrarAsync(filtro, UsuarioId);
+
+            if (!result.Status)
+            {
+                return BadRequest(result);
             }
 
             return Ok(result);

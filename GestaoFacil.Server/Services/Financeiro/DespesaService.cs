@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
+using GestaoFacil.Server.DTOs.Despesa;
+using GestaoFacil.Server.DTOs.Filtro;
 using GestaoFacil.Server.Models.Principais;
 using GestaoFacil.Server.Repositories.Despesa;
-using GestaoFacil.Server.DTOs.Despesa;
 using GestaoFacil.Server.Responses;
 using Microsoft.Extensions.Logging;
 
@@ -90,6 +91,22 @@ namespace GestaoFacil.Server.Services.Despesa
 
             _logger.LogInformation("Despesa {Id} removida para o usuário {UsuarioId}", id, usuarioId);
             return ResponseHelper.Sucesso(true, "Despesa removida com sucesso.");
+        }
+
+        public async Task<ResponseModel<List<DespesaDto>>> FiltrarAsync(DespesaFiltroDto filtro, int usuarioId)
+        {
+            if (filtro.DataInicial.HasValue && filtro.DataFinal.HasValue && filtro.DataInicial > filtro.DataFinal)
+            {
+                _logger.LogWarning("Filtro inválido: DataInicial {DataInicial} maior que DataFinal {DataFinal} para usuário {UsuarioId}",
+                    filtro.DataInicial, filtro.DataFinal, usuarioId);
+
+                return ResponseHelper.Falha<List<DespesaDto>>("A data inicial não pode ser maior que a data final.");
+            }
+
+            var despesas = await _repository.FiltrarAsync(filtro, usuarioId);
+            var dto = _mapper.Map<List<DespesaDto>>(despesas);
+
+            return ResponseHelper.Sucesso(dto);
         }
     }
 }

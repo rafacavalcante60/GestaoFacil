@@ -11,9 +11,8 @@ namespace GestaoFacil.Server.DTOs.Financeiro
         public DateTime Data { get; set; }
 
         [StringLength(200, ErrorMessage = "A descrição deve ter no máximo 200 caracteres.")]
-        public string Descricao { get; set; } = string.Empty;
+        public string? Descricao { get; set; }
 
-        [Required(ErrorMessage = "O valor é obrigatório.")]
         [Range(0.01, 999999.99, ErrorMessage = "O valor deve ser maior que zero.")]
         public decimal Valor { get; set; }
 

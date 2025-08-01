@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using GestaoFacil.Server.Services.Financeiro;
 using GestaoFacil.Server.DTOs.Financeiro;
+using GestaoFacil.Server.DTOs.Filtro;
 
 namespace GestaoFacil.Server.Controllers.Financeiro
 {
@@ -88,5 +89,19 @@ namespace GestaoFacil.Server.Controllers.Financeiro
 
             return Ok(result);
         }
+
+        [HttpPost("filtrar")]
+        public async Task<ActionResult<ResponseModel<List<ReceitaDto>>>> Filtrar(ReceitaFiltroDto filtro)
+        {
+            var result = await _receitaService.FiltrarAsync(filtro, UsuarioId);
+
+            if (!result.Status)
+            {
+                return BadRequest(result);
+            }
+
+            return Ok(result);
+        }
+
     }
 }

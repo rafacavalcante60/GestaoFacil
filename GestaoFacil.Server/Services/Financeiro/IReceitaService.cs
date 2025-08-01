@@ -1,5 +1,6 @@
 ﻿using GestaoFacil.Server.Responses;
 using GestaoFacil.Server.DTOs.Financeiro;
+using GestaoFacil.Server.DTOs.Filtro;
 
 namespace GestaoFacil.Server.Services.Financeiro
 {
@@ -10,5 +11,6 @@ namespace GestaoFacil.Server.Services.Financeiro
         Task<ResponseModel<ReceitaDto>> CreateAsync(ReceitaCreateDto dto, int usuarioId);
         Task<ResponseModel<bool>> UpdateAsync(int id, ReceitaUpdateDto dto, int usuarioId);
         Task<ResponseModel<bool>> DeleteAsync(int id, int usuarioId);
+        Task<ResponseModel<List<ReceitaDto>>> FiltrarAsync(ReceitaFiltroDto filtro, int usuarioId);
     }
 }
