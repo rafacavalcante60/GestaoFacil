@@ -20,4 +20,5 @@ Próximas etapas:
 - **xUnit + Moq** (testes automatizados)  
 - **Serilog** (Monitorar logging)  
 - Desenvolvimento do **frontend em Angular**  
+- **Docker** (containerização do sistema)
 - Deploy contínuo na **AWS**, com CI/CD via **Azure DevOps** ou **GitHub Actions**  

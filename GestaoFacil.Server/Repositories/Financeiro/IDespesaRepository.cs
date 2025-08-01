@@ -1,4 +1,5 @@
-﻿using GestaoFacil.Server.Models.Principais;
+﻿using GestaoFacil.Server.DTOs.Filtro;
+using GestaoFacil.Server.Models.Principais;
 
 namespace GestaoFacil.Server.Repositories.Despesa
 {
@@ -9,5 +10,6 @@ namespace GestaoFacil.Server.Repositories.Despesa
         Task<DespesaModel> AddAsync(DespesaModel despesa);
         Task UpdateAsync(DespesaModel despesa);
         Task DeleteAsync(DespesaModel despesa);
+        Task<List<DespesaModel>> FiltrarAsync(DespesaFiltroDto filtro, int usuarioId);
     }
 }

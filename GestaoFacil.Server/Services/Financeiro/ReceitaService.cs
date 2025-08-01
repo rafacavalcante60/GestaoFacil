@@ -3,6 +3,7 @@ using GestaoFacil.Server.Responses;
 using GestaoFacil.Server.Models.Principais;
 using GestaoFacil.Server.Repositories.Financeiro;
 using GestaoFacil.Server.DTOs.Financeiro;
+using GestaoFacil.Server.DTOs.Filtro;
 
 namespace GestaoFacil.Server.Services.Financeiro
 {
@@ -88,5 +89,22 @@ namespace GestaoFacil.Server.Services.Financeiro
             _logger.LogInformation("Receita {Id} removida com sucesso para o usuário {UsuarioId}", id, usuarioId);
             return ResponseHelper.Sucesso(true, "Receita removida com sucesso.");
         }
+
+        public async Task<ResponseModel<List<ReceitaDto>>> FiltrarAsync(ReceitaFiltroDto filtro, int usuarioId)
+        {
+            if (filtro.DataInicial.HasValue && filtro.DataFinal.HasValue && filtro.DataInicial > filtro.DataFinal)
+            {
+                _logger.LogWarning("Filtro inválido: DataInicial {DataInicial} maior que DataFinal {DataFinal} para usuário {UsuarioId}",
+                    filtro.DataInicial, filtro.DataFinal, usuarioId);
+
+                return ResponseHelper.Falha<List<ReceitaDto>>("A data inicial não pode ser maior que a data final.");
+            }
+
+            var receitas = await _repository.FiltrarAsync(filtro, usuarioId);
+            var dto = _mapper.Map<List<ReceitaDto>>(receitas);
+
+            return ResponseHelper.Sucesso(dto);
+        }
+
     }
 }
