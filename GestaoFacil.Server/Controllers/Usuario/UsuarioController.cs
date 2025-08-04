@@ -1,5 +1,6 @@
-﻿using GestaoFacil.Server.Responses;
-using GestaoFacil.Server.DTOs.Usuario;
+﻿using GestaoFacil.Server.DTOs.Usuario;
+using GestaoFacil.Server.Pagination;
+using GestaoFacil.Server.Responses;
 using GestaoFacil.Server.Services.Usuario;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -45,10 +46,10 @@ namespace GestaoFacil.Server.Controllers.Usuario
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpGet]
-        public async Task<ActionResult<ResponseModel<List<UsuarioDto>>>> GetRecentAdmin()
+        [HttpGet("pagination")]
+        public async Task<ActionResult<ResponseModel<List<UsuarioDto>>>> GetPaged([FromQuery] Parameters parameters)
         {
-            var result = await _usuarioService.GetRecentAsync();
+            var result = await _usuarioService.GetPagedAsync(parameters);
 
             if (!result.Status)
             {

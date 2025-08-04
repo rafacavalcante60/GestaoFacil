@@ -23,19 +23,21 @@ namespace GestaoFacil.Server.Repositories.Usuario
             return usuario;
         }
 
-        public async Task<List<UsuarioModel>> GetRecentAsync()
-        {
-            return await _context.Usuarios
-                .AsNoTracking()
-                .Take(15)
-                .ToListAsync();
-        }
-
         public async Task<UsuarioModel> AddAsync(UsuarioModel usuario)
         {
             _context.Usuarios.Add(usuario);
             await _context.SaveChangesAsync();
             return usuario;
+        }
+
+        public async Task<List<UsuarioModel>> GetPagedAsync(int pageNumber, int pageSize)
+        {
+            return await _context.Usuarios
+                .AsNoTracking()
+                .OrderBy(u => u.Id)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
         }
 
         public async Task UpdateAsync(UsuarioModel usuario)

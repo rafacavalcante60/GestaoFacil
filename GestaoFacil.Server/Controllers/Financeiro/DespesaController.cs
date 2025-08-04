@@ -1,5 +1,6 @@
 ﻿using GestaoFacil.Server.DTOs.Despesa;
 using GestaoFacil.Server.DTOs.Filtro;
+using GestaoFacil.Server.Pagination;
 using GestaoFacil.Server.Responses;
 using GestaoFacil.Server.Services.Despesa;
 using Microsoft.AspNetCore.Authorization;
@@ -7,16 +8,16 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace GestaoFacil.Server.Controllers.Financeiro
 {
-    //sem uso de controller generico (com receita) visando clareza e escalabilidade
+    //sem uso de controller generico (com receita) visando clareza e flexibilidade para as 2 entidades
     [Authorize]
     [ApiController]
     [Route("api/[controller]")]
-    public class DespesaController : BaseController 
+    public class DespesaController : BaseController
     {
         private readonly IDespesaService _despesaService;
 
         public DespesaController(IDespesaService despesaService)
-        {   
+        {
             _despesaService = despesaService;
         }
 
@@ -33,15 +34,13 @@ namespace GestaoFacil.Server.Controllers.Financeiro
             return Ok(result);
         }
 
-        [HttpGet]
-        public async Task<ActionResult<ResponseModel<List<DespesaDto>>>> GetRecentByUsuario()
+        [HttpGet("pagination")]
+        public async Task<ActionResult<ResponseModel<List<DespesaDto>>>> GetByUsuarioPaged([FromQuery] Parameters parameters) //objeto complexo = FromQuery
         {
-            var result = await _despesaService.GetRecentByUsuarioAsync(UsuarioId);
+            var result = await _despesaService.GetByUsuarioPagedAsync(UsuarioId, parameters);
 
             if (!result.Status)
-            {
                 return BadRequest(result);
-            }
 
             return Ok(result);
         }
@@ -60,7 +59,7 @@ namespace GestaoFacil.Server.Controllers.Financeiro
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<ResponseModel<bool>>> Update(int id,DespesaUpdateDto dto)
+        public async Task<ActionResult<ResponseModel<bool>>> Update(int id, DespesaUpdateDto dto)
         {
             if (id != dto.Id)
             {

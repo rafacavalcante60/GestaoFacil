@@ -21,13 +21,14 @@ namespace GestaoFacil.Server.Repositories.Financeiro
                 .FirstOrDefaultAsync(r => r.Id == id && r.UsuarioId == usuarioId);
         }
 
-        public async Task<List<ReceitaModel>> GetRecentByUsuarioAsync(int usuarioId)
+        public async Task<List<ReceitaModel>> GetByUsuarioIdPagedAsync(int usuarioId, int pageNumber, int pageSize)
         {
             return await _context.Receitas
                 .AsNoTracking()
                 .Where(r => r.UsuarioId == usuarioId)
-                .OrderByDescending(d => d.Data)
-                .Take(15)
+                .OrderByDescending(r => r.Data)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
                 .ToListAsync();
         }
 
@@ -96,6 +97,5 @@ namespace GestaoFacil.Server.Repositories.Financeiro
                 .OrderByDescending(r => r.Data)
                 .ToListAsync();
         }
-
     }
 }

@@ -47,18 +47,18 @@ namespace GestaoFacil.Server.Mappings
                 .ForMember(dest => dest.TipoUsuario, opt => opt.Ignore());
 
             CreateMap<UsuarioAdminUpdateDto, UsuarioModel>()
-                .ForMember(dest => dest.Id, opt => opt.Ignore()) 
-                .ForMember(dest => dest.TipoUsuario, opt => opt.Ignore()); 
-
-            CreateMap<UsuarioRegisterDto, UsuarioModel>()
                 .ForMember(dest => dest.Id, opt => opt.Ignore())
-                .ForMember(dest => dest.SenhaHash, opt => opt.Ignore()) 
                 .ForMember(dest => dest.TipoUsuario, opt => opt.Ignore());
 
             CreateMap<UsuarioRegisterDto, UsuarioModel>()
-    .ForMember(dest => dest.Id, opt => opt.Ignore())          // Ignora o Id (gerado pelo DB)
-    .ForMember(dest => dest.SenhaHash, opt => opt.Ignore())   // Ignora a senha hash (vai setar manualmente no Service)
-    .ForMember(dest => dest.TipoUsuario, opt => opt.Ignore()); // Ignora a navegação TipoUsuario, será setado pelo TipoUsuarioId
+                .ForMember(dest => dest.Id, opt => opt.Ignore())
+                .ForMember(dest => dest.SenhaHash, opt => opt.Ignore())
+                .ForMember(dest => dest.TipoUsuario, opt => opt.Ignore());
+
+            CreateMap<UsuarioRegisterDto, UsuarioModel>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore())          // Ignora o Id (gerado pelo DB)
+                .ForMember(dest => dest.SenhaHash, opt => opt.Ignore())   // Ignora a senha hash (vai setar manualmente no Service)
+                .ForMember(dest => dest.TipoUsuario, opt => opt.Ignore()); // Ignora a navegação TipoUsuario, será setado pelo TipoUsuarioId
 
         }
     }

@@ -5,7 +5,7 @@ namespace GestaoFacil.Server.Repositories.Financeiro
 {
     public interface IReceitaRepository
     {
-        Task<List<ReceitaModel>> GetRecentByUsuarioAsync(int usuarioId);
+        Task<List<ReceitaModel>> GetByUsuarioIdPagedAsync(int usuarioId, int pageNumber, int pageSize);
         Task<ReceitaModel?> GetByIdAsync(int id, int usuarioId);
         Task<ReceitaModel> AddAsync(ReceitaModel receita);
         Task UpdateAsync(ReceitaModel receita);

@@ -1,13 +1,14 @@
-﻿using GestaoFacil.Server.Responses;
+﻿using GestaoFacil.Server.DTOs.Filtro;
+using GestaoFacil.Server.DTOs.Financeiro;
+using GestaoFacil.Server.Pagination;
+using GestaoFacil.Server.Responses;
+using GestaoFacil.Server.Services.Financeiro;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using GestaoFacil.Server.Services.Financeiro;
-using GestaoFacil.Server.DTOs.Financeiro;
-using GestaoFacil.Server.DTOs.Filtro;
 
 namespace GestaoFacil.Server.Controllers.Financeiro
 {
-    //sem uso de controller generico (com despesa) visando clareza e escalabilidade
+    //sem uso de controller generico (com despesa) visando clareza e flexibilidade para as 2 entidades
     [Authorize]
     [ApiController]
     [Route("api/[controller]")]
@@ -20,15 +21,13 @@ namespace GestaoFacil.Server.Controllers.Financeiro
             _receitaService = receitaService;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<ResponseModel<List<ReceitaDto>>>> GetRecentByUsuario()
+        [HttpGet("pagination")]
+        public async Task<ActionResult<ResponseModel<List<ReceitaDto>>>> GetByUsuarioPaged([FromQuery] Parameters parameters)
         {
-            var result = await _receitaService.GetRecentByUsuarioAsync(UsuarioId);
+            var result = await _receitaService.GetByUsuarioPagedAsync(UsuarioId, parameters);
 
             if (!result.Status)
-            {
                 return BadRequest(result);
-            }
 
             return Ok(result);
         }
