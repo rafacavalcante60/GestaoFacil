@@ -2,6 +2,7 @@
 using GestaoFacil.Server.DTOs.Despesa;
 using GestaoFacil.Server.DTOs.Filtro;
 using GestaoFacil.Server.Models.Principais;
+using GestaoFacil.Server.Pagination;
 using GestaoFacil.Server.Repositories.Despesa;
 using GestaoFacil.Server.Responses;
 using Microsoft.Extensions.Logging;
@@ -34,14 +35,13 @@ namespace GestaoFacil.Server.Services.Despesa
             return ResponseHelper.Sucesso<DespesaDto?>(dto, "Despesa localizada com sucesso.");
         }
 
-        public async Task<ResponseModel<List<DespesaDto>>> GetRecentByUsuarioAsync(int usuarioId)
+        public async Task<ResponseModel<List<DespesaDto>>> GetByUsuarioPagedAsync(int usuarioId, Parameters parameters)
         {
-            {
-                var despesas = await _repository.GetRecentByUsuarioIdAsync(usuarioId);
-                var dtos = _mapper.Map<List<DespesaDto>>(despesas);
-                return ResponseHelper.Sucesso(dtos, "Despesas carregadas com sucesso.");
-            }
+            var despesas = await _repository.GetByUsuarioIdPagedAsync(usuarioId, parameters.PageNumber, parameters.PageSize);
+            var dtos = _mapper.Map<List<DespesaDto>>(despesas);
+            return ResponseHelper.Sucesso(dtos, "Despesas paginadas carregadas com sucesso.");
         }
+
         public async Task<ResponseModel<DespesaDto>> CreateAsync(DespesaCreateDto dto, int usuarioId)
         {
             var despesa = _mapper.Map<DespesaModel>(dto);

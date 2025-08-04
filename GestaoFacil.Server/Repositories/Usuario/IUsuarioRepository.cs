@@ -3,7 +3,7 @@
 public interface IUsuarioRepository
 {
     Task<UsuarioModel?> GetByIdAsync(int id);
-    Task<List<UsuarioModel>> GetRecentAsync();
+    Task<List<UsuarioModel>> GetPagedAsync(int pageNumber, int pageSize);
     Task<UsuarioModel> AddAsync(UsuarioModel usuario);
     Task UpdateAsync(UsuarioModel usuario);
     Task DeleteAsync(UsuarioModel usuario);

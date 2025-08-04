@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
-using GestaoFacil.Server.Responses;
-using GestaoFacil.Server.Models.Principais;
-using GestaoFacil.Server.Repositories.Financeiro;
-using GestaoFacil.Server.DTOs.Financeiro;
 using GestaoFacil.Server.DTOs.Filtro;
+using GestaoFacil.Server.DTOs.Financeiro;
+using GestaoFacil.Server.Models.Principais;
+using GestaoFacil.Server.Pagination;
+using GestaoFacil.Server.Repositories.Financeiro;
+using GestaoFacil.Server.Responses;
+using NuGet.Protocol.Core.Types;
 
 namespace GestaoFacil.Server.Services.Financeiro
 {
@@ -20,11 +22,11 @@ namespace GestaoFacil.Server.Services.Financeiro
             _logger = logger;
         }
 
-        public async Task<ResponseModel<List<ReceitaDto>>> GetRecentByUsuarioAsync(int usuarioId)
+        public async Task<ResponseModel<List<ReceitaDto>>> GetByUsuarioPagedAsync(int usuarioId, Parameters parameters)
         {
-            var receitas = await _repository.GetRecentByUsuarioAsync(usuarioId);
+            var receitas = await _repository.GetByUsuarioIdPagedAsync(usuarioId, parameters.PageNumber, parameters.PageSize);
             var dtos = _mapper.Map<List<ReceitaDto>>(receitas);
-            return ResponseHelper.Sucesso(dtos, "Receitas carregadas com sucesso.");
+            return ResponseHelper.Sucesso(dtos, "Receitas paginadas carregadas com sucesso.");
         }
 
         public async Task<ResponseModel<ReceitaDto?>> GetByIdAsync(int id, int usuarioId)

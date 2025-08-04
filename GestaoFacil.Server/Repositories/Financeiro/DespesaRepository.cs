@@ -14,13 +14,14 @@ namespace GestaoFacil.Server.Repositories.Despesa
             _context = context;
         }
 
-        public async Task<List<DespesaModel>> GetRecentByUsuarioIdAsync(int usuarioId)
+        public async Task<List<DespesaModel>> GetByUsuarioIdPagedAsync(int usuarioId, int pageNumber, int pageSize)
         {
             return await _context.Despesas
                 .AsNoTracking()
                 .Where(d => d.UsuarioId == usuarioId)
                 .OrderByDescending(d => d.Data)
-                .Take(15)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
                 .ToListAsync();
         }
 
