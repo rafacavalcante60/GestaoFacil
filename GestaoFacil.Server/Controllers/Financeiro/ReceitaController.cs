@@ -22,12 +22,26 @@ namespace GestaoFacil.Server.Controllers.Financeiro
         }
 
         [HttpGet("pagination")]
-        public async Task<ActionResult<ResponseModel<List<ReceitaDto>>>> GetByUsuarioPaged([FromQuery] Parameters parameters)
+        public async Task<ActionResult<ResponseModel<PagedList<ReceitaDto>>>> GetByUsuarioPaged([FromQuery] Parameters parameters)
         {
             var result = await _receitaService.GetByUsuarioPagedAsync(UsuarioId, parameters);
 
             if (!result.Status)
+            {
                 return BadRequest(result);
+            }
+
+            var metadata = new
+            {
+                result.Dados!.CurrentPage,
+                result.Dados!.TotalPages,
+                result.Dados!.PageSize,
+                result.Dados!.TotalCount,
+                result.Dados!.HasNext,
+                result.Dados!.HasPrevious
+            };
+
+            Response.Headers.Add("X-Pagination", System.Text.Json.JsonSerializer.Serialize(metadata)); //adiciona os metadados de paginação no cabeçalho da resposta
 
             return Ok(result);
         }

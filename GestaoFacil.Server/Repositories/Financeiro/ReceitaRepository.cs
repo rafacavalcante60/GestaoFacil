@@ -1,6 +1,7 @@
 ﻿using GestaoFacil.Server.Data;
 using GestaoFacil.Server.DTOs.Filtro;
 using GestaoFacil.Server.Models.Principais;
+using GestaoFacil.Server.Pagination;
 using Microsoft.EntityFrameworkCore;
 
 namespace GestaoFacil.Server.Repositories.Financeiro
@@ -21,15 +22,21 @@ namespace GestaoFacil.Server.Repositories.Financeiro
                 .FirstOrDefaultAsync(r => r.Id == id && r.UsuarioId == usuarioId);
         }
 
-        public async Task<List<ReceitaModel>> GetByUsuarioIdPagedAsync(int usuarioId, int pageNumber, int pageSize)
+        public async Task<PagedList<ReceitaModel>> GetByUsuarioIdPagedAsync(int usuarioId, int pageNumber, int pageSize)
         {
-            return await _context.Receitas
-                .AsNoTracking()
-                .Where(r => r.UsuarioId == usuarioId)
-                .OrderByDescending(r => r.Data)
+            var query = _context.Receitas
+               .AsNoTracking()
+               .Where(r => r.UsuarioId == usuarioId)
+               .OrderByDescending(r => r.Data);
+
+            var totalCount = await query.CountAsync();
+
+            var items = await query
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
+
+            return new PagedList<ReceitaModel>(items, totalCount, pageNumber, pageSize);
         }
 
         public async Task<ReceitaModel> AddAsync(ReceitaModel receita)

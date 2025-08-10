@@ -1,9 +1,10 @@
 ﻿using GestaoFacil.Server.Models.Usuario;
+using GestaoFacil.Server.Pagination;
 
 public interface IUsuarioRepository
 {
     Task<UsuarioModel?> GetByIdAsync(int id);
-    Task<List<UsuarioModel>> GetPagedAsync(int pageNumber, int pageSize);
+    Task<PagedList<UsuarioModel>> GetPagedAsync(int pageNumber, int pageSize);
     Task<UsuarioModel> AddAsync(UsuarioModel usuario);
     Task UpdateAsync(UsuarioModel usuario);
     Task DeleteAsync(UsuarioModel usuario);

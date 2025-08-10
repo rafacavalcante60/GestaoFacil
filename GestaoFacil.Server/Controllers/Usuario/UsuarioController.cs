@@ -47,7 +47,7 @@ namespace GestaoFacil.Server.Controllers.Usuario
 
         [Authorize(Roles = "Admin")]
         [HttpGet("pagination")]
-        public async Task<ActionResult<ResponseModel<List<UsuarioDto>>>> GetPaged([FromQuery] Parameters parameters)
+        public async Task<ActionResult<ResponseModel<PagedList<UsuarioDto>>>> GetPaged([FromQuery] Parameters parameters)
         {
             var result = await _usuarioService.GetPagedAsync(parameters);
 
@@ -55,6 +55,18 @@ namespace GestaoFacil.Server.Controllers.Usuario
             {
                 return BadRequest(result);
             }
+
+            var metadata = new
+            {
+                result.Dados!.CurrentPage,
+                result.Dados!.TotalPages,
+                result.Dados!.PageSize,
+                result.Dados!.TotalCount,
+                result.Dados!.HasNext,
+                result.Dados!.HasPrevious
+            };
+
+            Response.Headers.Add("X-Pagination", System.Text.Json.JsonSerializer.Serialize(metadata)); //adiciona os metadados de paginação no cabeçalho da resposta
 
             return Ok(result);
         }

@@ -7,7 +7,7 @@ namespace GestaoFacil.Server.Services.Financeiro
 {
     public interface IReceitaService
     {
-        Task<ResponseModel<List<ReceitaDto>>> GetByUsuarioPagedAsync(int usuarioId, Parameters parameters);
+        Task<ResponseModel<PagedList<ReceitaDto>>> GetByUsuarioPagedAsync(int usuarioId, Parameters parameters);
         Task<ResponseModel<ReceitaDto?>> GetByIdAsync(int id, int usuarioId);
         Task<ResponseModel<ReceitaDto>> CreateAsync(ReceitaCreateDto dto, int usuarioId);
         Task<ResponseModel<bool>> UpdateAsync(int id, ReceitaUpdateDto dto, int usuarioId);

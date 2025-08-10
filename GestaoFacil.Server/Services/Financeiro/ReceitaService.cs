@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using GestaoFacil.Server.DTOs.Despesa;
 using GestaoFacil.Server.DTOs.Filtro;
 using GestaoFacil.Server.DTOs.Financeiro;
 using GestaoFacil.Server.Models.Principais;
@@ -22,10 +23,17 @@ namespace GestaoFacil.Server.Services.Financeiro
             _logger = logger;
         }
 
-        public async Task<ResponseModel<List<ReceitaDto>>> GetByUsuarioPagedAsync(int usuarioId, Parameters parameters)
+        public async Task<ResponseModel<PagedList<ReceitaDto>>> GetByUsuarioPagedAsync(int usuarioId, Parameters parameters)
         {
             var receitas = await _repository.GetByUsuarioIdPagedAsync(usuarioId, parameters.PageNumber, parameters.PageSize);
-            var dtos = _mapper.Map<List<ReceitaDto>>(receitas);
+
+            var dtos = new PagedList<ReceitaDto>(
+                _mapper.Map<List<ReceitaDto>>(receitas),
+                receitas.TotalCount,
+                receitas.CurrentPage,
+                receitas.PageSize
+            );
+
             return ResponseHelper.Sucesso(dtos, "Receitas paginadas carregadas com sucesso.");
         }
 

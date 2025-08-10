@@ -30,20 +30,35 @@ namespace GestaoFacil.Server.Controllers.Financeiro
             {
                 return NotFound(result);
             }
-
+   
             return Ok(result);
         }
 
         [HttpGet("pagination")]
-        public async Task<ActionResult<ResponseModel<List<DespesaDto>>>> GetByUsuarioPaged([FromQuery] Parameters parameters) //objeto complexo = FromQuery
+        public async Task<ActionResult<ResponseModel<PagedList<DespesaDto>>>> GetByUsuarioPaged([FromQuery] Parameters parameters)
         {
             var result = await _despesaService.GetByUsuarioPagedAsync(UsuarioId, parameters);
 
             if (!result.Status)
+            {
                 return BadRequest(result);
+            }
+
+            var metadata = new
+            {
+                result.Dados!.CurrentPage,
+                result.Dados!.TotalPages,
+                result.Dados!.PageSize,
+                result.Dados!.TotalCount,
+                result.Dados!.HasNext,
+                result.Dados!.HasPrevious
+            };
+
+            Response.Headers.Add("X-Pagination", System.Text.Json.JsonSerializer.Serialize(metadata)); //adiciona os metadados de paginação no cabeçalho da resposta
 
             return Ok(result);
         }
+
 
         [HttpPost]
         public async Task<ActionResult<ResponseModel<DespesaDto>>> Create(DespesaCreateDto dto)
