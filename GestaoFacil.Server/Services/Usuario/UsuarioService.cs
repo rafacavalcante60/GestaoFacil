@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using GestaoFacil.Server.DTOs.Despesa;
 using GestaoFacil.Server.DTOs.Usuario;
 using GestaoFacil.Server.Pagination;
 using GestaoFacil.Server.Responses;
@@ -31,12 +32,20 @@ namespace GestaoFacil.Server.Services.Usuario
                 return ResponseHelper.Sucesso(dto);
             }
 
-        public async Task<ResponseModel<List<UsuarioDto>>> GetPagedAsync(Parameters parameters)
+        public async Task<ResponseModel<PagedList<UsuarioDto>>> GetPagedAsync(Parameters parameters)
         {
             var usuarios = await _repository.GetPagedAsync(parameters.PageNumber, parameters.PageSize);
-            var dtos = _mapper.Map<List<UsuarioDto>>(usuarios);
+
+            var dtos = new PagedList<UsuarioDto>(
+                _mapper.Map<List<UsuarioDto>>(usuarios),
+                usuarios.TotalCount,
+                usuarios.CurrentPage,
+                usuarios.PageSize
+            );
+
             return ResponseHelper.Sucesso(dtos, "Usuários paginados carregados com sucesso.");
         }
+
 
         public async Task<ResponseModel<bool>> UpdatePerfilAsync(int id, UsuarioUpdateDto dto)
         {

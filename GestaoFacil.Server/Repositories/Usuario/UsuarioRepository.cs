@@ -1,5 +1,6 @@
 ﻿using GestaoFacil.Server.Data;
 using GestaoFacil.Server.Models.Usuario;
+using GestaoFacil.Server.Pagination;
 using Microsoft.EntityFrameworkCore;
 
 namespace GestaoFacil.Server.Repositories.Usuario
@@ -30,14 +31,20 @@ namespace GestaoFacil.Server.Repositories.Usuario
             return usuario;
         }
 
-        public async Task<List<UsuarioModel>> GetPagedAsync(int pageNumber, int pageSize)
+        public async Task<PagedList<UsuarioModel>> GetPagedAsync(int pageNumber, int pageSize)
         {
-            return await _context.Usuarios
+            var query = _context.Usuarios
                 .AsNoTracking()
-                .OrderBy(u => u.Id)
+                .OrderBy(u => u.Id);
+
+            var totalCount = await query.CountAsync();
+
+            var items = await query
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
+
+            return new PagedList<UsuarioModel>(items, totalCount, pageNumber, pageSize);
         }
 
         public async Task UpdateAsync(UsuarioModel usuario)

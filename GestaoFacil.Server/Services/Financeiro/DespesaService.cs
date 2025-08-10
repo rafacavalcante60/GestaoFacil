@@ -35,12 +35,21 @@ namespace GestaoFacil.Server.Services.Despesa
             return ResponseHelper.Sucesso<DespesaDto?>(dto, "Despesa localizada com sucesso.");
         }
 
-        public async Task<ResponseModel<List<DespesaDto>>> GetByUsuarioPagedAsync(int usuarioId, Parameters parameters)
+        public async Task<ResponseModel<PagedList<DespesaDto>>> GetByUsuarioPagedAsync(int usuarioId, Parameters parameters)
         {
             var despesas = await _repository.GetByUsuarioIdPagedAsync(usuarioId, parameters.PageNumber, parameters.PageSize);
-            var dtos = _mapper.Map<List<DespesaDto>>(despesas);
+
+            var dtos = new PagedList<DespesaDto>(
+                _mapper.Map<List<DespesaDto>>(despesas),
+                despesas.TotalCount,
+                despesas.CurrentPage,
+                despesas.PageSize
+            );
+
             return ResponseHelper.Sucesso(dtos, "Despesas paginadas carregadas com sucesso.");
         }
+
+
 
         public async Task<ResponseModel<DespesaDto>> CreateAsync(DespesaCreateDto dto, int usuarioId)
         {

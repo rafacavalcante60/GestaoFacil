@@ -1,6 +1,7 @@
 ﻿using GestaoFacil.Server.Data;
 using GestaoFacil.Server.DTOs.Filtro;
 using GestaoFacil.Server.Models.Principais;
+using GestaoFacil.Server.Pagination;
 using Microsoft.EntityFrameworkCore;
 
 namespace GestaoFacil.Server.Repositories.Despesa
@@ -14,16 +15,23 @@ namespace GestaoFacil.Server.Repositories.Despesa
             _context = context;
         }
 
-        public async Task<List<DespesaModel>> GetByUsuarioIdPagedAsync(int usuarioId, int pageNumber, int pageSize)
+        public async Task<PagedList<DespesaModel>> GetByUsuarioIdPagedAsync(int usuarioId, int pageNumber, int pageSize)
         {
-            return await _context.Despesas
+            var query = _context.Despesas
                 .AsNoTracking()
                 .Where(d => d.UsuarioId == usuarioId)
-                .OrderByDescending(d => d.Data)
+                .OrderByDescending(d => d.Data);
+
+            var totalCount = await query.CountAsync();
+
+            var items = await query
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
+
+            return new PagedList<DespesaModel>(items, totalCount, pageNumber, pageSize);
         }
+
 
         public async Task<DespesaModel?> GetByIdAsync(int id, int usuarioId)
         {
