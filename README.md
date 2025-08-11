@@ -14,7 +14,7 @@ Backend:
 - **JWT** (autenticação)  
 - **AutoMapper**  
 
-# Documentação da API
+## Documentação da API
 
 ![Print do Swagger](https://i.imgur.com/2FIuEAh.png)
 
