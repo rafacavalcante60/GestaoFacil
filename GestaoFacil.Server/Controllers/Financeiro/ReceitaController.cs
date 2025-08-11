@@ -21,31 +21,6 @@ namespace GestaoFacil.Server.Controllers.Financeiro
             _receitaService = receitaService;
         }
 
-        [HttpGet("pagination")]
-        public async Task<ActionResult<ResponseModel<PagedList<ReceitaDto>>>> GetByUsuarioPaged([FromQuery] Parameters parameters)
-        {
-            var result = await _receitaService.GetByUsuarioPagedAsync(UsuarioId, parameters);
-
-            if (!result.Status)
-            {
-                return BadRequest(result);
-            }
-
-            var metadata = new
-            {
-                result.Dados!.CurrentPage,
-                result.Dados!.TotalPages,
-                result.Dados!.PageSize,
-                result.Dados!.TotalCount,
-                result.Dados!.HasNext,
-                result.Dados!.HasPrevious
-            };
-
-            Response.Headers.Add("X-Pagination", System.Text.Json.JsonSerializer.Serialize(metadata)); //adiciona os metadados de paginação no cabeçalho da resposta
-
-            return Ok(result);
-        }
-
         [HttpGet("{id}")]
         public async Task<ActionResult<ResponseModel<ReceitaDto>>> GetById(int id)
         {
@@ -57,6 +32,32 @@ namespace GestaoFacil.Server.Controllers.Financeiro
             }
 
             return Ok(result);
+        }
+
+        [HttpGet("pagination")]
+        public async Task<ActionResult<ResponseModel<PagedList<ReceitaDto>>>> GetByUsuarioPaged([FromQuery] QueryStringParameters parameters)
+        {
+            var result = await _receitaService.GetByUsuarioPagedAsync(UsuarioId, parameters);
+
+            if (!result.Status)
+            {
+                return BadRequest(result);
+            }
+
+            return ObterReceitas(result);
+        }
+
+        [HttpPost("filter/pagination")]
+        public async Task<ActionResult<ResponseModel<PagedList<ReceitaDto>>>> FiltrarPaged([FromQuery] ReceitaFiltroDto filtro)
+        {
+            var result = await _receitaService.FiltrarPagedAsync(UsuarioId, filtro);
+
+            if (!result.Status)
+            {
+                return BadRequest(result);
+            }
+
+            return ObterReceitas(result);
         }
 
         [HttpPost]
@@ -103,18 +104,21 @@ namespace GestaoFacil.Server.Controllers.Financeiro
             return Ok(result);
         }
 
-        [HttpPost("filtrar")]
-        public async Task<ActionResult<ResponseModel<List<ReceitaDto>>>> Filtrar(ReceitaFiltroDto filtro)
+        private ActionResult<ResponseModel<PagedList<ReceitaDto>>> ObterReceitas(ResponseModel<PagedList<ReceitaDto>> result)
         {
-            var result = await _receitaService.FiltrarAsync(filtro, UsuarioId);
-
-            if (!result.Status)
+            var metadata = new
             {
-                return BadRequest(result);
-            }
+                result.Dados!.CurrentPage,
+                result.Dados!.TotalPages,
+                result.Dados!.PageSize,
+                result.Dados!.TotalCount,
+                result.Dados!.HasNext,
+                result.Dados!.HasPrevious
+            };
+
+            Response.Headers.Add("X-Pagination", System.Text.Json.JsonSerializer.Serialize(metadata)); //adiciona os metadados de paginação no cabeçalho da resposta
 
             return Ok(result);
         }
-
     }
 }

@@ -23,7 +23,20 @@ namespace GestaoFacil.Server.Services.Financeiro
             _logger = logger;
         }
 
-        public async Task<ResponseModel<PagedList<ReceitaDto>>> GetByUsuarioPagedAsync(int usuarioId, Parameters parameters)
+        public async Task<ResponseModel<ReceitaDto?>> GetByIdAsync(int id, int usuarioId)
+        {
+            var receita = await _repository.GetByIdAsync(id, usuarioId);
+            if (receita == null)
+            {
+                _logger.LogWarning("Receita {Id} não encontrada para o usuário {UsuarioId}", id, usuarioId);
+                return ResponseHelper.Falha<ReceitaDto?>("Receita não encontrada.");
+            }
+
+            var dto = _mapper.Map<ReceitaDto>(receita);
+            return ResponseHelper.Sucesso<ReceitaDto?>(dto, "Receita localizada com sucesso.");
+        }
+
+        public async Task<ResponseModel<PagedList<ReceitaDto>>> GetByUsuarioPagedAsync(int usuarioId, QueryStringParameters parameters)
         {
             var receitas = await _repository.GetByUsuarioIdPagedAsync(usuarioId, parameters.PageNumber, parameters.PageSize);
 
@@ -37,17 +50,26 @@ namespace GestaoFacil.Server.Services.Financeiro
             return ResponseHelper.Sucesso(dtos, "Receitas paginadas carregadas com sucesso.");
         }
 
-        public async Task<ResponseModel<ReceitaDto?>> GetByIdAsync(int id, int usuarioId)
+        public async Task<ResponseModel<PagedList<ReceitaDto>>> FiltrarPagedAsync(int usuarioId, ReceitaFiltroDto filtro)
         {
-            var receita = await _repository.GetByIdAsync(id, usuarioId);
-            if (receita == null)
+            if (filtro.DataInicial.HasValue && filtro.DataFinal.HasValue && filtro.DataInicial > filtro.DataFinal)
             {
-                _logger.LogWarning("Receita {Id} não encontrada para o usuário {UsuarioId}", id, usuarioId);
-                return ResponseHelper.Falha<ReceitaDto?>("Receita não encontrada.");
+                _logger.LogWarning("Filtro inválido: DataInicial {DataInicial} maior que DataFinal {DataFinal} para usuário {UsuarioId}",
+                    filtro.DataInicial, filtro.DataFinal, usuarioId);
+
+                return ResponseHelper.Falha<PagedList<ReceitaDto>>("A data inicial não pode ser maior que a data final.");
             }
 
-            var dto = _mapper.Map<ReceitaDto>(receita);
-            return ResponseHelper.Sucesso<ReceitaDto?>(dto, "Receita localizada com sucesso.");
+            var receitas = await _repository.FiltrarPagedAsync(usuarioId, filtro);
+
+            var dtos = new PagedList<ReceitaDto>(
+                _mapper.Map<List<ReceitaDto>>(receitas),
+                receitas.TotalCount,
+                receitas.CurrentPage,
+                receitas.PageSize
+            );
+
+            return ResponseHelper.Sucesso(dtos, "Receitas filtradas e paginadas carregadas com sucesso.");
         }
 
         public async Task<ResponseModel<ReceitaDto>> CreateAsync(ReceitaCreateDto dto, int usuarioId)
@@ -99,22 +121,5 @@ namespace GestaoFacil.Server.Services.Financeiro
             _logger.LogInformation("Receita {Id} removida com sucesso para o usuário {UsuarioId}", id, usuarioId);
             return ResponseHelper.Sucesso(true, "Receita removida com sucesso.");
         }
-
-        public async Task<ResponseModel<List<ReceitaDto>>> FiltrarAsync(ReceitaFiltroDto filtro, int usuarioId)
-        {
-            if (filtro.DataInicial.HasValue && filtro.DataFinal.HasValue && filtro.DataInicial > filtro.DataFinal)
-            {
-                _logger.LogWarning("Filtro inválido: DataInicial {DataInicial} maior que DataFinal {DataFinal} para usuário {UsuarioId}",
-                    filtro.DataInicial, filtro.DataFinal, usuarioId);
-
-                return ResponseHelper.Falha<List<ReceitaDto>>("A data inicial não pode ser maior que a data final.");
-            }
-
-            var receitas = await _repository.FiltrarAsync(filtro, usuarioId);
-            var dto = _mapper.Map<List<ReceitaDto>>(receitas);
-
-            return ResponseHelper.Sucesso(dto);
-        }
-
     }
 }

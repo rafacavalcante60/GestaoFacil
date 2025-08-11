@@ -7,11 +7,12 @@ namespace GestaoFacil.Server.Services.Despesa
 {
     public interface IDespesaService
     {
-        Task<ResponseModel<PagedList<DespesaDto>>> GetByUsuarioPagedAsync(int usuarioId, Parameters parameters);
         Task<ResponseModel<DespesaDto?>> GetByIdAsync(int id, int usuarioId);
+        Task<ResponseModel<PagedList<DespesaDto>>> GetByUsuarioPagedAsync(int usuarioId, QueryStringParameters parameters);
+        Task<ResponseModel<PagedList<DespesaDto>>> FiltrarPagedAsync(int usuarioId, DespesaFiltroDto filtro);
         Task<ResponseModel<DespesaDto>> CreateAsync(DespesaCreateDto dto, int usuarioId);
         Task<ResponseModel<bool>> UpdateAsync(int id, DespesaUpdateDto dto, int usuarioId);
         Task<ResponseModel<bool>> DeleteAsync(int id, int usuarioId);
-        Task<ResponseModel<List<DespesaDto>>> FiltrarAsync(DespesaFiltroDto filtro, int usuarioId);
+        
     }
 }

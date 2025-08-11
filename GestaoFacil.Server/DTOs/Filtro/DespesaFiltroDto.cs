@@ -1,8 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using GestaoFacil.Server.Pagination;
+using System.ComponentModel.DataAnnotations;
 
 namespace GestaoFacil.Server.DTOs.Filtro
 {
-    public class DespesaFiltroDto
+    public class DespesaFiltroDto : QueryStringParameters
     {
         [Range(0.01, 999999.99, ErrorMessage = "O valor deve ser maior que zero.")]
         public decimal? ValorMin { get; set; }

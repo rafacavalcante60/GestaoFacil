@@ -7,11 +7,11 @@ namespace GestaoFacil.Server.Services.Financeiro
 {
     public interface IReceitaService
     {
-        Task<ResponseModel<PagedList<ReceitaDto>>> GetByUsuarioPagedAsync(int usuarioId, Parameters parameters);
         Task<ResponseModel<ReceitaDto?>> GetByIdAsync(int id, int usuarioId);
+        Task<ResponseModel<PagedList<ReceitaDto>>> GetByUsuarioPagedAsync(int usuarioId, QueryStringParameters parameters);
+        Task<ResponseModel<PagedList<ReceitaDto>>> FiltrarPagedAsync(int usuarioId, ReceitaFiltroDto filtro);
         Task<ResponseModel<ReceitaDto>> CreateAsync(ReceitaCreateDto dto, int usuarioId);
         Task<ResponseModel<bool>> UpdateAsync(int id, ReceitaUpdateDto dto, int usuarioId);
         Task<ResponseModel<bool>> DeleteAsync(int id, int usuarioId);
-        Task<ResponseModel<List<ReceitaDto>>> FiltrarAsync(ReceitaFiltroDto filtro, int usuarioId);
     }
 }

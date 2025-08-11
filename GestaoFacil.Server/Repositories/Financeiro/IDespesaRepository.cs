@@ -8,9 +8,10 @@ namespace GestaoFacil.Server.Repositories.Despesa
     {
         Task<DespesaModel?> GetByIdAsync(int id, int usuarioId);
         Task<PagedList<DespesaModel>> GetByUsuarioIdPagedAsync(int usuarioId, int pageNumber, int pageSize);
+        Task<PagedList<DespesaModel>> FiltrarPagedAsync(int usuarioId, DespesaFiltroDto filtro);
         Task<DespesaModel> AddAsync(DespesaModel despesa);
         Task UpdateAsync(DespesaModel despesa);
         Task DeleteAsync(DespesaModel despesa);
-        Task<List<DespesaModel>> FiltrarAsync(DespesaFiltroDto filtro, int usuarioId);
+        
     }
 }
