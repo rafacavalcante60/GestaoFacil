@@ -16,7 +16,7 @@ Backend:
 
 # Documentação da API
 
-![Print do Swagger](https://imgur.com/a/9zwElut.png)
+![Print do Swagger](https://i.imgur.com/2FIuEAh.png)
 
 Próximas etapas:  
 - Relatórios financeiros  
