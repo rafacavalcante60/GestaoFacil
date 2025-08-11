@@ -13,7 +13,10 @@ Backend:
 - **Entity Framework Core + MySQL**  
 - **JWT** (autenticação)  
 - **AutoMapper**  
-- **Swagger (Swashbuckle)**  
+
+# Documentação da API
+
+![Print do Swagger](https://imgur.com/a/9zwElut.png)
 
 Próximas etapas:  
 - Relatórios financeiros  
@@ -22,3 +25,6 @@ Próximas etapas:
 - Desenvolvimento do **frontend em Angular**  
 - **Docker** (containerização do sistema)
 - Deploy contínuo na **AWS**, com CI/CD via **Azure DevOps** ou **GitHub Actions**  
+
+
+
