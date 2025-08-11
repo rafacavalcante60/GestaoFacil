@@ -1,6 +1,6 @@
 ﻿namespace GestaoFacil.Server.Pagination
 {
-    public class Parameters
+    public class QueryStringParameters
     {
         const int maxPageSize = 50;
         public int PageNumber { get; set; } = 1;

@@ -20,7 +20,7 @@
             AddRange(items);
         }
 
-        public static PagedList<T> ToPagedList(IQueryable<T> source, int pageNumber, int pageSize)
+        public static PagedList<T> ToPagedList(IQueryable<T> source, int pageNumber, int pageSize) //Queryable é mais eficiente que IEnumerable
         {
             var count = source.Count();
             var items = source.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();

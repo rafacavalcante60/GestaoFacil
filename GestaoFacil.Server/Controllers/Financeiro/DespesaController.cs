@@ -35,7 +35,7 @@ namespace GestaoFacil.Server.Controllers.Financeiro
         }
 
         [HttpGet("pagination")]
-        public async Task<ActionResult<ResponseModel<PagedList<DespesaDto>>>> GetByUsuarioPaged([FromQuery] Parameters parameters)
+        public async Task<ActionResult<ResponseModel<PagedList<DespesaDto>>>> GetByUsuarioPaged([FromQuery] QueryStringParameters parameters)
         {
             var result = await _despesaService.GetByUsuarioPagedAsync(UsuarioId, parameters);
 
@@ -44,6 +44,24 @@ namespace GestaoFacil.Server.Controllers.Financeiro
                 return BadRequest(result);
             }
 
+            return ObterDespesas(result);
+        }
+
+        [HttpPost("filter/pagination")]
+        public async Task<ActionResult<ResponseModel<PagedList<DespesaDto>>>> Filtrar([FromQuery] DespesaFiltroDto filtro)
+        {
+            var result = await _despesaService.FiltrarPagedAsync(UsuarioId, filtro);
+
+            if (!result.Status)
+            {
+                return BadRequest(result);
+            }
+
+            return ObterDespesas(result);
+        }
+
+        private ActionResult<ResponseModel<PagedList<DespesaDto>>> ObterDespesas(ResponseModel<PagedList<DespesaDto>> result)
+        {
             var metadata = new
             {
                 result.Dados!.CurrentPage,
@@ -58,7 +76,6 @@ namespace GestaoFacil.Server.Controllers.Financeiro
 
             return Ok(result);
         }
-
 
         [HttpPost]
         public async Task<ActionResult<ResponseModel<DespesaDto>>> Create(DespesaCreateDto dto)
@@ -99,19 +116,6 @@ namespace GestaoFacil.Server.Controllers.Financeiro
             if (!result.Status)
             {
                 return NotFound(result);
-            }
-
-            return Ok(result);
-        }
-
-        [HttpPost("filtrar")]
-        public async Task<ActionResult<ResponseModel<List<DespesaDto>>>> Filtrar(DespesaFiltroDto filtro)
-        {
-            var result = await _despesaService.FiltrarAsync(filtro, UsuarioId);
-
-            if (!result.Status)
-            {
-                return BadRequest(result);
             }
 
             return Ok(result);

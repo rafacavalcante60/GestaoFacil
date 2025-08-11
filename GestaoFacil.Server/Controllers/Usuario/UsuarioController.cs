@@ -47,7 +47,7 @@ namespace GestaoFacil.Server.Controllers.Usuario
 
         [Authorize(Roles = "Admin")]
         [HttpGet("pagination")]
-        public async Task<ActionResult<ResponseModel<PagedList<UsuarioDto>>>> GetPaged([FromQuery] Parameters parameters)
+        public async Task<ActionResult<ResponseModel<PagedList<UsuarioDto>>>> GetPaged([FromQuery] QueryStringParameters parameters)
         {
             var result = await _usuarioService.GetPagedAsync(parameters);
 

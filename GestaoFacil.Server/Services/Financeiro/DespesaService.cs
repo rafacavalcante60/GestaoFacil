@@ -35,7 +35,7 @@ namespace GestaoFacil.Server.Services.Despesa
             return ResponseHelper.Sucesso<DespesaDto?>(dto, "Despesa localizada com sucesso.");
         }
 
-        public async Task<ResponseModel<PagedList<DespesaDto>>> GetByUsuarioPagedAsync(int usuarioId, Parameters parameters)
+        public async Task<ResponseModel<PagedList<DespesaDto>>> GetByUsuarioPagedAsync(int usuarioId, QueryStringParameters parameters)
         {
             var despesas = await _repository.GetByUsuarioIdPagedAsync(usuarioId, parameters.PageNumber, parameters.PageSize);
 
@@ -48,8 +48,27 @@ namespace GestaoFacil.Server.Services.Despesa
 
             return ResponseHelper.Sucesso(dtos, "Despesas paginadas carregadas com sucesso.");
         }
+        public async Task<ResponseModel<PagedList<DespesaDto>>> FiltrarPagedAsync(int usuarioId, DespesaFiltroDto filtro)
+        {
+            if (filtro.DataInicial.HasValue && filtro.DataFinal.HasValue && filtro.DataInicial > filtro.DataFinal)
+            {
+                _logger.LogWarning("Filtro inválido: DataInicial {DataInicial} maior que DataFinal {DataFinal} para usuário {UsuarioId}",
+                    filtro.DataInicial, filtro.DataFinal, usuarioId);
 
+                return ResponseHelper.Falha<PagedList<DespesaDto>>("A data inicial não pode ser maior que a data final.");
+            }
 
+            var despesas = await _repository.FiltrarPagedAsync(usuarioId, filtro);
+
+            var dtos = new PagedList<DespesaDto>(
+                _mapper.Map<List<DespesaDto>>(despesas),
+                despesas.TotalCount,
+                despesas.CurrentPage,
+                despesas.PageSize
+            );
+
+            return ResponseHelper.Sucesso(dtos, "Despesas filtradas e paginadas carregadas com sucesso.");
+        }
 
         public async Task<ResponseModel<DespesaDto>> CreateAsync(DespesaCreateDto dto, int usuarioId)
         {
@@ -100,22 +119,6 @@ namespace GestaoFacil.Server.Services.Despesa
 
             _logger.LogInformation("Despesa {Id} removida para o usuário {UsuarioId}", id, usuarioId);
             return ResponseHelper.Sucesso(true, "Despesa removida com sucesso.");
-        }
-
-        public async Task<ResponseModel<List<DespesaDto>>> FiltrarAsync(DespesaFiltroDto filtro, int usuarioId)
-        {
-            if (filtro.DataInicial.HasValue && filtro.DataFinal.HasValue && filtro.DataInicial > filtro.DataFinal)
-            {
-                _logger.LogWarning("Filtro inválido: DataInicial {DataInicial} maior que DataFinal {DataFinal} para usuário {UsuarioId}",
-                    filtro.DataInicial, filtro.DataFinal, usuarioId);
-
-                return ResponseHelper.Falha<List<DespesaDto>>("A data inicial não pode ser maior que a data final.");
-            }
-
-            var despesas = await _repository.FiltrarAsync(filtro, usuarioId);
-            var dto = _mapper.Map<List<DespesaDto>>(despesas);
-
-            return ResponseHelper.Sucesso(dto);
         }
     }
 }

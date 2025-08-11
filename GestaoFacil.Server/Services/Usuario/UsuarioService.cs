@@ -32,7 +32,7 @@ namespace GestaoFacil.Server.Services.Usuario
                 return ResponseHelper.Sucesso(dto);
             }
 
-        public async Task<ResponseModel<PagedList<UsuarioDto>>> GetPagedAsync(Parameters parameters)
+        public async Task<ResponseModel<PagedList<UsuarioDto>>> GetPagedAsync(QueryStringParameters parameters)
         {
             var usuarios = await _repository.GetPagedAsync(parameters.PageNumber, parameters.PageSize);
 
