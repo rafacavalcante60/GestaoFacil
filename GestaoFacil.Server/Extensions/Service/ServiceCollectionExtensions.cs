@@ -1,15 +1,20 @@
-﻿using GestaoFacil.Server.Mappings;
+﻿using GestaoFacil.Server.Data;
+using GestaoFacil.Server.Mappings;
 using GestaoFacil.Server.Repositories.Despesa;
 using GestaoFacil.Server.Repositories.Financeiro;
 using GestaoFacil.Server.Repositories.Usuario;
 using GestaoFacil.Server.Services.Auth;
 using GestaoFacil.Server.Services.Despesa;
+using GestaoFacil.Server.Services.Email;
 using GestaoFacil.Server.Services.Financeiro;
 using GestaoFacil.Server.Services.Usuario;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.RateLimiting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
+using System.Threading.RateLimiting;
 
 namespace GestaoFacil.Server.Extensions.Service
 {
@@ -21,6 +26,7 @@ namespace GestaoFacil.Server.Extensions.Service
             services.AddScoped<IReceitaService, ReceitaService>();
             services.AddScoped<IUsuarioService, UsuarioService>();
             services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<TokenService>();
 
             return services;
@@ -103,6 +109,68 @@ namespace GestaoFacil.Server.Extensions.Service
 
             return services;
         }
-    }
 
-}
+
+
+        public static IServiceCollection AddCorsPolicy(this IServiceCollection services, string policyName, string origin)
+        {
+            services.AddCors(options =>
+            {
+                options.AddPolicy(policyName, policy =>
+                {
+                    policy.WithOrigins(origin)
+                          .AllowAnyHeader()
+                          .AllowAnyMethod();
+                });
+            });
+
+            return services;
+        }
+
+        public static IServiceCollection AddRateLimitingPolicies(this IServiceCollection services, IConfiguration configuration)
+            {
+                services.AddRateLimiter(options =>
+                {
+                    //Global
+                    var globalPermitLimit = configuration.GetValue<int>("RateLimiting:Global:PermitLimit", 100);
+                    var globalWindowMinutes = configuration.GetValue<int>("RateLimiting:Global:WindowMinutes", 1);
+                    var globalQueueLimit = configuration.GetValue<int>("RateLimiting:Global:QueueLimit", 0);
+
+                    options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(httpContext =>
+                    {
+                        var ipAddress = httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+                        return RateLimitPartition.GetFixedWindowLimiter(ipAddress, _ => new FixedWindowRateLimiterOptions
+                        {
+                            PermitLimit = globalPermitLimit,
+                            Window = TimeSpan.FromMinutes(globalWindowMinutes),
+                            QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+                            QueueLimit = globalQueueLimit
+                        });
+                    });
+
+                    //Pra login
+                    var loginPermitLimit = configuration.GetValue<int>("RateLimiting:Login:PermitLimit", 3);
+                    var loginWindowSeconds = configuration.GetValue<int>("RateLimiting:Login:WindowSeconds", 30);
+                    var loginQueueLimit = configuration.GetValue<int>("RateLimiting:Login:QueueLimit", 0);
+
+                    options.AddFixedWindowLimiter("login", opt =>
+                    {
+                        opt.PermitLimit = loginPermitLimit;
+                        opt.Window = TimeSpan.FromSeconds(loginWindowSeconds);
+                        opt.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+                        opt.QueueLimit = loginQueueLimit;
+                    });
+
+                    options.OnRejected = async (context, token) =>
+                    {
+                        context.HttpContext.Response.StatusCode = 429;
+                        await context.HttpContext.Response.WriteAsync(
+                            "Muitas requisições. Tente novamente mais tarde.",
+                            cancellationToken: token);
+                    };
+                });
+
+                return services;
+            }
+        }
+    }

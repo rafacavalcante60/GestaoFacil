@@ -9,5 +9,7 @@ namespace GestaoFacil.Server.Services.Auth
         Task<ResponseModel<string>> LogoutAsync(string refreshToken);
         Task<ResponseModel<TokenDto>> RefreshTokenAsync(string refreshToken);
         Task<ResponseModel<string>> RegisterAsync(UsuarioRegisterDto request);
+        Task<ResponseModel<string>> ResetPasswordAsync(ResetPasswordRequestDto dto);
+        Task<ResponseModel<string>> ForgotPasswordAsync(ForgotPasswordRequestDto dto);
     }
 }

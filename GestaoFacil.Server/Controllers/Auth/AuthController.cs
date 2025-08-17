@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using GestaoFacil.Server.DTOs.Auth;
-using GestaoFacil.Server.Services.Auth;
+﻿using GestaoFacil.Server.DTOs.Auth;
 using GestaoFacil.Server.Responses;
+using GestaoFacil.Server.Services.Auth;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace GestaoFacil.Server.Controllers.Auth
 {
@@ -17,6 +18,7 @@ namespace GestaoFacil.Server.Controllers.Auth
         }
 
         [HttpPost("login")]
+        [EnableRateLimiting("login")]
         public async Task<ActionResult<ResponseModel<TokenDto>>> Login(UsuarioLoginDto request)
         {
             var result = await _authService.LoginAsync(request);
@@ -68,5 +70,30 @@ namespace GestaoFacil.Server.Controllers.Auth
             return Ok(result);
         }
 
+        [HttpPost("forgot-password")]
+        public async Task<ActionResult<ResponseModel<string>>> ForgotPassword(ForgotPasswordRequestDto dto)
+        {
+            var result = await _authService.ForgotPasswordAsync(dto);
+
+            if (!result.Status)
+            {
+                return BadRequest(result);
+            }
+
+            return Ok(result);
+        }
+
+        [HttpPost("reset-password")]
+        public async Task<ActionResult<ResponseModel<string>>> ResetPassword(ResetPasswordRequestDto dto)
+        {
+            var result = await _authService.ResetPasswordAsync(dto);
+
+            if (!result.Status)
+            {
+                return BadRequest(result);
+            }
+
+            return Ok(result);
+        }
     }
 }

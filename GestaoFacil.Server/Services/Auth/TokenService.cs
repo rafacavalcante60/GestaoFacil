@@ -67,4 +67,11 @@ public class TokenService
         return Convert.ToBase64String(randomBytes);
     }
 
+    public string GeneratePasswordResetToken()
+    {
+        var randomBytes = new byte[32];
+        using var rng = RandomNumberGenerator.Create();
+        rng.GetBytes(randomBytes);
+        return Convert.ToBase64String(randomBytes);
+    }
 }

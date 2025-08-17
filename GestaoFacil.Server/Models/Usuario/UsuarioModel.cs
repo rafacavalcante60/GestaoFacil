@@ -15,7 +15,8 @@ namespace GestaoFacil.Server.Models.Usuario
 
         public int TipoUsuarioId { get; set; }
         public TipoUsuarioModel TipoUsuario { get; set; } = null!;
-
+        public string? PasswordResetToken { get; set; }
+        public DateTime? PasswordResetTokenExpiraEm { get; set; }
         public ICollection<ReceitaModel> Receitas { get; set; } = new Collection<ReceitaModel>();
         public ICollection<DespesaModel> Despesas { get; set; } = new Collection<DespesaModel>();
     }

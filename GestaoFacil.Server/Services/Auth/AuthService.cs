@@ -1,9 +1,10 @@
 ﻿using AutoMapper;
 using GestaoFacil.Server.Data;
+using GestaoFacil.Server.DTOs.Auth;
 using GestaoFacil.Server.Models.Auth;
 using GestaoFacil.Server.Models.Usuario;
-using GestaoFacil.Server.DTOs.Auth;
 using GestaoFacil.Server.Responses;
+using GestaoFacil.Server.Services.Email;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
@@ -16,14 +17,17 @@ namespace GestaoFacil.Server.Services.Auth
         private readonly ILogger<AuthService> _logger;
         private readonly IMapper _mapper;
         private readonly AppDbContext _context; //apenas para o refresh token
+        private readonly IEmailService _emailService;
 
-        public AuthService(IUsuarioRepository usuarioRepository, TokenService tokenService, ILogger<AuthService> logger, IMapper mapper, AppDbContext context)
+        public AuthService(IUsuarioRepository usuarioRepository, TokenService tokenService, ILogger<AuthService> logger, 
+            IMapper mapper, AppDbContext context, IEmailService emailService)
         {
             _usuarioRepository = usuarioRepository;
             _tokenService = tokenService;
             _logger = logger;
             _mapper = mapper;
             _context = context;
+            _emailService = emailService;
         }
 
         public async Task<ResponseModel<TokenDto>> LoginAsync(UsuarioLoginDto request)
@@ -151,5 +155,68 @@ namespace GestaoFacil.Server.Services.Auth
 
             return ResponseHelper.Sucesso(dto);
         }
+
+        public async Task<ResponseModel<string>> ForgotPasswordAsync(ForgotPasswordRequestDto dto)
+        {
+            _logger.LogInformation("Solicitação de esqueci a senha para: {Email}", dto.Email);
+
+            var usuario = await _usuarioRepository.GetByEmailAsync(dto.Email);
+            if (usuario == null)
+            {
+                _logger.LogWarning("Email não encontrado no esqueci a senha: {Email}", dto.Email);
+                return ResponseHelper.Sucesso("Se o email existir, um link de redefinição foi enviado.");
+            }
+
+            var token = _tokenService.GeneratePasswordResetToken();
+            var tokenExpiraEm = DateTime.UtcNow.AddHours(1);
+
+            usuario.PasswordResetToken = token;
+            usuario.PasswordResetTokenExpiraEm = tokenExpiraEm;
+            await _usuarioRepository.UpdateAsync(usuario);
+
+            var linkReset = $"https://seusite.com/reset-password?token={token}"; //necessario alteracao pós criação de front-end
+
+            try
+            {
+                await _emailService.SendAsync(
+                    to: usuario.Email,
+                    subject: "Redefinição de senha GestaoFacil",
+                    body: $"Olá, <br> Clique no link abaixo para redefinir sua senha:<br><a href='{linkReset}'>{linkReset}</a><br>Este link expira em 1 hora."
+                );
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Falha ao enviar email de redefinição para {Email}", dto.Email);
+                return ResponseHelper.Falha<string>("Não foi possível enviar o email de redefinição. Tente novamente mais tarde.");
+            }
+
+            _logger.LogInformation("Token de redefinição gerado e email enviado para usuário ID {UsuarioId}", usuario.Id);
+            return ResponseHelper.Sucesso("Se o email existir, um link de redefinição foi enviado.");
+        }
+
+        public async Task<ResponseModel<string>> ResetPasswordAsync(ResetPasswordRequestDto dto)
+        {
+            _logger.LogInformation("Tentativa de redefinição de senha com token: {Token}", dto.Token);
+
+            var usuario = await _context.Usuarios.FirstOrDefaultAsync(u =>
+                u.PasswordResetToken == dto.Token &&
+                u.PasswordResetTokenExpiraEm > DateTime.UtcNow);
+
+            if (usuario == null)
+            {
+                _logger.LogWarning("Token inválido ou expirado para redefinição de senha.");
+                return ResponseHelper.Falha<string>("Token inválido ou expirado.");
+            }
+
+            usuario.SenhaHash = BCrypt.Net.BCrypt.HashPassword(dto.NewPassword);
+            usuario.PasswordResetToken = null;
+            usuario.PasswordResetTokenExpiraEm = null;
+
+            await _usuarioRepository.UpdateAsync(usuario);
+
+            _logger.LogInformation("Senha redefinida com sucesso para o usuário ID {UsuarioId}", usuario.Id);
+            return ResponseHelper.Sucesso("Senha redefinida com sucesso.");
+        }
+
     }
 }
