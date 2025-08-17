@@ -20,12 +20,12 @@
             AddRange(items);
         }
 
-        public static PagedList<T> ToPagedList(IQueryable<T> source, int pageNumber, int pageSize) //Queryable é mais eficiente que IEnumerable
-        {
-            var count = source.Count();
-            var items = source.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
+        //public static PagedList<T> ToPagedList(IQueryable<T> source, int pageNumber, int pageSize) //Queryable é mais eficiente que IEnumerable
+        //{
+        //    var count = source.Count();
+        //    var items = source.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
                     
-            return new PagedList<T>(items, count, pageNumber, pageSize);
-        }
+        //    return new PagedList<T>(items, count, pageNumber, pageSize);
+        //}
     }
 }

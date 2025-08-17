@@ -48,7 +48,7 @@ namespace GestaoFacil.Server.Controllers.Financeiro
         }
 
         [HttpPost("filter/pagination")]
-        public async Task<ActionResult<ResponseModel<PagedList<DespesaDto>>>> Filtrar([FromQuery] DespesaFiltroDto filtro)
+        public async Task<ActionResult<ResponseModel<PagedList<DespesaDto>>>> FiltrarPaged([FromQuery] DespesaFiltroDto filtro)
         {
             var result = await _despesaService.FiltrarPagedAsync(UsuarioId, filtro);
 
