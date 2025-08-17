@@ -11,6 +11,9 @@ obj/
 .vs/
 *.log
 
+# Configuração local
+appsettings.Development.json
+
 # Angular
 Client/node_modules/
 Client/dist/
