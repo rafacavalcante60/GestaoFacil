@@ -2,6 +2,8 @@
 using GestaoFacil.Server.DTOs.Filtro;
 using GestaoFacil.Server.Pagination;
 using GestaoFacil.Server.Responses;
+using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace GestaoFacil.Server.Services.Despesa
 {
@@ -10,6 +12,7 @@ namespace GestaoFacil.Server.Services.Despesa
         Task<ResponseModel<DespesaDto?>> GetByIdAsync(int id, int usuarioId);
         Task<ResponseModel<PagedList<DespesaDto>>> GetByUsuarioPagedAsync(int usuarioId, QueryStringParameters parameters);
         Task<ResponseModel<PagedList<DespesaDto>>> FiltrarPagedAsync(int usuarioId, DespesaFiltroDto filtro);
+        Task<ResponseModel<byte[]>> ExportarExcelCompletoAsync(int usuarioId, DespesaFiltroDto filtro);
         Task<ResponseModel<DespesaDto>> CreateAsync(DespesaCreateDto dto, int usuarioId);
         Task<ResponseModel<bool>> UpdateAsync(int id, DespesaUpdateDto dto, int usuarioId);
         Task<ResponseModel<bool>> DeleteAsync(int id, int usuarioId);

@@ -60,6 +60,19 @@ namespace GestaoFacil.Server.Controllers.Financeiro
             return ObterReceitas(result);
         }
 
+        [HttpPost("filter/export-excel-completo")]
+        public async Task<IActionResult> ExportarExcelCompleto([FromQuery] ReceitaFiltroDto filtro)
+        {
+            var result = await _receitaService.ExportarExcelCompletoAsync(UsuarioId, filtro);
+
+            if (!result.Status)
+                return BadRequest(result);
+
+            return File(result.Dados,
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                "Receitas_Completas.xlsx");
+        }
+
         [HttpPost]
         public async Task<ActionResult<ResponseModel<ReceitaDto>>> Create(ReceitaCreateDto dto)
         {

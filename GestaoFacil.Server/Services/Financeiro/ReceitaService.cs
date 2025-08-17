@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ClosedXML.Excel;
 using GestaoFacil.Server.DTOs.Despesa;
 using GestaoFacil.Server.DTOs.Filtro;
 using GestaoFacil.Server.DTOs.Financeiro;
@@ -71,6 +72,49 @@ namespace GestaoFacil.Server.Services.Financeiro
 
             return ResponseHelper.Sucesso(dtos, "Receitas filtradas e paginadas carregadas com sucesso.");
         }
+
+        public async Task<ResponseModel<byte[]>> ExportarExcelCompletoAsync(int usuarioId, ReceitaFiltroDto filtro)
+        {
+            var receitas = await _repository.FiltrarAsync(usuarioId, filtro); // método que inclui CategoriaReceita e FormaPagamento
+
+            if (!receitas.Any()) 
+            { 
+                return ResponseHelper.Falha<byte[]>("Nenhuma receita encontrada para exportação.");
+            }
+            using var workbook = new XLWorkbook();
+            var worksheet = workbook.Worksheets.Add("Receitas");
+
+            // Cabeçalhos
+            var headers = new string[] { "Data", "Nome", "Descrição", "Categoria", "Forma Pagamento", "Valor" };
+            for (int c = 0; c < headers.Length; c++)
+            {
+                worksheet.Cell(1, c + 1).Value = headers[c];
+                worksheet.Cell(1, c + 1).Style.Font.Bold = true;
+                worksheet.Cell(1, c + 1).Style.Fill.BackgroundColor = XLColor.DarkOrange;
+                worksheet.Cell(1, c + 1).Style.Font.FontColor = XLColor.White;
+            }
+
+            // Preenchendo linhas
+            for (int i = 0; i < receitas.Count; i++)
+            {
+                var r = receitas[i];
+                worksheet.Cell(i + 2, 1).Value = r.Data.ToString("dd/MM/yyyy HH:mm");
+                worksheet.Cell(i + 2, 2).Value = r.Nome;
+                worksheet.Cell(i + 2, 3).Value = r.Descricao;
+                worksheet.Cell(i + 2, 4).Value = r.CategoriaReceita?.Nome ?? "";
+                worksheet.Cell(i + 2, 5).Value = r.FormaPagamento?.Nome ?? "";
+                worksheet.Cell(i + 2, 6).Value = r.Valor;
+                worksheet.Cell(i + 2, 6).Style.NumberFormat.Format = "R$ #,##0.00";
+            }
+
+            worksheet.Columns().AdjustToContents();
+
+            using var stream = new MemoryStream();
+            workbook.SaveAs(stream);
+
+            return ResponseHelper.Sucesso(stream.ToArray(), "Relatório de receitas exportado com sucesso.");
+        }
+
 
         public async Task<ResponseModel<ReceitaDto>> CreateAsync(ReceitaCreateDto dto, int usuarioId)
         {

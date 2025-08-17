@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ClosedXML.Excel;
 using GestaoFacil.Server.DTOs.Despesa;
 using GestaoFacil.Server.DTOs.Filtro;
 using GestaoFacil.Server.Models.Principais;
@@ -68,6 +69,60 @@ namespace GestaoFacil.Server.Services.Despesa
             );
 
             return ResponseHelper.Sucesso(dtos, "Despesas filtradas e paginadas carregadas com sucesso.");
+        }
+
+        public async Task<ResponseModel<byte[]>> ExportarExcelCompletoAsync(int usuarioId, DespesaFiltroDto filtro)
+        {
+            if (filtro.DataInicial.HasValue && filtro.DataFinal.HasValue && filtro.DataInicial > filtro.DataFinal)
+            {
+                _logger.LogWarning("Filtro inválido: DataInicial {DataInicial} maior que DataFinal {DataFinal} para usuário {UsuarioId}",
+                    filtro.DataInicial, filtro.DataFinal, usuarioId);
+
+                return ResponseHelper.Falha<byte[]>("A data inicial não pode ser maior que a data final.");
+            }
+
+            var despesas = await _repository.FiltrarAsync(usuarioId, filtro);
+
+            if (!despesas.Any())
+            {
+                return ResponseHelper.Falha<byte[]>("Nenhuma despesa encontrada para exportação.");
+            }
+            using var workbook = new XLWorkbook();
+            var worksheet = workbook.Worksheets.Add("Despesas");
+
+            //cabeçalhos
+            var headers = new string[]
+            {
+                "Data", "Nome", "Descrição", "Categoria", "Forma Pagamento", "Valor"
+            };
+
+            for (int c = 0; c < headers.Length; c++)
+            {
+                worksheet.Cell(1, c + 1).Value = headers[c];
+                worksheet.Cell(1, c + 1).Style.Font.Bold = true;
+                worksheet.Cell(1, c + 1).Style.Fill.BackgroundColor = XLColor.DarkOrange; 
+                worksheet.Cell(1, c + 1).Style.Font.FontColor = XLColor.White;
+            }
+
+            //preenchendo linhas
+            for (int i = 0; i < despesas.Count; i++)
+            {
+                var d = despesas[i];
+                worksheet.Cell(i + 2, 1).Value = d.Data.ToString("dd/MM/yyyy HH:mm");
+                worksheet.Cell(i + 2, 2).Value = d.Nome;
+                worksheet.Cell(i + 2, 3).Value = d.Descricao;
+                worksheet.Cell(i + 2, 4).Value = d.CategoriaDespesa?.Nome ?? "";
+                worksheet.Cell(i + 2, 5).Value = d.FormaPagamento?.Nome ?? "";
+                worksheet.Cell(i + 2, 6).Value = d.Valor;
+                worksheet.Cell(i + 2, 6).Style.NumberFormat.Format = "#,##0.00";
+            }
+
+            worksheet.Columns().AdjustToContents();
+
+            using var stream = new MemoryStream();
+            workbook.SaveAs(stream);
+
+            return ResponseHelper.Sucesso(stream.ToArray(), "Relatório exportado com sucesso.");
         }
 
         public async Task<ResponseModel<DespesaDto>> CreateAsync(DespesaCreateDto dto, int usuarioId)

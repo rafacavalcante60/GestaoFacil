@@ -39,59 +39,41 @@ namespace GestaoFacil.Server.Repositories.Despesa
             return new PagedList<DespesaModel>(items, totalCount, pageNumber, pageSize);
         }
 
+        //filtro paginado para exibição
         public async Task<PagedList<DespesaModel>> FiltrarPagedAsync(int usuarioId, DespesaFiltroDto filtro)
         {
             var query = _context.Despesas
                 .AsNoTracking()
-                .Where(d => d.UsuarioId == usuarioId)
-                .AsQueryable();
+                .Where(d => d.UsuarioId == usuarioId);
 
-            if (filtro.ValorMin.HasValue)
-            {
-                query = query.Where(d => d.Valor >= filtro.ValorMin.Value);
-            }
-
-            if (filtro.ValorMax.HasValue)
-            {
-                query = query.Where(d => d.Valor <= filtro.ValorMax.Value);
-            }
-
-            if (filtro.DataInicial.HasValue)
-            {
-                query = query.Where(d => d.Data >= filtro.DataInicial.Value.Date); // início do dia
-            }
-
-            if (filtro.DataFinal.HasValue)
-            {
-                var dataFinalInclusiva = filtro.DataFinal.Value.Date.AddDays(1).AddTicks(-1); // fim do dia
-                query = query.Where(d => d.Data <= dataFinalInclusiva);
-            }
-
-            if (filtro.CategoriaDespesaId.HasValue)
-            {
-                query = query.Where(d => d.CategoriaDespesaId == filtro.CategoriaDespesaId.Value);
-            }
-
-            if (filtro.FormaPagamentoId.HasValue)
-            {
-                query = query.Where(d => d.FormaPagamentoId == filtro.FormaPagamentoId.Value);
-            }
-
-            if (!string.IsNullOrWhiteSpace(filtro.BuscaTexto))
-            {
-                query = query.Where(d => d.Descricao != null && d.Descricao.Contains(filtro.BuscaTexto));
-            }
-
-            query = query.OrderByDescending(d => d.Data);
+            query = AplicarFiltros(query, filtro);
 
             var totalCount = await query.CountAsync();
 
             var items = await query
+                .OrderByDescending(d => d.Data)
                 .Skip((filtro.PageNumber - 1) * filtro.PageSize)
                 .Take(filtro.PageSize)
                 .ToListAsync();
 
             return new PagedList<DespesaModel>(items, totalCount, filtro.PageNumber, filtro.PageSize);
+        }
+
+        //filtro não paginado para exportação excel
+        public async Task<List<DespesaModel>> FiltrarAsync(int usuarioId, DespesaFiltroDto filtro)
+        {
+            var query = _context.Despesas
+                .AsNoTracking()
+                .Where(d => d.UsuarioId == usuarioId)
+                .Include(d => d.CategoriaDespesa)
+                .Include(d => d.FormaPagamento)
+                .AsQueryable();
+
+            query = AplicarFiltros(query, filtro);
+
+            return await query
+                .OrderByDescending(d => d.Data)
+                .ToListAsync();
         }
 
         public async Task<DespesaModel> AddAsync(DespesaModel despesa)
@@ -111,6 +93,35 @@ namespace GestaoFacil.Server.Repositories.Despesa
         {
             _context.Despesas.Remove(despesa);
             await _context.SaveChangesAsync();
+        }
+
+        private IQueryable<DespesaModel> AplicarFiltros(IQueryable<DespesaModel> query, DespesaFiltroDto filtro)
+        {
+            if (filtro.ValorMin.HasValue)
+                query = query.Where(d => d.Valor >= filtro.ValorMin.Value);
+
+            if (filtro.ValorMax.HasValue)
+                query = query.Where(d => d.Valor <= filtro.ValorMax.Value);
+
+            if (filtro.DataInicial.HasValue)
+                query = query.Where(d => d.Data >= filtro.DataInicial.Value.Date);
+
+            if (filtro.DataFinal.HasValue)
+            {
+                var dataFinalInclusiva = filtro.DataFinal.Value.Date.AddDays(1).AddTicks(-1);
+                query = query.Where(d => d.Data <= dataFinalInclusiva);
+            }
+
+            if (filtro.CategoriaDespesaId.HasValue)
+                query = query.Where(d => d.CategoriaDespesaId == filtro.CategoriaDespesaId.Value);
+
+            if (filtro.FormaPagamentoId.HasValue)
+                query = query.Where(d => d.FormaPagamentoId == filtro.FormaPagamentoId.Value);
+
+            if (!string.IsNullOrWhiteSpace(filtro.BuscaTexto))
+                query = query.Where(d => d.Descricao != null && d.Descricao.Contains(filtro.BuscaTexto));
+
+            return query;
         }
     }
 }

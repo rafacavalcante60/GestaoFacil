@@ -46,7 +46,7 @@ namespace GestaoFacil.Server.Controllers.Financeiro
 
             return ObterDespesas(result);
         }
-
+            
         [HttpPost("filter/pagination")]
         public async Task<ActionResult<ResponseModel<PagedList<DespesaDto>>>> FiltrarPaged([FromQuery] DespesaFiltroDto filtro)
         {
@@ -58,6 +58,19 @@ namespace GestaoFacil.Server.Controllers.Financeiro
             }
 
             return ObterDespesas(result);
+        }
+
+        [HttpPost("filter/export-excel-completo")]
+        public async Task<IActionResult> ExportarExcelCompleto([FromQuery] DespesaFiltroDto filtro)
+        {
+            var result = await _despesaService.ExportarExcelCompletoAsync(UsuarioId, filtro);
+
+            if (!result.Status)
+                return BadRequest(result);
+
+            return File(result.Dados,
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                "Despesas_Completas.xlsx");
         }
 
         private ActionResult<ResponseModel<PagedList<DespesaDto>>> ObterDespesas(ResponseModel<PagedList<DespesaDto>> result)
