@@ -5,7 +5,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 
-public class TokenService
+public class TokenService : ITokenService
 {
     private readonly string _jwtKey;
     private readonly string _jwtIssuer;
