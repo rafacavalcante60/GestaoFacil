@@ -17,8 +17,8 @@ Backend:
 ## Documentação da API
 
 
-![Print do Swagger 1](https://i.imgur.com/MLomZ3I.png)
-![Print do Swagger 2](https://i.imgur.com/ePT82Io.png)
+![Print do Swagger 1](https://i.imgur.com/hmPj6CJ.png)
+![Print do Swagger 2](https://i.imgur.com/kdc1yrZ.png)
 
 Próximas etapas:    
 - **xUnit + Moq** (testes automatizados)  
