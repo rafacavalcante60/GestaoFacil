@@ -7,6 +7,7 @@ using GestaoFacil.Server.Services.Auth;
 using GestaoFacil.Server.Services.Despesa;
 using GestaoFacil.Server.Services.Email;
 using GestaoFacil.Server.Services.Financeiro;
+using GestaoFacil.Server.Services.Relatorio;
 using GestaoFacil.Server.Services.Usuario;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.RateLimiting;
@@ -24,6 +25,7 @@ namespace GestaoFacil.Server.Extensions.Service
         {
             services.AddScoped<IDespesaService, DespesaService>();
             services.AddScoped<IReceitaService, ReceitaService>();
+            services.AddScoped<IRelatorioService, RelatorioService>();
             services.AddScoped<IUsuarioService, UsuarioService>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IEmailService, EmailService>();
