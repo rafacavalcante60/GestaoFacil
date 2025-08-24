@@ -1,4 +1,7 @@
+# ==============================
 # ASP.NET / .NET
+# ==============================
+
 bin/
 obj/
 *.user
@@ -11,16 +14,35 @@ obj/
 .vs/
 *.log
 
+# ==============================
 # Configuração local
+# ==============================
+
 appsettings.Development.json
 
+# ==============================
 # Angular
+# ==============================
+
 Client/node_modules/
 Client/dist/
 Client/.angular/cache/
 Client/.angular/
 
+# ==============================
+# Testes xUnit / NUnit / MSTest
+# ==============================
+
+**/bin/
+**/obj/
+**/TestResults/
+*.TestResults/
+*.trx
+
+# ==============================
 # Geral
+# ==============================
+
 .env
 *.env
 *.DS_Store

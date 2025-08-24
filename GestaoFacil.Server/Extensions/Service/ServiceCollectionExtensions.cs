@@ -1,5 +1,4 @@
-﻿using GestaoFacil.Server.Data;
-using GestaoFacil.Server.Mappings;
+﻿using GestaoFacil.Server.Mappings;
 using GestaoFacil.Server.Repositories.Despesa;
 using GestaoFacil.Server.Repositories.Financeiro;
 using GestaoFacil.Server.Repositories.Usuario;
@@ -11,7 +10,6 @@ using GestaoFacil.Server.Services.Relatorio;
 using GestaoFacil.Server.Services.Usuario;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.RateLimiting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
@@ -28,8 +26,26 @@ namespace GestaoFacil.Server.Extensions.Service
             services.AddScoped<IRelatorioService, RelatorioService>();
             services.AddScoped<IUsuarioService, UsuarioService>();
             services.AddScoped<IAuthService, AuthService>();
-            services.AddScoped<IEmailService, EmailService>();
-            services.AddScoped<TokenService>();
+            services.AddScoped<ITokenService, TokenService>();
+
+            // Wrapper do SMTP
+            services.AddScoped<ISmtpClientWrapper>(sp =>
+            {
+                var config = sp.GetRequiredService<IConfiguration>();
+                return new SmtpClientWrapper(
+                    config["Email:SmtpHost"],
+                    int.Parse(config["Email:SmtpPort"]),
+                    config["Email:SmtpUser"],
+                    config["Email:SmtpPass"]);
+            });
+
+            // EmailService usando o wrapper
+            services.AddScoped<IEmailService>(sp =>
+            {
+                var config = sp.GetRequiredService<IConfiguration>();
+                Func<ISmtpClientWrapper> factory = () => sp.GetRequiredService<ISmtpClientWrapper>();
+                return new EmailService(config, factory);
+            });
 
             return services;
         }

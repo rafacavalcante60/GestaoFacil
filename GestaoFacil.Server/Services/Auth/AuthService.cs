@@ -13,14 +13,14 @@ namespace GestaoFacil.Server.Services.Auth
     public class AuthService : IAuthService
     {
         private readonly IUsuarioRepository _usuarioRepository;
-        private readonly TokenService _tokenService;
+        private readonly ITokenService _tokenService; 
         private readonly ILogger<AuthService> _logger;
         private readonly IMapper _mapper;
-        private readonly AppDbContext _context; //apenas para o refresh token
+        private readonly AppDbContext _context; // Apenas para o refresh token
         private readonly IEmailService _emailService;
 
-        public AuthService(IUsuarioRepository usuarioRepository, TokenService tokenService, ILogger<AuthService> logger, 
-            IMapper mapper, AppDbContext context, IEmailService emailService)
+        public AuthService(IUsuarioRepository usuarioRepository, ITokenService tokenService, ILogger<AuthService> logger, IMapper mapper, 
+            AppDbContext context, IEmailService emailService)
         {
             _usuarioRepository = usuarioRepository;
             _tokenService = tokenService;
@@ -98,7 +98,6 @@ namespace GestaoFacil.Server.Services.Auth
             return ResponseHelper.Sucesso("Usuário registrado com sucesso.");
         }
 
-
         public async Task<ResponseModel<string>> LogoutAsync(string refreshToken)
         {
             var token = await _context.RefreshTokens.FirstOrDefaultAsync(t => t.Token == refreshToken);
@@ -174,7 +173,7 @@ namespace GestaoFacil.Server.Services.Auth
             usuario.PasswordResetTokenExpiraEm = tokenExpiraEm;
             await _usuarioRepository.UpdateAsync(usuario);
 
-            var linkReset = $"https://seusite.com/reset-password?token={token}"; //necessario alteracao pós criação de front-end
+            var linkReset = $"https://seusite.com/reset-password?token={token}";
 
             try
             {
@@ -217,6 +216,5 @@ namespace GestaoFacil.Server.Services.Auth
             _logger.LogInformation("Senha redefinida com sucesso para o usuário ID {UsuarioId}", usuario.Id);
             return ResponseHelper.Sucesso("Senha redefinida com sucesso.");
         }
-
     }
 }
