@@ -9,19 +9,18 @@ Está sendo desenvolvido com **ASP.NET Core** e **Angular**.
 ## Tecnologias usadas
 
 Backend:  
-- **ASP.NET Core Web API**  
-- **Entity Framework Core + MySQL**  
-- **JWT** (autenticação)  
-- **AutoMapper**  
+-API: **ASP.NET Core Web API**  
+-Dados: **Entity Framework Core + MySQL**  
+-Autenticação e autorização: **JWT** 
+-Mapameamento de DTOs: **AutoMapper**  
+-Testes unitários: **xUnit + Moq + Fluent Assertions** 
 
 ## Documentação da API
-
 
 ![Print do Swagger 1](https://i.imgur.com/hmPj6CJ.png)
 ![Print do Swagger 2](https://i.imgur.com/kdc1yrZ.png)
 
 Próximas etapas:    
-- **xUnit + Moq** (testes automatizados)  
 - **Serilog** (Monitorar logging)  
 - Desenvolvimento do **frontend em Angular**  
 - **Docker** (containerização do sistema)
