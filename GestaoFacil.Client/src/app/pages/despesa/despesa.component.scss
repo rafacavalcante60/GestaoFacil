@@ -1,0 +1,48 @@
+.panel--light {
+  align-items: flex-start;
+  padding-top: 28px;
+}
+
+.form-layout {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+.form-column {
+  flex: 1;
+  max-width: 480px;
+}
+
+.sidebar-illustration {
+  flex: 0.9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.input, select, textarea {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(0,0,0,0.08);
+  background: white;
+  font-size: 14px;
+}
+
+.descricao-box {
+  width: 470px;
+  height: 80px;
+  resize: none;     
+  overflow: auto;    
+}
+
+
+.btn-limpar {
+  background-color: white;  
+  color: black;             
+  border: 1px solid #ccc;    
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+}

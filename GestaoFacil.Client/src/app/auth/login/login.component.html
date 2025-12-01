@@ -1,0 +1,45 @@
+<main class="app-container">
+  <section class="card" aria-labelledby="login-title">
+    <!-- Painel esquerdo (formulário) -->
+    <div class="panel--light login-left">
+      <div class="brand" aria-hidden="true">
+        <img src="assets/img/monkey.png" alt="Logomarca" />
+      </div>
+
+      <form (ngSubmit)="submit()" #loginForm="ngForm" class="form" aria-label="Formulário de login">
+        <input
+          name="email"
+          class="input"
+          type="text"
+          placeholder="Login/E-mail"
+          [(ngModel)]="email"
+          required
+        />
+        <input
+          name="senha"
+          class="input"
+          type="password"
+          placeholder="Senha"
+          [(ngModel)]="senha"
+          required
+        />
+        <a class="small-link" href="#">Esqueci minha senha</a>
+
+        <!-- Local para mostrar erro -->
+        <div *ngIf="errorMsg" class="error-msg">
+          {{ errorMsg }}
+        </div>
+
+        <button class="btn" type="submit">Confirmar</button>
+      </form>
+    </div>
+
+    <!-- Painel direito (mensagem e cadastro) -->
+    <aside class="panel--accent" id="login-title">
+      <h1 class="h1">Bem-vindo de volta!</h1>
+      <p class="sub">Com GestãoFácil organize suas finanças de forma simples, rápida e inteligente.</p>
+      <p class="muted">Não possui uma conta?</p>
+        <button class="btn--outline" (click)="goToCadastro()">Cadastrar-se</button>
+    </aside>
+  </section>
+</main>

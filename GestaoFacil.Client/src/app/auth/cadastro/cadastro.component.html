@@ -1,0 +1,23 @@
+<main class="app-container">
+  <section class="card" aria-labelledby="cadastro-title">
+    <div class="panel--accent" style="align-items:center;">
+      <div class="brand"><img src="assets/img/monkey.png" alt="logo" /></div>
+      <button class="btn--outline" type="button" (click)="goToLogin()">
+        Voltar para o Login
+      </button>
+    </div>
+
+    <aside class="panel--light cadastro-left" id="cadastro-title" style="align-items:flex-start;">
+      <h1 class="h1" style="color:var(--orange);">Criando Cadastro</h1>
+      <p class="sub">Crie sua conta para começar a controlar suas finanças com praticidade e segurança. Leva menos de um minuto!</p>
+
+      <form class="form" aria-label="Formulário de cadastro" (ngSubmit)="submit()">
+        <input class="input" type="text" placeholder="Nome" [(ngModel)]="nome" name="nome" />
+        <input class="input" type="text" placeholder="Login/E-mail" [(ngModel)]="email" name="email" />
+        <input class="input" type="password" placeholder="Senha" [(ngModel)]="senha" name="senha" />
+        <input class="input" type="password" placeholder="Confirmar senha" [(ngModel)]="senhaConfirm" name="senhaConfirm" />
+        <button class="btn" type="submit">Confirmar</button>
+      </form>      
+    </aside>
+  </section>
+</main>
