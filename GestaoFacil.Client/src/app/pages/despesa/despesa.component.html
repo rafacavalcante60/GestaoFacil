@@ -1,0 +1,135 @@
+<main class="app-container">
+  <section class="card" aria-labelledby="despesas-title">
+    <!-- COLUNA PRINCIPAL (FORMULÁRIO) -->
+    <div class="panel--light" style="align-items: flex-start">
+      <div style="display: flex; align-items: center; gap: 12px">
+        <div class="brand">
+          <img src="assets/img/monkey.png" alt="logo" />
+        </div>
+        <h1 class="h1" id="despesas-title" style="color: var(--orange)">
+          Despesas
+        </h1>
+      </div>
+
+      <div class="form-layout">
+        <div class="form-column">
+          <!-- FORM ANGULAR -->
+          <form
+            class="form"
+            (ngSubmit)="salvarDespesa()"
+            aria-label="Formulário de despesas"
+          >
+            <!-- NOME DA DESPESA -->
+            <label class="muted">Nome da despesa</label>
+            <input
+              type="text"
+              class="input"
+              placeholder="Ex: Mercado, Uber, Internet..."
+              [(ngModel)]="nome"
+              name="nome"
+              required
+            />
+
+            <!-- DATA -->
+            <label class="muted">Data</label>
+            <input
+              type="date"
+              class="input"
+              [(ngModel)]="data"
+              name="data"
+              required
+            />
+
+            <!-- VALOR -->
+            <label class="muted">Valor</label>
+            <input
+              type="number"
+              step="0.01"
+              class="input"
+              placeholder="R$ 0,00"
+              [(ngModel)]="valor"
+              name="valor"
+              required
+            />
+
+            <!-- FORMA PAGAMENTO -->
+            <label class="muted">Forma de Pagamento</label>
+            <select
+              class="input"
+              [(ngModel)]="formaPagamentoId"
+              name="formaPagamentoId"
+              required
+            >
+              <option *ngFor="let f of formasPagamento" [value]="f.id">
+                {{ f.nome }}
+              </option>
+            </select>
+
+            <!-- CATEGORIA -->
+            <label class="muted">Categoria</label>
+            <select
+              class="input"
+              [(ngModel)]="categoriaDespesaId"
+              name="categoriaDespesaId"
+              required
+            >
+              <option *ngFor="let c of categoriasDespesa" [value]="c.id">
+                {{ c.nome }}
+              </option>
+            </select>
+
+            <!-- DESCRIÇÃO -->
+            <label class="muted">Descrição</label>
+            <textarea
+              class="input descricao-box"
+              rows="3"
+              placeholder="Descrição detalhada da despesa"
+              [(ngModel)]="descricao"
+              name="descricao"
+            ></textarea>
+
+            <!-- ERRO -->
+            <p class="error" *ngIf="errorMsg">{{ errorMsg }}</p>
+
+            <!-- BOTÕES -->
+            <div style="display: flex; gap: 12px; margin-top: 8px">
+              <button class="btn" type="submit">Salvar</button>
+              <button class="btn-limpar" type="button" (click)="limpar()">
+                Limpar
+              </button>
+              <button
+                class="btn"
+                type="button"
+                (click)="voltar()"
+              >
+                Voltar
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- IMAGEM AO LADO -->
+        <div class="sidebar-illustration">
+          <div class="illustration" aria-hidden="true">
+            <img
+              src="assets/img/despesa-icon.png"
+              alt=""
+              style="width: 80%; opacity: 0.95"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAINEL LATERAL -->
+    <aside
+      class="panel--accent"
+      style="justify-content: flex-start; padding-top: 36px"
+    >
+      <p class="sub" style="color: white; max-width: 320px">
+        Registre suas despesas e categorize para manter controle e relatórios
+        precisos.
+      </p>
+    </aside>
+  </section>
+</main>

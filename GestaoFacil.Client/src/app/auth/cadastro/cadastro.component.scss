@@ -1,0 +1,25 @@
+.panel--light.cadastro-left {
+  align-items: flex-start;
+}
+.panel--light.cadastro-left .form {
+  max-width: 420px;
+}
+
+.input {
+  padding: 12px 14px;
+  border-radius: 8px;
+  border: 1px solid rgba(0,0,0,0.08);
+  background: white;
+  font-size: 15px;
+}
+
+.btn {
+  display: inline-block;
+  padding: 12px 26px;
+  border-radius: 22px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  background: var(--orange);
+  color: white;
+}
