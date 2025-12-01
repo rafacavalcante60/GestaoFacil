@@ -8,12 +8,23 @@ Está sendo desenvolvido com **ASP.NET Core** e **Angular**.
 
 ## Tecnologias usadas
 
+Frontend:
+-Framework: **Angular**
+
 Backend:  
 -API: **ASP.NET Core Web API**  
 -Dados: **Entity Framework Core + MySQL**  
 -Autenticação e autorização: **JWT** 
 -Mapameamento de DTOs: **AutoMapper**  
 -Testes unitários: **xUnit + Moq + Fluent Assertions** 
+
+## Telas
+![Print das telas 1](https://i.imgur.com/vImgN5r.png)
+![Print das telas 2](https://i.imgur.com/T6lRzbg.png)
+![Print das telas 3](https://i.imgur.com/lUpdgB4.png)
+![Print das telas 4](https://i.imgur.com/ulDJRcj.png)
+![Print das telas 5](https://i.imgur.com/R6Jog21.png)
+![Print das telas 6](https://i.imgur.com/EXyr1Af.png)
 
 ## Documentação da API
 
@@ -22,7 +33,6 @@ Backend:
 
 Próximas etapas:    
 - **Serilog** (Monitorar logging)  
-- Desenvolvimento do **frontend em Angular**  
 - **Docker** (containerização do sistema)
 - Deploy contínuo na **AWS**, com CI/CD via **Azure DevOps** ou **GitHub Actions**  
 
