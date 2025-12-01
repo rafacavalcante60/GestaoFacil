@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GestaoFacil.Server.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250816231723_resettoken")]
-    partial class resettoken
+    [Migration("20250904233415_migrationReset")]
+    partial class migrationReset
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

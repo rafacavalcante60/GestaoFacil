@@ -128,8 +128,6 @@ namespace GestaoFacil.Server.Extensions.Service
             return services;
         }
 
-
-
         public static IServiceCollection AddCorsPolicy(this IServiceCollection services, string policyName, string origin)
         {
             services.AddCors(options =>
