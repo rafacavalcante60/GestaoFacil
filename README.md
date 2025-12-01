@@ -1,4 +1,7 @@
 # GestãoFácil
+<p align="center">
+  <img src="https://i.imgur.com/Dp5plyS.png" alt="GestãoFácil Logo" width="180">
+</p>
 
 **GestãoFácil** é um sistema de controle financeiro desenvolvido para **microempreendedores**, como **comerciantes**, **indústrias** e **prestadores de serviços**, que buscam uma plataforma simples e eficiente para registrar **receitas** e **despesas** com clareza.
 
@@ -25,6 +28,23 @@ Backend:
 ![Print das telas 4](https://i.imgur.com/ulDJRcj.png)
 ![Print das telas 5](https://i.imgur.com/R6Jog21.png)
 ![Print das telas 6](https://i.imgur.com/EXyr1Af.png)
+
+# Lista de funcionalidades
+
+- Cadastro de usuários
+- Login utilizando JWT
+- Hash seguro de senhas
+
+- Cadastro de receitas
+- Cadastro de despesas
+
+- Resumo mensal de receitas e despesas
+- Cálculo de saldo
+- Totais de entradas e saídas
+- Indicadores financeiros básicos
+
+# Grupo
+- João (Frontend), Felipe (Banco de dados), Rafael  (Frontend, Backend e Banco de Dados)
 
 ## Documentação da API
 
