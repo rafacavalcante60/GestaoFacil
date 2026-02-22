@@ -16,6 +16,7 @@
         <input class="input" type="text" placeholder="Login/E-mail" [(ngModel)]="email" name="email" [disabled]="isSubmitting" />
         <input class="input" type="password" placeholder="Senha" [(ngModel)]="senha" name="senha" [disabled]="isSubmitting" />
         <input class="input" type="password" placeholder="Confirmar senha" [(ngModel)]="senhaConfirm" name="senhaConfirm" [disabled]="isSubmitting" />
+        <div *ngIf="errorMsg" class="error-msg">{{ errorMsg }}</div>
         <button class="btn" type="submit" [disabled]="isSubmitting">
           {{ isSubmitting ? 'Enviando...' : 'Confirmar' }}
         </button>

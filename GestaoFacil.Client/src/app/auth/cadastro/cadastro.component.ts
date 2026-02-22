@@ -28,6 +28,13 @@ export class CadastroComponent {
 
   submit() {
     if (this.isSubmitting) return;
+    this.errorMsg = '';
+
+    if (!this.senha || this.senha.length < 6) {
+      this.errorMsg = 'A senha deve ter pelo menos 6 caracteres.';
+      return;
+    }
+
     if (this.senha !== this.senhaConfirm) {
       this.errorMsg = "As senhas não coincidem!";
       return;
