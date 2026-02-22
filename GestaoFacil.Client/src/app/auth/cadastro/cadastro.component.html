@@ -3,7 +3,7 @@
     <div class="panel--accent" style="align-items:center;">
       <div class="brand"><img src="assets/img/monkey.png" alt="logo" /></div>
       <button class="btn--outline" type="button" (click)="goToLogin()">
-        Voltar para o Login
+        Já tem conta? Logar
       </button>
     </div>
 
@@ -12,11 +12,13 @@
       <p class="sub">Crie sua conta para começar a controlar suas finanças com praticidade e segurança. Leva menos de um minuto!</p>
 
       <form class="form" aria-label="Formulário de cadastro" (ngSubmit)="submit()">
-        <input class="input" type="text" placeholder="Nome" [(ngModel)]="nome" name="nome" />
-        <input class="input" type="text" placeholder="Login/E-mail" [(ngModel)]="email" name="email" />
-        <input class="input" type="password" placeholder="Senha" [(ngModel)]="senha" name="senha" />
-        <input class="input" type="password" placeholder="Confirmar senha" [(ngModel)]="senhaConfirm" name="senhaConfirm" />
-        <button class="btn" type="submit">Confirmar</button>
+        <input class="input" type="text" placeholder="Nome" [(ngModel)]="nome" name="nome" [disabled]="isSubmitting" />
+        <input class="input" type="text" placeholder="Login/E-mail" [(ngModel)]="email" name="email" [disabled]="isSubmitting" />
+        <input class="input" type="password" placeholder="Senha" [(ngModel)]="senha" name="senha" [disabled]="isSubmitting" />
+        <input class="input" type="password" placeholder="Confirmar senha" [(ngModel)]="senhaConfirm" name="senhaConfirm" [disabled]="isSubmitting" />
+        <button class="btn" type="submit" [disabled]="isSubmitting">
+          {{ isSubmitting ? 'Enviando...' : 'Confirmar' }}
+        </button>
       </form>      
     </aside>
   </section>

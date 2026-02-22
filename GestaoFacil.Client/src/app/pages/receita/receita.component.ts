@@ -95,16 +95,14 @@ export class ReceitaComponent {
     if (this.isEdit && this.id) {
       this.svc.update(this.id, payload).subscribe({
         next: () => this.router.navigate(['/receita']),
-        error: (err: any) => this.errorMsg = err.error?.message || 'Erro ao atualizar receita.'
+        error: (err: any) => this.errorMsg = err.error?.mensagem || err.error?.message || 'Erro ao atualizar receita.'
       });
     } else {
       this.svc.create(payload).subscribe({
         next: () => {
-          this.limpar();
-          // opcional: navegar para lista de receitas
-          // this.router.navigate(['/receita']);
+          this.router.navigate(['/receita']);
         },
-        error: (err: any) => this.errorMsg = err.error?.message || 'Erro ao criar receita.'
+        error: (err: any) => this.errorMsg = err.error?.mensagem || err.error?.message || 'Erro ao criar receita.'
       });
     }
   }
@@ -122,6 +120,10 @@ export class ReceitaComponent {
   }
 
   voltar() {
+    this.router.navigate(['/receita']);
+  }
+
+  irAtividades() {
     this.router.navigate(['/atividades']);
   }
 }

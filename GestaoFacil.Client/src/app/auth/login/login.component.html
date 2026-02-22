@@ -23,7 +23,9 @@
           [(ngModel)]="senha"
           required
         />
-        <a class="small-link" href="#">Esqueci minha senha</a>
+        <button class="small-link link-btn" type="button" (click)="goToForgotPassword()">
+          Esqueci minha senha
+        </button>
 
         <!-- Local para mostrar erro -->
         <div *ngIf="errorMsg" class="error-msg">
