@@ -67,12 +67,13 @@ export class DespesaListComponent implements OnInit {
       DataFinal: this.filtros.dataFinal || undefined
     }).subscribe({
       next: (res) => {
-        this.despesas = res.items ?? [];
+        const rawItems = Array.isArray(res.items) ? res.items : [];
+        this.despesas = rawItems.filter((item): item is Despesa => this.isDespesaValida(item));
 
         if (res.pagination) {
           this.pageNumber = res.pagination.currentPage;
-          this.totalPages = Math.max(1, res.pagination.totalPages);
           this.totalCount = res.pagination.totalCount;
+          this.totalPages = Math.max(1, Math.ceil(this.totalCount / Math.max(1, this.pageSize)));
         } else {
           this.totalPages = this.despesas.length < this.pageSize ? this.pageNumber : this.pageNumber + 1;
           this.totalCount = this.despesas.length;
@@ -151,5 +152,11 @@ export class DespesaListComponent implements OnInit {
 
   nomeFormaPagamento(id?: number): string {
     return this.formasPagamento.find((f) => f.id === id)?.nome ?? '-';
+  }
+
+  private isDespesaValida(item: unknown): item is Despesa {
+    if (!item || typeof item !== 'object') return false;
+    const despesa = item as Partial<Despesa>;
+    return typeof despesa.id === 'number' && despesa.id > 0;
   }
 }

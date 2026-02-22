@@ -1,0 +1,123 @@
+<main class="app-container">
+  <section class="card" aria-labelledby="admin-usuarios-title">
+    <div class="panel--light list-panel">
+      <div class="list-head">
+        <div class="head-left">
+          <div class="brand">
+            <img src="assets/img/monkey.png" alt="logo" />
+          </div>
+          <h1 class="h1" id="admin-usuarios-title" style="color: var(--orange)">
+            Usuarios (Admin)
+          </h1>
+        </div>
+        <div class="head-actions">
+          <button class="btn btn-light" type="button" (click)="irAtividades()">
+            Voltar
+          </button>
+          <button class="btn" type="button" (click)="carregar()">
+            Atualizar
+          </button>
+        </div>
+      </div>
+
+      <div class="filters-row">
+        <input
+          class="input"
+          type="text"
+          placeholder="Buscar por nome ou email"
+          [(ngModel)]="filtroTexto"
+        />
+        <label class="page-size">
+          <span>Itens por pagina</span>
+          <select class="input" [(ngModel)]="pageSize" (change)="mudarPageSize()">
+            <option *ngFor="let opt of pageSizeOptions" [value]="opt">{{ opt }}</option>
+          </select>
+        </label>
+      </div>
+
+      <p class="error" *ngIf="errorMsg">{{ errorMsg }}</p>
+      <p class="ok" *ngIf="!errorMsg && infoMsg">{{ infoMsg }}</p>
+
+      <div class="table-wrap">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Email</th>
+              <th>Tipo</th>
+              <th>Acoes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngIf="loading">
+              <td colspan="4" class="center muted">Carregando...</td>
+            </tr>
+            <tr *ngFor="let item of usuariosFiltrados">
+              <td>{{ item.nome || '-' }}</td>
+              <td>{{ item.email || '-' }}</td>
+              <td>{{ nomeTipo(item.tipoUsuarioId) }}</td>
+              <td class="actions">
+                <button class="btn btn-small" type="button" (click)="editar(item)">Editar</button>
+                <button class="btn btn-small btn-danger" type="button" (click)="excluir(item)">
+                  Excluir
+                </button>
+              </td>
+            </tr>
+            <tr *ngIf="!loading && usuariosFiltrados.length === 0">
+              <td colspan="4" class="center muted">Nenhum usuario encontrado.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="pagination">
+        <span>Pagina {{ pageNumber }} de {{ totalPages }} ({{ totalCount }} registros)</span>
+        <div class="pagination-actions">
+          <button class="btn btn-small btn-light" type="button" (click)="paginaAnterior()" [disabled]="pageNumber <= 1">
+            Anterior
+          </button>
+          <button class="btn btn-small" type="button" (click)="proximaPagina()" [disabled]="pageNumber >= totalPages">
+            Proxima
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <aside class="panel--accent admin-panel">
+      <div class="panel-head">
+        <h2 class="h2">Editar usuario</h2>
+        <p class="sub">Altere nome, email e tipo. Use com cuidado.</p>
+      </div>
+
+      <form class="form admin-form" *ngIf="selected" (ngSubmit)="salvar()">
+        <label class="field">
+          <span>Nome</span>
+          <input class="input" type="text" [(ngModel)]="form.nome" name="nome" />
+        </label>
+        <label class="field">
+          <span>Email</span>
+          <input class="input" type="email" [(ngModel)]="form.email" name="email" />
+        </label>
+        <label class="field">
+          <span>Tipo</span>
+          <select class="input" [(ngModel)]="form.tipoUsuarioId" name="tipoUsuarioId">
+            <option *ngFor="let t of tiposUsuario" [value]="t.id">{{ t.nome }}</option>
+          </select>
+        </label>
+
+        <div class="admin-actions">
+          <button class="btn btn-light" type="button" (click)="cancelarEdicao()">
+            Cancelar
+          </button>
+          <button class="btn" type="submit" [disabled]="saving">
+            {{ saving ? 'Salvando...' : 'Salvar' }}
+          </button>
+        </div>
+      </form>
+
+      <div class="empty" *ngIf="!selected">
+        <p>Selecione um usuario na tabela para editar.</p>
+      </div>
+    </aside>
+  </section>
+</main>

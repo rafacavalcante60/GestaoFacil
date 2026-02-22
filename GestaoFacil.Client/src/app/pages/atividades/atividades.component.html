@@ -1,5 +1,5 @@
 <main class="app-container">
-  <section class="card" aria-labelledby="menu-title">
+  <section class="card card--menu" aria-labelledby="menu-title">
     <div class="panel--light" style="align-items:flex-start; padding-top:28px;">
       <div style="display:flex; align-items:center; gap:14px; width:100%;">
         <div class="brand"><img src="assets/img/monkey.png" alt="logo" /></div>
@@ -39,6 +39,17 @@
           <p>Veja um resumo das suas finanças pra tomar decisões com mais segurança.</p>
           <div style="margin-top:auto; display:flex; justify-content:flex-end;">
             <button class="btn" (click)="goToRelatorio()">Acessar</button>
+          </div>
+        </article>
+
+        <article class="menu-card admin-card" role="listitem" *ngIf="isAdmin">
+          <div class="menu-head">
+            <svg width="26" height="26" aria-hidden="true"></svg>
+            <h3>Admin</h3>
+          </div>
+          <p>Gerencie usuários, atualize perfis e controle permissões.</p>
+          <div style="margin-top:auto; display:flex; justify-content:flex-end;">
+            <button class="btn" (click)="goToAdminUsuarios()">Acessar</button>
           </div>
         </article>
       </div>

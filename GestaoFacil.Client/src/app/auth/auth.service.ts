@@ -101,4 +101,46 @@ export class AuthService {
   getRefreshToken(): string | null {
     return localStorage.getItem('refreshToken');
   }
+
+  getUserRoles(): string[] {
+    const payload = this.getTokenPayload();
+    if (!payload) return [];
+
+    const roleClaim =
+      payload['role'] ??
+      payload['roles'] ??
+      payload['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
+
+    if (!roleClaim) return [];
+    if (Array.isArray(roleClaim)) {
+      return roleClaim.map((r) => String(r));
+    }
+    return [String(roleClaim)];
+  }
+
+  isAdmin(): boolean {
+    return this.getUserRoles().includes('Admin');
+  }
+
+  private getTokenPayload(): Record<string, any> | null {
+    const token = this.getToken();
+    if (!token) return null;
+
+    const parts = token.split('.');
+    if (parts.length !== 3) return null;
+
+    try {
+      const payload = this.decodeBase64Url(parts[1]);
+      return JSON.parse(payload);
+    } catch {
+      return null;
+    }
+  }
+
+  private decodeBase64Url(input: string): string {
+    const base64 = input.replace(/-/g, '+').replace(/_/g, '/');
+    const padLength = (4 - (base64.length % 4)) % 4;
+    const padded = base64 + '='.repeat(padLength);
+    return atob(padded);
+  }
 }

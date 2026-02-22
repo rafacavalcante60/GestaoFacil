@@ -35,7 +35,7 @@ namespace GestaoFacil.Server.Controllers.Financeiro
         }
 
         [HttpGet("pagination")]
-        public async Task<ActionResult<ResponseModel<PagedList<ReceitaDto>>>> GetByUsuarioPaged([FromQuery] QueryStringParameters parameters)
+        public async Task<ActionResult<ResponseModel<List<ReceitaDto>>>> GetByUsuarioPaged([FromQuery] QueryStringParameters parameters)
         {
             var result = await _receitaService.GetByUsuarioPagedAsync(UsuarioId, parameters);
 
@@ -48,7 +48,7 @@ namespace GestaoFacil.Server.Controllers.Financeiro
         }
 
         [HttpPost("filter/pagination")]
-        public async Task<ActionResult<ResponseModel<PagedList<ReceitaDto>>>> FiltrarPaged([FromQuery] ReceitaFiltroDto filtro)
+        public async Task<ActionResult<ResponseModel<List<ReceitaDto>>>> FiltrarPaged([FromQuery] ReceitaFiltroDto filtro)
         {
             var result = await _receitaService.FiltrarPagedAsync(UsuarioId, filtro);
 
@@ -117,7 +117,7 @@ namespace GestaoFacil.Server.Controllers.Financeiro
             return Ok(result);
         }
 
-        private ActionResult<ResponseModel<PagedList<ReceitaDto>>> ObterReceitas(ResponseModel<PagedList<ReceitaDto>> result)
+        private ActionResult<ResponseModel<List<ReceitaDto>>> ObterReceitas(ResponseModel<PagedList<ReceitaDto>> result)
         {
             var metadata = new
             {
@@ -131,7 +131,14 @@ namespace GestaoFacil.Server.Controllers.Financeiro
 
             Response.Headers.Add("X-Pagination", System.Text.Json.JsonSerializer.Serialize(metadata)); //adiciona os metadados de paginação no cabeçalho da resposta
 
-            return Ok(result);
+            var response = new ResponseModel<List<ReceitaDto>>
+            {
+                Dados = result.Dados?.ToList() ?? new List<ReceitaDto>(),
+                Mensagem = result.Mensagem,
+                Status = result.Status
+            };
+
+            return Ok(response);
         }
     }
 }

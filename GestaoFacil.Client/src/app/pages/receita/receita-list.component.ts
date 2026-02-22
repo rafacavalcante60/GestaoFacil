@@ -65,12 +65,13 @@ export class ReceitaListComponent implements OnInit {
       DataFinal: this.filtros.dataFinal || undefined
     }).subscribe({
       next: (res) => {
-        this.receitas = res.items ?? [];
+        const rawItems = Array.isArray(res.items) ? res.items : [];
+        this.receitas = rawItems.filter((item): item is Receita => this.isReceitaValida(item));
 
         if (res.pagination) {
           this.pageNumber = res.pagination.currentPage;
-          this.totalPages = Math.max(1, res.pagination.totalPages);
           this.totalCount = res.pagination.totalCount;
+          this.totalPages = Math.max(1, Math.ceil(this.totalCount / Math.max(1, this.pageSize)));
         } else {
           this.totalPages = this.receitas.length < this.pageSize ? this.pageNumber : this.pageNumber + 1;
           this.totalCount = this.receitas.length;
@@ -149,5 +150,11 @@ export class ReceitaListComponent implements OnInit {
 
   nomeFormaPagamento(id?: number): string {
     return this.formasPagamento.find((f) => f.id === id)?.nome ?? '-';
+  }
+
+  private isReceitaValida(item: unknown): item is Receita {
+    if (!item || typeof item !== 'object') return false;
+    const receita = item as Partial<Receita>;
+    return typeof receita.id === 'number' && receita.id > 0;
   }
 }

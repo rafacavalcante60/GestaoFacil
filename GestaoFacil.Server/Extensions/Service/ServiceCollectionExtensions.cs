@@ -136,7 +136,8 @@ namespace GestaoFacil.Server.Extensions.Service
                 {
                     policy.WithOrigins(origin)
                           .AllowAnyHeader()
-                          .AllowAnyMethod();
+                          .AllowAnyMethod()
+                          .WithExposedHeaders("X-Pagination");
                 });
             });
 

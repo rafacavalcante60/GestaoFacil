@@ -67,8 +67,8 @@
               <td>{{ nomeCategoria(item.categoriaDespesaId) }}</td>
               <td>{{ nomeFormaPagamento(item.formaPagamentoId) }}</td>
               <td class="actions">
-                <button class="btn btn-small" type="button" (click)="editar(item)">Editar</button>
-                <button class="btn btn-small btn-danger" type="button" (click)="excluir(item)">Excluir</button>
+                <button class="btn btn-small" type="button" (click)="editar(item)" [disabled]="!item.id">Editar</button>
+                <button class="btn btn-small btn-danger" type="button" (click)="excluir(item)" [disabled]="!item.id">Excluir</button>
               </td>
             </tr>
             <tr *ngIf="!loading && despesas.length === 0">
