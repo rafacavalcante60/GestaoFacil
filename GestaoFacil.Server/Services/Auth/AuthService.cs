@@ -18,9 +18,10 @@ namespace GestaoFacil.Server.Services.Auth
         private readonly IMapper _mapper;
         private readonly AppDbContext _context; // Apenas para o refresh token
         private readonly IEmailService _emailService;
+        private readonly IConfiguration _configuration;
 
         public AuthService(IUsuarioRepository usuarioRepository, ITokenService tokenService, ILogger<AuthService> logger, IMapper mapper, 
-            AppDbContext context, IEmailService emailService)
+            AppDbContext context, IEmailService emailService, IConfiguration configuration)
         {
             _usuarioRepository = usuarioRepository;
             _tokenService = tokenService;
@@ -28,6 +29,7 @@ namespace GestaoFacil.Server.Services.Auth
             _mapper = mapper;
             _context = context;
             _emailService = emailService;
+            _configuration = configuration;
         }
 
         public async Task<ResponseModel<TokenDto>> LoginAsync(UsuarioLoginDto request)
@@ -92,10 +94,17 @@ namespace GestaoFacil.Server.Services.Auth
             usuario.SenhaHash = BCrypt.Net.BCrypt.HashPassword(dto.Senha);
             usuario.TipoUsuarioId = tipoComum.Id;
 
-            var criado = await _usuarioRepository.AddAsync(usuario);
-
-            _logger.LogInformation("Usuário registrado com sucesso. Id: {Id}, Email: {Email}", criado.Id, criado.Email);
-            return ResponseHelper.Sucesso("Usuário registrado com sucesso.");
+            try
+            {
+                var criado = await _usuarioRepository.AddAsync(usuario);
+                _logger.LogInformation("Usuário registrado com sucesso. Id: {Id}, Email: {Email}", criado.Id, criado.Email);
+                return ResponseHelper.Sucesso("Usuário registrado com sucesso.");
+            }
+            catch (DbUpdateException ex) when (IsDuplicateEmail(ex))
+            {
+                _logger.LogWarning(ex, "Registro duplicado detectado para o email: {Email}", dto.Email);
+                return ResponseHelper.Falha<string>("Email já está em uso.");
+            }
         }
 
         public async Task<ResponseModel<string>> LogoutAsync(string refreshToken)
@@ -113,6 +122,15 @@ namespace GestaoFacil.Server.Services.Auth
 
             _logger.LogInformation("Logout realizado com sucesso para o refresh token: {RefreshToken}", refreshToken);
             return ResponseHelper.Sucesso("Logout realizado com sucesso.");
+        }
+
+        private static bool IsDuplicateEmail(DbUpdateException ex)
+        {
+            var msg = ex.InnerException?.Message ?? ex.Message;
+            if (string.IsNullOrWhiteSpace(msg)) return false;
+            return msg.Contains("duplicate", StringComparison.OrdinalIgnoreCase)
+                || msg.Contains("unique constraint", StringComparison.OrdinalIgnoreCase)
+                || msg.Contains("unique", StringComparison.OrdinalIgnoreCase);
         }
 
         public async Task<ResponseModel<TokenDto>> RefreshTokenAsync(string refreshToken)
@@ -173,7 +191,8 @@ namespace GestaoFacil.Server.Services.Auth
             usuario.PasswordResetTokenExpiraEm = tokenExpiraEm;
             await _usuarioRepository.UpdateAsync(usuario);
 
-            var linkReset = $"https://seusite.com/reset-password?token={token}";
+            var frontBaseUrl = _configuration["Frontend:BaseUrl"] ?? "http://localhost:4200";
+            var linkReset = $"{frontBaseUrl.TrimEnd('/')}/auth/reset-password?token={Uri.EscapeDataString(token)}";
 
             try
             {

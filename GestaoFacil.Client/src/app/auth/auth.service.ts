@@ -8,6 +8,15 @@ interface LoginRequest {
   senha: string;
 }
 
+interface ForgotPasswordRequest {
+  email: string;
+}
+
+interface ResetPasswordRequest {
+  token: string;
+  newPassword: string;
+}
+
 interface LoginResponseRaw {
   dados?: {
     token?: string;
@@ -51,6 +60,16 @@ export class AuthService {
 
   register(data: any): Observable<any> {
     return this.http.post(`${this.baseUrl}/register`, data);
+  }
+
+  forgotPassword(email: string): Observable<any> {
+    const body: ForgotPasswordRequest = { email };
+    return this.http.post(`${this.baseUrl}/forgot-password`, body);
+  }
+
+  resetPassword(token: string, newPassword: string): Observable<any> {
+    const body: ResetPasswordRequest = { token, newPassword };
+    return this.http.post(`${this.baseUrl}/reset-password`, body);
   }
 
   // retorna token (null se não existir ou inválido)

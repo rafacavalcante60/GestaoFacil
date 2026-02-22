@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from '../../auth/auth.service';
 
 @Component({
   selector: 'app-atividades',
@@ -8,7 +9,7 @@ import { Router } from '@angular/router';
   styleUrl: './atividades.component.scss'
 })
 export class AtividadesComponent {
-  constructor(private router: Router) {}
+  constructor(private router: Router, private auth: AuthService) {}
 
   goToDespesa() {
     this.router.navigate(['/despesa']); 
@@ -20,5 +21,9 @@ export class AtividadesComponent {
 
   goToRelatorio() {
     this.router.navigate(['/relatorio']);
+  }
+
+  logout() {
+    this.auth.logout();
   }
 }

@@ -99,17 +99,14 @@ export class DespesaComponent {
     if (this.isEdit && this.id) {
       this.svc.update(this.id, payload).subscribe({
         next: () => this.router.navigate(['/despesa']),
-        error: (err) => this.errorMsg = err.error?.message || 'Erro ao atualizar despesa.'
+        error: (err) => this.errorMsg = err.error?.mensagem || err.error?.message || 'Erro ao atualizar despesa.'
       });
     } else {
       this.svc.create(payload).subscribe({
         next: () => {
-          // limpar formulário ou redirecionar para lista
-          this.limpar();
-          // opcional: navegar para lista
-          // this.router.navigate(['/despesa']);
+          this.router.navigate(['/despesa']);
         },
-        error: (err) => this.errorMsg = err.error?.message || 'Erro ao criar despesa.'
+        error: (err) => this.errorMsg = err.error?.mensagem || err.error?.message || 'Erro ao criar despesa.'
       });
     }
   }
@@ -126,6 +123,6 @@ export class DespesaComponent {
   }
 
   voltar() {
-    this.router.navigate(['/atividades']);
+    this.router.navigate(['/despesa']);
   }
 }

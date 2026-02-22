@@ -67,6 +67,10 @@ namespace GestaoFacil.Server.Data
                 .HasOne(r => r.Usuario)
                 .WithMany()
                 .HasForeignKey(r => r.UsuarioId);
+
+            modelBuilder.Entity<UsuarioModel>()
+                .HasIndex(u => u.Email)
+                .IsUnique();
         }
     }
 }

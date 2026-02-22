@@ -32,3 +32,13 @@
   align-items: center;
   gap: 10px;
 }
+
+.btn--logout {
+  margin-left: auto;
+  padding: 10px 18px;
+  border-radius: 18px;
+  background: var(--orange);
+  color: #f4d6c6;
+  border: 2px solid rgba(241,101,24,0.95);
+  box-shadow: 0 6px 18px rgba(241,101,24,0.18);
+}

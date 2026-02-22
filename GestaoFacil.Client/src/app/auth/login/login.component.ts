@@ -29,4 +29,8 @@ export class LoginComponent {
   goToCadastro() {
     this.router.navigate(['/auth/cadastro']);
   }
+
+  goToForgotPassword() {
+    this.router.navigate(['/auth/forgot-password']);
+  }
 }

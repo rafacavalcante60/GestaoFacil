@@ -1,0 +1,111 @@
+.list-panel {
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 16px;
+}
+
+.list-head {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.head-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.head-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.filters-row {
+  width: 100%;
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) 170px 170px auto auto;
+  gap: 10px;
+  align-items: center;
+}
+
+.table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.84);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  padding: 12px 10px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  text-align: left;
+  font-size: 14px;
+}
+
+.table th {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: rgba(0, 0, 0, 0.68);
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-small {
+  padding: 8px 14px;
+  border-radius: 16px;
+  font-size: 13px;
+}
+
+.btn-light {
+  background: #fff;
+  color: #222;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  box-shadow: none;
+}
+
+.btn-danger {
+  background: #b93817;
+}
+
+.pagination {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 8px;
+}
+
+.pagination-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.ok {
+  color: #1d6f2c;
+  margin: 0;
+}
+
+@media (max-width: 980px) {
+  .filters-row {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .pagination {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+}

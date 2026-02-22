@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-cadastro',
@@ -18,6 +19,7 @@ export class CadastroComponent {
   senha = '';
   senhaConfirm = '';
   errorMsg = '';
+  isSubmitting = false;
 
   //injecao de dependencia
   constructor(private router: Router, 
@@ -25,6 +27,7 @@ export class CadastroComponent {
   ) {}
 
   submit() {
+    if (this.isSubmitting) return;
     if (this.senha !== this.senhaConfirm) {
       this.errorMsg = "As senhas não coincidem!";
       return;
@@ -37,15 +40,18 @@ export class CadastroComponent {
       confirmarSenha: this.senhaConfirm
     };
   
-    this.auth.register(body).subscribe({
-      next: () => {
-        alert("Cadastro realizado!");
-        this.router.navigate(['/auth/login']);
-      },
-      error: (err) => {
-        this.errorMsg = err.error?.message || "Erro ao cadastrar";
-      }
-    });
+    this.isSubmitting = true;
+    this.auth.register(body)
+      .pipe(finalize(() => this.isSubmitting = false))
+      .subscribe({
+        next: () => {
+          alert("Cadastro realizado!");
+          this.router.navigate(['/auth/login']);
+        },
+        error: (err) => {
+          this.errorMsg = err.error?.message || "Erro ao cadastrar";
+        }
+      });
   }
 
   goToLogin() {
