@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { AdminGuard } from '../auth/admin.guard';
 
 export const PAGES_ROUTES: Routes = [
   {
@@ -43,6 +44,14 @@ export const PAGES_ROUTES: Routes = [
     loadComponent: () =>
       import('./relatorio/relatorio.component').then(
         (m) => m.RelatorioComponent
+      ),
+  },
+  {
+    path: 'admin/usuarios',
+    canMatch: [AdminGuard],
+    loadComponent: () =>
+      import('./admin/usuarios/admin-usuarios.component').then(
+        (m) => m.AdminUsuariosComponent
       ),
   },
   { path: 'despesas', redirectTo: 'despesa', pathMatch: 'full' },

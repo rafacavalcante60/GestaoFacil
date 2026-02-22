@@ -1,15 +1,13 @@
 <main class="app-container relatorio-page">
   <section class="card" aria-labelledby="reports-title">
-    <!-- PAINEL PRINCIPAL (filtros + botões à esquerda) -->
-    <div class="panel--accent rel-main" style="padding-top:26px;">
-      <div style="display:flex; gap:12px; align-items:center;">
+    <div class="panel--accent rel-main">
+      <div class="rel-header">
         <div class="brand"><img src="assets/img/monkey.png" alt="logo" /></div>
         <h1 class="h1" id="reports-title">Relatórios</h1>
       </div>
 
-      <div style="margin-top:18px; width:100%;">
-        <!-- filtros -->
-        <div class="filters" style="display:flex; gap:12px; align-items:end; margin-bottom:12px; flex-wrap:wrap;">
+      <div class="rel-main-content">
+        <div class="filters">
           <div class="filter">
             <label class="muted">Tipo</label>
             <select class="input" [(ngModel)]="filtros.tipo">
@@ -21,12 +19,30 @@
 
           <div class="filter">
             <label class="muted">Período inicial</label>
-            <input class="input" type="date" [(ngModel)]="filtros.dataInicial" />
+            <input
+              class="input date-input"
+              type="text"
+              inputmode="numeric"
+              placeholder="DD/MM/AAAA"
+              maxlength="10"
+              [ngModel]="dateInputs.dataInicial"
+              (ngModelChange)="onDateInputChange('dataInicial', $event)"
+              (blur)="onDateInputBlur('dataInicial')"
+            />
           </div>
 
           <div class="filter">
             <label class="muted">Período final</label>
-            <input class="input" type="date" [(ngModel)]="filtros.dataFinal" />
+            <input
+              class="input date-input"
+              type="text"
+              inputmode="numeric"
+              placeholder="DD/MM/AAAA"
+              maxlength="10"
+              [ngModel]="dateInputs.dataFinal"
+              (ngModelChange)="onDateInputChange('dataFinal', $event)"
+              (blur)="onDateInputBlur('dataFinal')"
+            />
           </div>
 
           <div class="filter">
@@ -46,28 +62,24 @@
           </div>
         </div>
 
-        <!-- BOTÕES A ESQUERDA (aqui onde você pediu) -->
-        <div class="actions-left" style="display:flex; gap:12px; align-items:center; margin-bottom:16px;">
+        <div class="actions-left">
           <button class="btn-cream" type="button" (click)="atualizar()">Atualizar</button>
-  <button class="btn-cream" type="button" (click)="gerarRelatorio()">Gerar Relatório</button>
-  <button class="btn-cream" type="button" (click)="exportar()">Exportar (Excel)</button>
-  <button class="btn-cream" type="button" (click)="voltar()">Voltar</button>
+          <button class="btn-cream" type="button" (click)="gerarRelatorio()">Gerar Relatório</button>
+          <button class="btn-cream" type="button" (click)="exportar()">Exportar (Excel)</button>
+          <button class="btn-cream" type="button" (click)="voltar()">Voltar</button>
         </div>
 
-        <!-- espaço principal para conteúdo dinâmico (tabela/gráficos) -->
         <div class="rel-content">
           <p class="sub">Aqui podem ir gráficos, tabela de lançamentos, filtros avançados ou preview do relatório.</p>
         </div>
       </div>
     </div>
 
-    <!-- PAINEL LATERAL (RESUMOS PUXADOS DA API) -->
-    <aside class="panel--light rel-side" style="align-items:flex-start; padding:24px 20px;">
-      <div style="width:100%;">
-        <h2 class="h2" style="margin-bottom:12px; text-align:left; color:#2b2b2b;">Resumos</h2>
+    <aside class="panel--light rel-side">
+      <div class="rel-side-content">
+        <h2 class="h2 rel-side-title">Resumos</h2>
 
         <div class="report-list" aria-live="polite">
-          <!-- Resumo geral -->
           <div class="menu-card" *ngIf="resumoLoaded">
             <div class="menu-head"><h3>Resumo</h3></div>
             <p class="sub">Total receitas: {{ resumo?.totalReceitas | number:'1.2-2' }}</p>
@@ -75,44 +87,50 @@
             <p class="sub">Saldo: {{ resumo?.saldo | number:'1.2-2' }}</p>
           </div>
 
-          <!-- Por Categoria -->
-          <div class="menu-card" *ngIf="porCategoriaLoaded && porCategoria?.length">
+          <div class="menu-card" *ngIf="porCategoriaLoaded">
             <div class="menu-head"><h3>Por Categoria</h3></div>
-            <div *ngFor="let p of porCategoria">
-              <div style="display:flex; justify-content:space-between;">
+            <div class="card-rows" *ngIf="porCategoria.length; else categoriaVazia">
+              <div class="line" *ngFor="let p of porCategoria">
                 <small>{{ p.categoria }}</small>
-                <strong>{{ p.total | number:'1.2-2' }}</strong>
+                <strong class="val">{{ p.total | number:'1.2-2' }}</strong>
               </div>
             </div>
+            <ng-template #categoriaVazia>
+              <p class="sub card-empty">Sem dados por categoria para o período selecionado.</p>
+            </ng-template>
           </div>
 
-          <!-- Fluxo -->
-          <div class="menu-card" *ngIf="fluxoLoaded && fluxo?.length">
+          <div class="menu-card" *ngIf="fluxoLoaded">
             <div class="menu-head"><h3>Fluxo</h3></div>
-            <div *ngFor="let f of fluxo | slice:0:6">
-              <small>{{ f.data | date:'shortDate' }} — Saldo: {{ f.saldoAcumulado | number:'1.2-2' }}</small>
+            <div class="card-scroll" *ngIf="fluxo.length; else fluxoVazio">
+              <div class="line flow-line" *ngFor="let f of fluxo">
+                <small>{{ formatDateBr(f.data) }}</small>
+                <strong class="val">Saldo: {{ f.saldoAcumulado | number:'1.2-2' }}</strong>
+              </div>
             </div>
+            <ng-template #fluxoVazio>
+              <p class="sub card-empty">Sem registros de fluxo no período selecionado.</p>
+            </ng-template>
           </div>
 
-          <!-- Mensal -->
-          <div class="menu-card mensal" *ngIf="mensalLoaded && mensal?.length">
+          <div class="menu-card mensal" *ngIf="mensalLoaded">
             <div class="menu-head"><h3>Mensal</h3></div>
-          
-            <div class="grid-months">
+
+            <div class="grid-months" *ngIf="mensal.length; else mensalVazio">
               <div class="line" *ngFor="let m of mensal">
                 <small>{{ formatMes(m.mes) }}/{{ anoSelecionado }}</small>
                 <strong class="val">{{ m.saldo | number:'1.2-2' }}</strong>
               </div>
             </div>
+            <ng-template #mensalVazio>
+              <p class="sub card-empty">Sem resumo mensal disponível para {{ anoSelecionado }}.</p>
+            </ng-template>
           </div>
-          
 
-          <!-- Se nenhum dado carregado -->
           <div class="menu-card" *ngIf="!resumoLoaded && !porCategoriaLoaded && !fluxoLoaded && !mensalLoaded">
             <p class="sub">Nenhum resumo carregado. Clique em "Gerar Relatório".</p>
           </div>
         </div>
-
       </div>
     </aside>
   </section>

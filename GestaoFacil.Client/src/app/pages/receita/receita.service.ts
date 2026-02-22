@@ -103,7 +103,12 @@ export class ReceitaService {
 
   private extractList(res: ApiResponse<Receita[]>): Receita[] {
     const data = res?.dados ?? res?.Dados;
-    return Array.isArray(data) ? data : [];
+    if (!Array.isArray(data)) return [];
+    return data.filter((item): item is Receita => {
+      if (!item || typeof item !== 'object') return false;
+      const id = (item as any).id ?? (item as any).Id;
+      return typeof id === 'number' && id > 0;
+    });
   }
 
   private extractMessage(res: ApiResponse<unknown>): string {

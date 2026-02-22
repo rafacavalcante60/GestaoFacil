@@ -13,6 +13,7 @@ obj/
 *.cache/
 .vs/
 *.log
+*.docx
 
 # ==============================
 # Configuração local
