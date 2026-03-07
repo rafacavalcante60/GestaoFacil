@@ -22,7 +22,7 @@ export class LoginComponent {
     this.errorMsg = '';
     this.auth.login({ email: this.email, senha: this.senha }).subscribe({
       next: () => this.router.navigate(['/atividades']),
-      error: err => this.errorMsg = 'Login falhou: ' + (err.error?.message || err.message)
+      error: err => this.errorMsg = AuthService.parseError(err, 'Email ou senha incorretos.')
     });
   }
 

@@ -54,6 +54,21 @@ export const PAGES_ROUTES: Routes = [
         (m) => m.AdminUsuariosComponent
       ),
   },
+  {
+    path: 'meta',
+    loadComponent: () =>
+      import('./meta/meta-list.component').then((m) => m.MetaListComponent),
+  },
+  {
+    path: 'meta/nova',
+    loadComponent: () =>
+      import('./meta/meta.component').then((m) => m.MetaComponent),
+  },
+  {
+    path: 'meta/:id/editar',
+    loadComponent: () =>
+      import('./meta/meta.component').then((m) => m.MetaComponent),
+  },
   { path: 'despesas', redirectTo: 'despesa', pathMatch: 'full' },
   { path: 'receitas', redirectTo: 'receita', pathMatch: 'full' },
   { path: '', redirectTo: 'atividades', pathMatch: 'full' },

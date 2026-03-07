@@ -56,7 +56,7 @@ export class CadastroComponent {
           this.router.navigate(['/auth/login']);
         },
         error: (err) => {
-          this.errorMsg = err.error?.message || "Erro ao cadastrar";
+          this.errorMsg = AuthService.parseError(err, 'Erro ao cadastrar. Tente novamente.');
         }
       });
   }

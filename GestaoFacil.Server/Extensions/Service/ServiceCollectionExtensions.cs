@@ -1,11 +1,13 @@
 ﻿using GestaoFacil.Server.Mappings;
 using GestaoFacil.Server.Repositories.Despesa;
 using GestaoFacil.Server.Repositories.Financeiro;
+using GestaoFacil.Server.Repositories.Meta;
 using GestaoFacil.Server.Repositories.Usuario;
 using GestaoFacil.Server.Services.Auth;
 using GestaoFacil.Server.Services.Despesa;
 using GestaoFacil.Server.Services.Email;
 using GestaoFacil.Server.Services.Financeiro;
+using GestaoFacil.Server.Services.Meta;
 using GestaoFacil.Server.Services.Relatorio;
 using GestaoFacil.Server.Services.Usuario;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -27,6 +29,7 @@ namespace GestaoFacil.Server.Extensions.Service
             services.AddScoped<IUsuarioService, UsuarioService>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<IMetaService, MetaService>();
 
             // Wrapper do SMTP
             services.AddScoped<ISmtpClientWrapper>(sp =>
@@ -55,6 +58,7 @@ namespace GestaoFacil.Server.Extensions.Service
             services.AddScoped<IDespesaRepository, DespesaRepository>();
             services.AddScoped<IReceitaRepository, ReceitaRepository>();
             services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+            services.AddScoped<IMetaRepository, MetaRepository>();
 
             return services;
         }

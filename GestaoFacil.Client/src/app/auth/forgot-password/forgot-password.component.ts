@@ -35,7 +35,7 @@ export class ForgotPasswordComponent {
         this.successMsg = res?.mensagem || res?.Mensagem || 'Se o e-mail existir, enviaremos o link de redefinicao.';
       },
       error: (err) => {
-        this.errorMsg = err.error?.mensagem || err.error?.Mensagem || err.error?.message || 'Falha ao solicitar redefinicao.';
+        this.errorMsg = AuthService.parseError(err, 'Falha ao solicitar redefinição.');
       },
       complete: () => {
         this.isSubmitting = false;
