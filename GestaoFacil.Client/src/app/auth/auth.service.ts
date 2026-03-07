@@ -137,6 +137,11 @@ export class AuthService {
     }
   }
 
+  static parseError(err: any, fallback = 'Algo deu errado. Tente novamente.'): string {
+    if (err.status === 0) return 'Não foi possível conectar ao servidor.';
+    return err.error?.mensagem || err.error?.Mensagem || err.error?.message || fallback;
+  }
+
   private decodeBase64Url(input: string): string {
     const base64 = input.replace(/-/g, '+').replace(/_/g, '/');
     const padLength = (4 - (base64.length % 4)) % 4;

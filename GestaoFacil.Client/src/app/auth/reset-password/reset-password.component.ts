@@ -58,7 +58,7 @@ export class ResetPasswordComponent implements OnInit {
         this.successMsg = res?.mensagem || res?.Mensagem || 'Senha redefinida com sucesso.';
       },
       error: (err) => {
-        this.errorMsg = err.error?.mensagem || err.error?.Mensagem || err.error?.message || 'Falha ao redefinir senha.';
+        this.errorMsg = AuthService.parseError(err, 'Falha ao redefinir senha.');
       },
       complete: () => {
         this.isSubmitting = false;

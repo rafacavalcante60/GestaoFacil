@@ -1,0 +1,85 @@
+<main class="app-container">
+  <section class="card" aria-labelledby="meta-list-title">
+    <div class="panel--light list-panel">
+      <div class="list-head">
+        <div class="head-left">
+          <div class="brand">
+            <img src="assets/img/monkey.png" alt="logo" />
+          </div>
+          <h1 class="h1" id="meta-list-title" style="color: var(--orange)">
+            Metas Financeiras
+          </h1>
+        </div>
+        <div class="head-actions">
+          <button class="btn btn-light" type="button" (click)="irAtividades()">Voltar</button>
+          <button class="btn" type="button" (click)="novaMeta()">Nova Meta</button>
+        </div>
+      </div>
+
+      <p class="error" *ngIf="errorMsg">{{ errorMsg }}</p>
+      <p class="ok" *ngIf="!errorMsg && infoMsg">{{ infoMsg }}</p>
+
+      <div class="table-wrap">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Tipo</th>
+              <th>Categoria</th>
+              <th>Período</th>
+              <th>Meta</th>
+              <th>Progresso</th>
+              <th>Status</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngIf="loading">
+              <td colspan="8" class="center muted">Carregando...</td>
+            </tr>
+            <tr *ngFor="let item of metas">
+              <td>{{ item.nome }}</td>
+              <td>{{ labelTipo(item.tipo) }}</td>
+              <td>{{ nomeCategoria(item) }}</td>
+              <td class="muted" style="font-size: 13px;">
+                {{ item.dataInicio | date:'dd/MM/yy' }} – {{ item.dataFim | date:'dd/MM/yy' }}
+              </td>
+              <td>{{ item.valorMeta | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</td>
+              <td class="progress-cell">
+                <div class="progress-wrap">
+                  <div
+                    class="progress-bar"
+                    [style.width]="larguraBarra(item)"
+                    [style.background]="corBarra(item)"
+                  ></div>
+                </div>
+                <span class="progress-label">
+                  {{ item.valorAtual | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}
+                  ({{ item.percentual | number:'1.0-1' }}%)
+                </span>
+              </td>
+              <td>
+                <span class="badge" [ngClass]="'badge--' + item.statusMeta">
+                  {{ item.statusMeta | uppercase }}
+                </span>
+              </td>
+              <td class="actions">
+                <button class="btn btn-small" type="button" (click)="editar(item)">Editar</button>
+                <button class="btn btn-small btn-danger" type="button" (click)="excluir(item)">Excluir</button>
+              </td>
+            </tr>
+            <tr *ngIf="!loading && metas.length === 0">
+              <td colspan="8" class="center muted">Nenhuma meta cadastrada.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <aside class="panel--accent">
+      <p class="sub">
+        Acompanhe suas metas financeiras com barras de progresso em tempo real.
+      </p>
+    </aside>
+  </section>
+</main>

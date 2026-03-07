@@ -19,6 +19,7 @@ namespace GestaoFacil.Server.Data
         public DbSet<CategoriaReceitaModel> CategoriasReceita { get; set; }
         public DbSet<TipoUsuarioModel> TiposUsuario { get; set; }
         public DbSet<RefreshTokenModel> RefreshTokens { get; set; }
+        public DbSet<MetaFinanceiraModel> MetasFinanceiras { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<UsuarioModel>()
@@ -71,6 +72,12 @@ namespace GestaoFacil.Server.Data
             modelBuilder.Entity<UsuarioModel>()
                 .HasIndex(u => u.Email)
                 .IsUnique();
+
+            modelBuilder.Entity<UsuarioModel>()
+                .HasMany(u => u.MetasFinanceiras)
+                .WithOne(m => m.Usuario)
+                .HasForeignKey(m => m.UsuarioId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

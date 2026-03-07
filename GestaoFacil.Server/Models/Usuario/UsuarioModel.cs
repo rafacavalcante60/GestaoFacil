@@ -19,5 +19,6 @@ namespace GestaoFacil.Server.Models.Usuario
         public DateTime? PasswordResetTokenExpiraEm { get; set; }
         public ICollection<ReceitaModel> Receitas { get; set; } = new Collection<ReceitaModel>();
         public ICollection<DespesaModel> Despesas { get; set; } = new Collection<DespesaModel>();
+        public ICollection<MetaFinanceiraModel> MetasFinanceiras { get; set; } = new Collection<MetaFinanceiraModel>();
     }
 }

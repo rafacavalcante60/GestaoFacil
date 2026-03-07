@@ -4,6 +4,7 @@ using GestaoFacil.Server.Models.Usuario;
 using GestaoFacil.Server.DTOs.Auth;
 using GestaoFacil.Server.DTOs.Despesa;
 using GestaoFacil.Server.DTOs.Financeiro;
+using GestaoFacil.Server.DTOs.Meta;
 using GestaoFacil.Server.DTOs.Usuario;
 
 namespace GestaoFacil.Server.Mappings
@@ -60,6 +61,20 @@ namespace GestaoFacil.Server.Mappings
                 .ForMember(dest => dest.SenhaHash, opt => opt.Ignore())   // Ignora a senha hash (vai setar manualmente no Service)
                 .ForMember(dest => dest.TipoUsuario, opt => opt.Ignore()); // Ignora a navegação TipoUsuario, será setado pelo TipoUsuarioId
 
+            //meta financeira
+            CreateMap<MetaFinanceiraModel, MetaDto>()
+                .ForMember(dest => dest.ValorAtual, opt => opt.Ignore())
+                .ForMember(dest => dest.Percentual, opt => opt.Ignore())
+                .ForMember(dest => dest.StatusMeta, opt => opt.Ignore());
+
+            CreateMap<MetaCreateDto, MetaFinanceiraModel>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore())
+                .ForMember(dest => dest.UsuarioId, opt => opt.Ignore())
+                .ForMember(dest => dest.Usuario, opt => opt.Ignore());
+
+            CreateMap<MetaUpdateDto, MetaFinanceiraModel>()
+                .ForMember(dest => dest.UsuarioId, opt => opt.Ignore())
+                .ForMember(dest => dest.Usuario, opt => opt.Ignore());
         }
     }
 }

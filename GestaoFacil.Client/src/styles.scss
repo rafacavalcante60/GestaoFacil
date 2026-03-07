@@ -16,8 +16,8 @@ html,body{height:100%}
 body{
   margin:0;
   font-family:'Poppins',sans-serif;
-  background: radial-gradient(circle at 10% 10%, rgba(255,205,185,0.12), transparent 10%),
-              linear-gradient(180deg, rgba(59,15,3,0.75) 0%, rgba(73,14,5,0.7) 100%);
+  background: radial-gradient(ellipse at 20% 0%, rgba(241,101,24,0.15) 0%, transparent 50%),
+              linear-gradient(160deg, #0f172a 0%, #1e293b 100%);
   display:flex;
   align-items:center;
   justify-content:center;
