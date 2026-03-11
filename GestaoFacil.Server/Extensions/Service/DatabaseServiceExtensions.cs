@@ -20,6 +20,7 @@ namespace GestaoFacil.Server.Extensions.Service
         {
             using var scope = app.ApplicationServices.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+            context.Database.Migrate(); //cria o banco e aplica migrations automaticamente
             DbInitializer.Seed(context);
         }
     }
