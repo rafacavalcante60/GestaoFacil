@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace GestaoFacil.Server.DTOs.Filtro
 {
-    public class ReceitaFiltroDto : QueryStringParameters
+    public class ReceitaFiltroDto : QueryStringParameters, IFiltroData
     {
         [Range(0.01, 999999.99, ErrorMessage = "O valor deve ser maior que zero.")]
         public decimal? ValorMin { get; set; }

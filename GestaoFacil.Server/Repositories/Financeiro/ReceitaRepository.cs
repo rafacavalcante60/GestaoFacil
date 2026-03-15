@@ -119,7 +119,8 @@ namespace GestaoFacil.Server.Repositories.Financeiro
                 query = query.Where(r => r.FormaPagamentoId == filtro.FormaPagamentoId.Value);
 
             if (!string.IsNullOrWhiteSpace(filtro.BuscaTexto))
-                query = query.Where(r => r.Descricao != null && r.Descricao.Contains(filtro.BuscaTexto));
+                query = query.Where(r => r.Nome.Contains(filtro.BuscaTexto) ||
+                    (r.Descricao != null && r.Descricao.Contains(filtro.BuscaTexto)));
 
             return query;
         }

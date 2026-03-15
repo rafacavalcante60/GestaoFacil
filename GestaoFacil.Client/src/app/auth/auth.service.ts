@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable, tap, catchError, throwError } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 interface LoginRequest {
   email: string;
@@ -29,7 +30,7 @@ interface LoginResponseRaw {
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private baseUrl = 'https://localhost:7285/api/Auth';
+  private baseUrl = `${environment.apiUrl}/Auth`;
 
   constructor(private http: HttpClient, private router: Router) {}
 

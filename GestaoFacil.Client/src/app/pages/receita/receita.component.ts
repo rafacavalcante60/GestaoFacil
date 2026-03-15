@@ -3,7 +3,9 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ReceitaService } from '../receita/receita.service';
-import { Receita } from '../../models/receita.model'; // ajuste o caminho se necessário
+import { Receita } from '../../models/receita.model';
+import { AuthService } from '../../auth/auth.service';
+import { LookupService } from '../../shared/lookup.service';
 
 @Component({
   selector: 'app-receita',
@@ -26,31 +28,17 @@ export class ReceitaComponent {
   isEdit = false;
   id?: number;
 
-  // formas de pagamento reuso das mesmas usadas em despesa
-  formasPagamento = [
-    { id: 1, nome: 'Dinheiro' },
-    { id: 2, nome: 'Cartão de Crédito' },
-    { id: 3, nome: 'Cartão de Débito' },
-    { id: 4, nome: 'Pix' },
-    { id: 5, nome: 'Cheque' },
-    { id: 6, nome: 'Boleto' },
-    { id: 7, nome: 'Outro' }
-  ];
-
-  // categorias específicas para receitas (conforme enviado)
-  categoriasReceita = [
-    { id: 1, nome: 'Salário' },
-    { id: 2, nome: 'Presente' },
-    { id: 3, nome: 'Venda' },
-    { id: 4, nome: 'Investimento' },
-    { id: 5, nome: 'Outros' }
-  ];
+  formasPagamento;
+  categoriasReceita;
 
   constructor(
     private svc: ReceitaService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private lookup: LookupService
   ) {
+    this.formasPagamento = this.lookup.formasPagamento;
+    this.categoriasReceita = this.lookup.categoriasReceita;
     const idParam = this.route.snapshot.paramMap.get('id');
     if (idParam) {
       this.isEdit = true;
@@ -95,14 +83,14 @@ export class ReceitaComponent {
     if (this.isEdit && this.id) {
       this.svc.update(this.id, payload).subscribe({
         next: () => this.router.navigate(['/receita']),
-        error: (err: any) => this.errorMsg = err.error?.mensagem || err.error?.message || 'Erro ao atualizar receita.'
+        error: (err: any) => this.errorMsg = AuthService.parseError(err, 'Erro ao atualizar receita.')
       });
     } else {
       this.svc.create(payload).subscribe({
         next: () => {
           this.router.navigate(['/receita']);
         },
-        error: (err: any) => this.errorMsg = err.error?.mensagem || err.error?.message || 'Erro ao criar receita.'
+        error: (err: any) => this.errorMsg = AuthService.parseError(err, 'Erro ao criar receita.')
       });
     }
   }

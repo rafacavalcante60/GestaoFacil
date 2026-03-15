@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 import { Meta } from '../../models/meta.model';
+import { environment } from '../../../environments/environment';
 
 interface ApiResponse<T> {
   dados?: T;
@@ -12,7 +13,7 @@ interface ApiResponse<T> {
 
 @Injectable({ providedIn: 'root' })
 export class MetaService {
-  private base = 'https://localhost:7285/api/Meta';
+  private base = `${environment.apiUrl}/Meta`;
 
   constructor(private http: HttpClient) {}
 

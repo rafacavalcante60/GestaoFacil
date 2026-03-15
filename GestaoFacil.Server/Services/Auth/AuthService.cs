@@ -1,33 +1,33 @@
-﻿using AutoMapper;
-using GestaoFacil.Server.Data;
+using AutoMapper;
 using GestaoFacil.Server.DTOs.Auth;
 using GestaoFacil.Server.Models.Auth;
 using GestaoFacil.Server.Models.Usuario;
+using GestaoFacil.Server.Repositories.Auth;
 using GestaoFacil.Server.Responses;
 using GestaoFacil.Server.Services.Email;
 using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
 
 namespace GestaoFacil.Server.Services.Auth
 {
     public class AuthService : IAuthService
     {
         private readonly IUsuarioRepository _usuarioRepository;
-        private readonly ITokenService _tokenService; 
+        private readonly IRefreshTokenRepository _refreshTokenRepository;
+        private readonly ITokenService _tokenService;
         private readonly ILogger<AuthService> _logger;
         private readonly IMapper _mapper;
-        private readonly AppDbContext _context; // Apenas para o refresh token
         private readonly IEmailService _emailService;
         private readonly IConfiguration _configuration;
 
-        public AuthService(IUsuarioRepository usuarioRepository, ITokenService tokenService, ILogger<AuthService> logger, IMapper mapper, 
-            AppDbContext context, IEmailService emailService, IConfiguration configuration)
+        public AuthService(IUsuarioRepository usuarioRepository, IRefreshTokenRepository refreshTokenRepository,
+            ITokenService tokenService, ILogger<AuthService> logger, IMapper mapper,
+            IEmailService emailService, IConfiguration configuration)
         {
             _usuarioRepository = usuarioRepository;
+            _refreshTokenRepository = refreshTokenRepository;
             _tokenService = tokenService;
             _logger = logger;
             _mapper = mapper;
-            _context = context;
             _emailService = emailService;
             _configuration = configuration;
         }
@@ -35,12 +35,6 @@ namespace GestaoFacil.Server.Services.Auth
         public async Task<ResponseModel<TokenDto>> LoginAsync(UsuarioLoginDto request)
         {
             _logger.LogInformation("Tentativa de login para o email: {Email}", request.Email);
-
-            if (!new EmailAddressAttribute().IsValid(request.Email))
-            {
-                _logger.LogWarning("Email inválido informado no login: {Email}", request.Email);
-                return ResponseHelper.Falha<TokenDto>("Email inválido.");
-            }
 
             var usuario = await _usuarioRepository.GetByEmailAsync(request.Email);
 
@@ -53,16 +47,13 @@ namespace GestaoFacil.Server.Services.Auth
             var (accessToken, expiraEm) = _tokenService.GenerateToken(usuario);
             var refreshToken = _tokenService.GenerateRefreshToken();
 
-            var refreshTokenModel = new RefreshTokenModel
+            await _refreshTokenRepository.AddAsync(new RefreshTokenModel
             {
                 Token = refreshToken,
                 UsuarioId = usuario.Id,
                 ExpiraEm = DateTime.UtcNow.AddDays(7),
                 EstaRevogado = false
-            };
-
-            _context.RefreshTokens.Add(refreshTokenModel);
-            await _context.SaveChangesAsync();
+            });
 
             var tokenDto = new TokenDto
             {
@@ -109,18 +100,18 @@ namespace GestaoFacil.Server.Services.Auth
 
         public async Task<ResponseModel<string>> LogoutAsync(string refreshToken)
         {
-            var token = await _context.RefreshTokens.FirstOrDefaultAsync(t => t.Token == refreshToken);
+            var token = await _refreshTokenRepository.GetByTokenAsync(refreshToken);
 
             if (token == null)
             {
-                _logger.LogWarning("Tentativa de logout com refresh token inexistente: {RefreshToken}", refreshToken);
+                _logger.LogWarning("Tentativa de logout com refresh token inexistente.");
                 return ResponseHelper.Falha<string>("Token não encontrado.");
             }
 
             token.EstaRevogado = true;
-            await _context.SaveChangesAsync();
+            await _refreshTokenRepository.SaveChangesAsync();
 
-            _logger.LogInformation("Logout realizado com sucesso para o refresh token: {RefreshToken}", refreshToken);
+            _logger.LogInformation("Logout realizado com sucesso.");
             return ResponseHelper.Sucesso("Logout realizado com sucesso.");
         }
 
@@ -135,14 +126,11 @@ namespace GestaoFacil.Server.Services.Auth
 
         public async Task<ResponseModel<TokenDto>> RefreshTokenAsync(string refreshToken)
         {
-            var tokenModel = await _context.RefreshTokens
-                .Include(t => t.Usuario)
-                .ThenInclude(u => u.TipoUsuario)
-                .FirstOrDefaultAsync(t => t.Token == refreshToken && !t.EstaRevogado);
+            var tokenModel = await _refreshTokenRepository.GetValidByTokenAsync(refreshToken);
 
             if (tokenModel == null || tokenModel.ExpiraEm < DateTime.UtcNow)
             {
-                _logger.LogWarning("Tentativa de refresh token inválida ou expirada: {RefreshToken}", refreshToken);
+                _logger.LogWarning("Tentativa de refresh token inválida ou expirada.");
                 return ResponseHelper.Falha<TokenDto>("Refresh token inválido ou expirado.");
             }
 
@@ -151,15 +139,13 @@ namespace GestaoFacil.Server.Services.Auth
             var (accessToken, expiraEm) = _tokenService.GenerateToken(tokenModel.Usuario);
             var newRefreshToken = _tokenService.GenerateRefreshToken();
 
-            _context.RefreshTokens.Add(new RefreshTokenModel
+            await _refreshTokenRepository.AddAsync(new RefreshTokenModel
             {
                 Token = newRefreshToken,
                 UsuarioId = tokenModel.UsuarioId,
                 ExpiraEm = DateTime.UtcNow.AddDays(7),
                 EstaRevogado = false
             });
-
-            await _context.SaveChangesAsync();
 
             _logger.LogInformation("Refresh token renovado com sucesso para o usuário ID {UsuarioId}", tokenModel.UsuarioId);
 
@@ -214,11 +200,9 @@ namespace GestaoFacil.Server.Services.Auth
 
         public async Task<ResponseModel<string>> ResetPasswordAsync(ResetPasswordRequestDto dto)
         {
-            _logger.LogInformation("Tentativa de redefinição de senha com token: {Token}", dto.Token);
+            _logger.LogInformation("Tentativa de redefinição de senha.");
 
-            var usuario = await _context.Usuarios.FirstOrDefaultAsync(u =>
-                u.PasswordResetToken == dto.Token &&
-                u.PasswordResetTokenExpiraEm > DateTime.UtcNow);
+            var usuario = await _usuarioRepository.GetByPasswordResetTokenAsync(dto.Token);
 
             if (usuario == null)
             {

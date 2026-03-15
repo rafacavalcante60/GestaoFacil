@@ -4,6 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DespesaService } from './despesa.service';
 import { Despesa } from '../../models/despesa.model';
+import { AuthService } from '../../auth/auth.service';
+import { LookupService } from '../../shared/lookup.service';
 
 @Component({
   selector: 'app-despesa',
@@ -26,31 +28,17 @@ export class DespesaComponent {
   isEdit = false;
   id?: number;
 
-  formasPagamento = [
-    { id: 1, nome: 'Dinheiro' },
-    { id: 2, nome: 'Cartão de Crédito' },
-    { id: 3, nome: 'Cartão de Débito' },
-    { id: 4, nome: 'Pix' },
-    { id: 5, nome: 'Cheque' },
-    { id: 6, nome: 'Boleto' },
-    { id: 7, nome: 'Outro' }
-  ];
-
-  categoriasDespesa = [
-    { id: 1, nome: 'Alimentação' },
-    { id: 2, nome: 'Transporte' },
-    { id: 3, nome: 'Moradia' },
-    { id: 4, nome: 'Lazer' },
-    { id: 5, nome: 'Educação' },
-    { id: 6, nome: 'Saúde' },
-    { id: 7, nome: 'Outra' }
-  ];
+  formasPagamento;
+  categoriasDespesa;
 
   constructor(
     private svc: DespesaService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private lookup: LookupService
   ) {
+    this.formasPagamento = this.lookup.formasPagamento;
+    this.categoriasDespesa = this.lookup.categoriasDespesa;
     // se existir id na rota, entra em modo edição
     const idParam = this.route.snapshot.paramMap.get('id');
     if (idParam) {
@@ -65,6 +53,7 @@ export class DespesaComponent {
       next: (d: Despesa) => {
         // adapta campos para o formulário
         // o backend geralmente retorna data em ISO, cortamos para yyyy-mm-dd
+        this.nome = d.nome ?? '';
         this.data = d.data ? d.data.substring(0, 10) : new Date().toISOString().substring(0, 10);
         this.valor = d.valor;
         this.descricao = d.descricao ?? '';
@@ -99,14 +88,14 @@ export class DespesaComponent {
     if (this.isEdit && this.id) {
       this.svc.update(this.id, payload).subscribe({
         next: () => this.router.navigate(['/despesa']),
-        error: (err) => this.errorMsg = err.error?.mensagem || err.error?.message || 'Erro ao atualizar despesa.'
+        error: (err) => this.errorMsg = AuthService.parseError(err, 'Erro ao atualizar despesa.')
       });
     } else {
       this.svc.create(payload).subscribe({
         next: () => {
           this.router.navigate(['/despesa']);
         },
-        error: (err) => this.errorMsg = err.error?.mensagem || err.error?.message || 'Erro ao criar despesa.'
+        error: (err) => this.errorMsg = AuthService.parseError(err, 'Erro ao criar despesa.')
       });
     }
   }

@@ -70,7 +70,51 @@
         </div>
 
         <div class="rel-content">
-          <p class="sub">Aqui podem ir gráficos, tabela de lançamentos, filtros avançados ou preview do relatório.</p>
+          <div *ngIf="!resumoLoaded && !porCategoriaLoaded && !fluxoLoaded && !mensalLoaded" class="chart-placeholder">
+            <p class="sub">Clique em "Gerar Relatório" para visualizar os gráficos.</p>
+          </div>
+
+          <div class="chart-grid-top" *ngIf="resumoLoaded || porCategoriaLoaded">
+            <div class="chart-card" *ngIf="resumoLoaded">
+              <div class="chart-wrapper chart-wrapper--top">
+                <canvas baseChart
+                  [type]="'doughnut'"
+                  [data]="resumoChartData"
+                  [options]="resumoChartOptions">
+                </canvas>
+              </div>
+            </div>
+
+            <div class="chart-card" *ngIf="porCategoriaLoaded && porCategoria.length">
+              <div class="chart-wrapper chart-wrapper--top">
+                <canvas baseChart
+                  [type]="'pie'"
+                  [data]="categoriaChartData"
+                  [options]="categoriaChartOptions">
+                </canvas>
+              </div>
+            </div>
+          </div>
+
+          <div class="chart-card" *ngIf="fluxoLoaded && fluxo.length">
+            <div class="chart-wrapper chart-wrapper--wide">
+              <canvas baseChart
+                [type]="'line'"
+                [data]="fluxoChartData"
+                [options]="fluxoChartOptions">
+              </canvas>
+            </div>
+          </div>
+
+          <div class="chart-card" *ngIf="mensalLoaded && mensal.length">
+            <div class="chart-wrapper chart-wrapper--wide">
+              <canvas baseChart
+                [type]="'bar'"
+                [data]="mensalChartData"
+                [options]="mensalChartOptions">
+              </canvas>
+            </div>
+          </div>
         </div>
       </div>
     </div>
