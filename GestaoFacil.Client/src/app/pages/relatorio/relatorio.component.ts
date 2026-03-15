@@ -2,12 +2,16 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { BaseChartDirective } from 'ng2-charts';
+import { ChartData, ChartOptions } from 'chart.js';
+import '../../shared/chart-config';
+import { CHART_COLORS, categoryPalette } from '../../shared/chart-colors';
 import { ReportService } from './report.service';
 
 @Component({
   selector: 'app-relatorio',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, BaseChartDirective],
   templateUrl: './relatorio.component.html',
   styleUrls: ['./relatorio.component.scss']
 })
@@ -49,6 +53,55 @@ export class RelatorioComponent {
   mensalLoaded = false;
 
   anoSelecionado = new Date().getFullYear();
+
+  // Chart data
+  resumoChartData: ChartData<'doughnut'> = { labels: [], datasets: [] };
+  resumoChartOptions: ChartOptions<'doughnut'> = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'bottom', labels: { padding: 16 } },
+      title: { display: true, text: 'Receitas vs Despesas', font: { size: 14 } }
+    }
+  };
+
+  categoriaChartData: ChartData<'pie'> = { labels: [], datasets: [] };
+  categoriaChartOptions: ChartOptions<'pie'> = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'bottom', labels: { padding: 12, font: { size: 11 } } },
+      title: { display: true, text: 'Distribuição por Categoria', font: { size: 14 } }
+    }
+  };
+
+  fluxoChartData: ChartData<'line'> = { labels: [], datasets: [] };
+  fluxoChartOptions: ChartOptions<'line'> = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      title: { display: true, text: 'Fluxo de Caixa (Saldo Acumulado)', font: { size: 14 } }
+    },
+    scales: {
+      x: { grid: { display: false } },
+      y: { beginAtZero: false }
+    }
+  };
+
+  mensalChartData: ChartData<'bar'> = { labels: [], datasets: [] };
+  mensalChartOptions: ChartOptions<'bar'> = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'bottom', labels: { padding: 16 } },
+      title: { display: true, text: 'Resumo Mensal', font: { size: 14 } }
+    },
+    scales: {
+      x: { grid: { display: false } },
+      y: { beginAtZero: true }
+    }
+  };
 
   constructor(private svc: ReportService, private router: Router) {
     this.syncDateInputsFromFiltros();
@@ -131,7 +184,6 @@ export class RelatorioComponent {
   }
 
   private buildQueryForRange() {
-    // backend espera inicio/fim como string(date-time)
     const inicio = `${this.filtros.dataInicial}T00:00:00`;
     const fim = `${this.filtros.dataFinal}T23:59:59`;
     return { inicio, fim };
@@ -146,6 +198,7 @@ export class RelatorioComponent {
       next: r => {
         this.resumo = r;
         this.resumoLoaded = true;
+        this.updateResumoChart();
       },
       error: () => {
         this.resumo = null;
@@ -153,25 +206,37 @@ export class RelatorioComponent {
       }
     });
 
-    // categoria (envia despesas flag dependendo do tipo)
+    // categoria
     this.porCategoriaLoaded = false;
     const despesasFlag = this.filtros.tipo === 'despesa' ? true : (this.filtros.tipo === 'receita' ? false : true);
     this.svc.categoria({ ...q, despesas: despesasFlag }).subscribe({
-      next: r => { this.porCategoria = r; this.porCategoriaLoaded = true; },
+      next: r => {
+        this.porCategoria = r;
+        this.porCategoriaLoaded = true;
+        this.updateCategoriaChart();
+      },
       error: () => { this.porCategoria = []; this.porCategoriaLoaded = false; }
     });
 
     // fluxo
     this.fluxoLoaded = false;
     this.svc.fluxo(q).subscribe({
-      next: r => { this.fluxo = r; this.fluxoLoaded = true; },
+      next: r => {
+        this.fluxo = r;
+        this.fluxoLoaded = true;
+        this.updateFluxoChart();
+      },
       error: () => { this.fluxo = []; this.fluxoLoaded = false; }
     });
 
     // mensal
     this.mensalLoaded = false;
     this.svc.mensal({ ano: this.anoSelecionado }).subscribe({
-      next: r => { this.mensal = r; this.mensalLoaded = true; },
+      next: r => {
+        this.mensal = r;
+        this.mensalLoaded = true;
+        this.updateMensalChart();
+      },
       error: () => { this.mensal = []; this.mensalLoaded = false; }
     });
   }
@@ -192,7 +257,6 @@ export class RelatorioComponent {
       this.svc.exportReceita(qRange).subscribe({ next: b => this.downloadBlob(b, `receitas_${this.filtros.dataInicial}_${this.filtros.dataFinal}.xlsx`) });
       return;
     }
-    // ambos -> baixa os dois
     this.svc.exportDespesa(qRange).subscribe({ next: b => this.downloadBlob(b, `despesas_${this.filtros.dataInicial}_${this.filtros.dataFinal}.xlsx`) });
     this.svc.exportReceita(qRange).subscribe({ next: b => this.downloadBlob(b, `receitas_${this.filtros.dataInicial}_${this.filtros.dataFinal}.xlsx`) });
   }
@@ -235,5 +299,79 @@ export class RelatorioComponent {
 
   voltar() {
     this.router.navigate(['/atividades']);
+  }
+
+  // --- Chart update methods ---
+
+  private updateResumoChart() {
+    if (!this.resumo) return;
+    this.resumoChartData = {
+      labels: ['Receitas', 'Despesas'],
+      datasets: [{
+        data: [this.resumo.totalReceitas, this.resumo.totalDespesas],
+        backgroundColor: [CHART_COLORS.green, CHART_COLORS.red],
+        hoverBackgroundColor: ['#27ae60', '#c0392b'],
+        borderWidth: 2,
+        borderColor: '#fff'
+      }]
+    };
+  }
+
+  private updateCategoriaChart() {
+    if (!this.porCategoria.length) return;
+    const labels = this.porCategoria.map(c => c.categoria);
+    const data = this.porCategoria.map(c => c.total);
+    const colors = categoryPalette(data.length);
+    this.categoriaChartData = {
+      labels,
+      datasets: [{
+        data,
+        backgroundColor: colors,
+        borderWidth: 2,
+        borderColor: '#fff'
+      }]
+    };
+  }
+
+  private updateFluxoChart() {
+    if (!this.fluxo.length) return;
+    const labels = this.fluxo.map(f => this.formatDateBr(f.data));
+    const data = this.fluxo.map(f => f.saldoAcumulado);
+    this.fluxoChartData = {
+      labels,
+      datasets: [{
+        data,
+        label: 'Saldo Acumulado',
+        borderColor: CHART_COLORS.blue,
+        backgroundColor: 'rgba(52, 152, 219, 0.15)',
+        fill: true,
+        tension: 0.3,
+        pointRadius: 3,
+        pointBackgroundColor: CHART_COLORS.blue
+      }]
+    };
+  }
+
+  private updateMensalChart() {
+    if (!this.mensal.length) return;
+    const meses = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+    const labels = this.mensal.map(m => meses[(m.mes - 1) % 12] || String(m.mes));
+    this.mensalChartData = {
+      labels,
+      datasets: [
+        {
+          label: 'Receitas',
+          data: this.mensal.map(m => m.totalReceitas),
+          backgroundColor: CHART_COLORS.green,
+          borderRadius: 4
+        },
+        {
+          label: 'Despesas',
+          data: this.mensal.map(m => m.totalDespesas),
+          backgroundColor: CHART_COLORS.red,
+          borderRadius: 4
+        }
+      ]
+    };
   }
 }

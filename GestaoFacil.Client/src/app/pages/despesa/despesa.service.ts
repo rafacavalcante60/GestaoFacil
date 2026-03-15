@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 import { Despesa } from '../../models/despesa.model';
+import { environment } from '../../../environments/environment';
 
 interface ApiResponse<T> {
   dados?: T;
@@ -42,7 +43,7 @@ type DespesaQuery = {
 
 @Injectable({ providedIn: 'root' })
 export class DespesaService {
-  private base = 'https://localhost:7285/api/Despesa';
+  private base = `${environment.apiUrl}/Despesa`;
 
   constructor(private http: HttpClient) {}
 

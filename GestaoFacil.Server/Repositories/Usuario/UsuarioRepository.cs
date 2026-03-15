@@ -80,5 +80,12 @@ namespace GestaoFacil.Server.Repositories.Usuario
         {
             return await _context.Usuarios.AnyAsync(u => u.Email == email);
         }
+
+        public async Task<UsuarioModel?> GetByPasswordResetTokenAsync(string token)
+        {
+            return await _context.Usuarios.FirstOrDefaultAsync(u =>
+                u.PasswordResetToken == token &&
+                u.PasswordResetTokenExpiraEm > DateTime.UtcNow);
+        }
     }
 }

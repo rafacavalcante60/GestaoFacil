@@ -61,15 +61,9 @@ namespace GestaoFacil.Server.Services.Meta
 
         public async Task<ResponseModel<MetaDto>> CreateAsync(MetaCreateDto dto, int usuarioId)
         {
-            if (dto.ValorMeta <= 0)
-            {
-                return ResponseHelper.Falha<MetaDto>("O valor da meta deve ser maior que zero.");
-            }
-
-            if (dto.DataInicio > dto.DataFim)
-            {
-                return ResponseHelper.Falha<MetaDto>("A data de início não pode ser maior que a data de fim.");
-            }
+            var erro = ValidarMeta(dto.ValorMeta, dto.DataInicio, dto.DataFim);
+            if (erro != null)
+                return ResponseHelper.Falha<MetaDto>(erro);
 
             var meta = _mapper.Map<MetaFinanceiraModel>(dto);
             meta.UsuarioId = usuarioId;
@@ -89,15 +83,9 @@ namespace GestaoFacil.Server.Services.Meta
                 return ResponseHelper.Falha<bool>("ID da meta inválido.");
             }
 
-            if (dto.ValorMeta <= 0)
-            {
-                return ResponseHelper.Falha<bool>("O valor da meta deve ser maior que zero.");
-            }
-
-            if (dto.DataInicio > dto.DataFim)
-            {
-                return ResponseHelper.Falha<bool>("A data de início não pode ser maior que a data de fim.");
-            }
+            var erro = ValidarMeta(dto.ValorMeta, dto.DataInicio, dto.DataFim);
+            if (erro != null)
+                return ResponseHelper.Falha<bool>(erro);
 
             var meta = await _repository.GetByIdAsync(id, usuarioId);
             if (meta == null)
@@ -126,6 +114,15 @@ namespace GestaoFacil.Server.Services.Meta
 
             _logger.LogInformation("Meta {Id} removida para o usuário {UsuarioId}", id, usuarioId);
             return ResponseHelper.Sucesso(true, "Meta removida com sucesso.");
+        }
+
+        private static string? ValidarMeta(decimal valorMeta, DateTime dataInicio, DateTime dataFim)
+        {
+            if (valorMeta <= 0)
+                return "O valor da meta deve ser maior que zero.";
+            if (dataInicio > dataFim)
+                return "A data de início não pode ser maior que a data de fim.";
+            return null;
         }
 
         private async Task<MetaDto> CalcularProgressoAsync(MetaFinanceiraModel meta)

@@ -11,4 +11,5 @@ public interface IUsuarioRepository
     Task<UsuarioModel?> GetByEmailAsync(string email);
     Task<bool> EmailExistsAsync(string email);
     Task<TipoUsuarioModel?> GetTipoUsuarioByNameAsync(string nome);
+    Task<UsuarioModel?> GetByPasswordResetTokenAsync(string token);
 }

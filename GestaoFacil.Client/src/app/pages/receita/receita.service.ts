@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 import { Receita } from '../../models/receita.model';
+import { environment } from '../../../environments/environment';
 
 interface ApiResponse<T> {
   dados?: T;
@@ -42,7 +43,7 @@ type ReceitaQuery = {
 
 @Injectable({ providedIn: 'root' })
 export class ReceitaService {
-  private base = 'https://localhost:7285/api/Receita';
+  private base = `${environment.apiUrl}/Receita`;
 
   constructor(private http: HttpClient) {}
 

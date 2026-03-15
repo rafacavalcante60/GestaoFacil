@@ -4,6 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MetaService } from './meta.service';
 import { Meta } from '../../models/meta.model';
+import { AuthService } from '../../auth/auth.service';
+import { LookupService } from '../../shared/lookup.service';
 
 @Component({
   selector: 'app-meta',
@@ -26,29 +28,17 @@ export class MetaComponent {
   isEdit = false;
   id?: number;
 
-  categoriasDespesa = [
-    { id: 1, nome: 'Alimentação' },
-    { id: 2, nome: 'Transporte' },
-    { id: 3, nome: 'Moradia' },
-    { id: 4, nome: 'Lazer' },
-    { id: 5, nome: 'Educação' },
-    { id: 6, nome: 'Saúde' },
-    { id: 7, nome: 'Outra' }
-  ];
-
-  categoriasReceita = [
-    { id: 1, nome: 'Salário' },
-    { id: 2, nome: 'Presente' },
-    { id: 3, nome: 'Venda' },
-    { id: 4, nome: 'Investimento' },
-    { id: 5, nome: 'Outros' }
-  ];
+  categoriasDespesa;
+  categoriasReceita;
 
   constructor(
     private svc: MetaService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private lookup: LookupService
   ) {
+    this.categoriasDespesa = this.lookup.categoriasDespesa;
+    this.categoriasReceita = this.lookup.categoriasReceita;
     const idParam = this.route.snapshot.paramMap.get('id');
     if (idParam) {
       this.isEdit = true;
@@ -107,12 +97,12 @@ export class MetaComponent {
     if (this.isEdit && this.id) {
       this.svc.update(this.id, payload).subscribe({
         next: () => this.router.navigate(['/meta']),
-        error: (err) => this.errorMsg = err.error?.mensagem || 'Erro ao atualizar meta.'
+        error: (err) => this.errorMsg = AuthService.parseError(err, 'Erro ao atualizar meta.')
       });
     } else {
       this.svc.create(payload).subscribe({
         next: () => this.router.navigate(['/meta']),
-        error: (err) => this.errorMsg = err.error?.mensagem || 'Erro ao criar meta.'
+        error: (err) => this.errorMsg = AuthService.parseError(err, 'Erro ao criar meta.')
       });
     }
   }

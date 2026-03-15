@@ -5,6 +5,7 @@ using GestaoFacil.Server.DTOs.Filtro;
 using GestaoFacil.Server.Models.Principais;
 using GestaoFacil.Server.Repositories.Despesa;
 using GestaoFacil.Server.Services.Despesa;
+using GestaoFacil.Server.Services.Financeiro;
 using Microsoft.Extensions.Logging;
 using Moq;
 

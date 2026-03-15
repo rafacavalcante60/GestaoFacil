@@ -1,5 +1,6 @@
 ﻿using GestaoFacil.Server.Mappings;
 using GestaoFacil.Server.Repositories.Despesa;
+using GestaoFacil.Server.Repositories.Auth;
 using GestaoFacil.Server.Repositories.Financeiro;
 using GestaoFacil.Server.Repositories.Meta;
 using GestaoFacil.Server.Repositories.Usuario;
@@ -59,6 +60,7 @@ namespace GestaoFacil.Server.Extensions.Service
             services.AddScoped<IReceitaRepository, ReceitaRepository>();
             services.AddScoped<IUsuarioRepository, UsuarioRepository>();
             services.AddScoped<IMetaRepository, MetaRepository>();
+            services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
 
             return services;
         }

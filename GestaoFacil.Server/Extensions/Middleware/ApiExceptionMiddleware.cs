@@ -17,17 +17,27 @@ namespace GestaoFacil.Server.Extensions.Middleware
                     var logger = app.ApplicationServices.GetRequiredService<ILoggerFactory>()
                                                         .CreateLogger("GlobalExceptionHandler");
 
-                    context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                     context.Response.ContentType = "application/json";
 
                     var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
                     if (contextFeature != null)
                     {
-                        logger.LogError(contextFeature.Error, "Erro não tratado capturado no middleware.");
+                        if (contextFeature.Error is UnauthorizedAccessException)
+                        {
+                            context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                            logger.LogWarning(contextFeature.Error, "Acesso não autorizado.");
+                        }
+                        else
+                        {
+                            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                            logger.LogError(contextFeature.Error, "Erro não tratado capturado no middleware.");
+                        }
 
                         var mensagem = env.IsDevelopment()
                             ? contextFeature.Error.Message
-                            : "Ocorreu um erro interno no servidor.";
+                            : contextFeature.Error is UnauthorizedAccessException
+                                ? "Acesso não autorizado."
+                                : "Ocorreu um erro interno no servidor.";
 
                         object? dados = null;
 

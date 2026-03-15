@@ -88,6 +88,42 @@
 
 .rel-content {
   min-height: 120px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.chart-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.chart-grid-top {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.chart-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  padding: 16px;
+}
+
+.chart-wrapper {
+  position: relative;
+}
+
+.chart-wrapper--top {
+  height: 220px;
+}
+
+.chart-wrapper--wide {
+  height: 260px;
 }
 
 .rel-side {
@@ -285,5 +321,9 @@
 
   .flow-line small {
     white-space: normal;
+  }
+
+  .chart-grid-top {
+    grid-template-columns: 1fr;
   }
 }

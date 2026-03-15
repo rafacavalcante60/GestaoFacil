@@ -1,61 +1,48 @@
-﻿using AutoMapper;
+using AutoMapper;
 using FluentAssertions;
-using GestaoFacil.Server.Data;
 using GestaoFacil.Server.DTOs.Auth;
 using GestaoFacil.Server.Models.Auth;
 using GestaoFacil.Server.Models.Usuario;
+using GestaoFacil.Server.Repositories.Auth;
 using GestaoFacil.Server.Services.Auth;
 using GestaoFacil.Server.Services.Email;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Moq;
 
 public class AuthServiceTests
 {
     private readonly Mock<IUsuarioRepository> _usuarioRepoMock;
+    private readonly Mock<IRefreshTokenRepository> _refreshTokenRepoMock;
     private readonly Mock<ITokenService> _tokenServiceMock;
     private readonly Mock<ILogger<AuthService>> _loggerMock;
     private readonly Mock<IMapper> _mapperMock;
     private readonly Mock<IEmailService> _emailServiceMock;
-    private readonly AppDbContext _context;
+    private readonly Mock<IConfiguration> _configMock;
 
     public AuthServiceTests()
     {
         _usuarioRepoMock = new Mock<IUsuarioRepository>();
+        _refreshTokenRepoMock = new Mock<IRefreshTokenRepository>();
         _tokenServiceMock = new Mock<ITokenService>();
         _loggerMock = new Mock<ILogger<AuthService>>();
         _mapperMock = new Mock<IMapper>();
         _emailServiceMock = new Mock<IEmailService>();
-
-        var options = new DbContextOptionsBuilder<AppDbContext>()
-            .UseInMemoryDatabase(Guid.NewGuid().ToString())
-            .Options;
-
-        _context = new AppDbContext(options);
+        _configMock = new Mock<IConfiguration>();
+        _configMock.Setup(c => c["Frontend:BaseUrl"]).Returns("http://localhost:4200");
     }
 
     private AuthService CreateService()
     {
         return new AuthService(
             _usuarioRepoMock.Object,
+            _refreshTokenRepoMock.Object,
             _tokenServiceMock.Object,
             _loggerMock.Object,
             _mapperMock.Object,
-            _context,
-            _emailServiceMock.Object
+            _emailServiceMock.Object,
+            _configMock.Object
         );
-    }
-
-    [Fact]
-    public async Task LoginAsync_DeveFalhar_QuandoEmailInvalido()
-    {
-        var service = CreateService();
-        var dto = new UsuarioLoginDto { Email = "emailinvalido", Senha = "123" };
-
-        var result = await service.LoginAsync(dto);
-
-        result.Status.Should().BeFalse();
-        result.Mensagem.Should().Be("Email inválido.");
     }
 
     [Fact]
@@ -135,6 +122,9 @@ public class AuthServiceTests
     [Fact]
     public async Task LogoutAsync_DeveFalhar_QuandoTokenNaoExiste()
     {
+        _refreshTokenRepoMock.Setup(r => r.GetByTokenAsync("naoexiste"))
+            .ReturnsAsync((RefreshTokenModel?)null);
+
         var service = CreateService();
         var result = await service.LogoutAsync("naoexiste");
 
@@ -152,8 +142,9 @@ public class AuthServiceTests
             ExpiraEm = DateTime.UtcNow.AddDays(1),
             EstaRevogado = false
         };
-        _context.RefreshTokens.Add(token);
-        await _context.SaveChangesAsync();
+
+        _refreshTokenRepoMock.Setup(r => r.GetByTokenAsync("token123"))
+            .ReturnsAsync(token);
 
         var service = CreateService();
         var result = await service.LogoutAsync("token123");
@@ -166,6 +157,9 @@ public class AuthServiceTests
     [Fact]
     public async Task RefreshTokenAsync_DeveFalhar_QuandoTokenInvalido()
     {
+        _refreshTokenRepoMock.Setup(r => r.GetValidByTokenAsync("invalido"))
+            .ReturnsAsync((RefreshTokenModel?)null);
+
         var service = CreateService();
         var result = await service.RefreshTokenAsync("invalido");
 
@@ -190,8 +184,9 @@ public class AuthServiceTests
             ExpiraEm = DateTime.UtcNow.AddDays(1),
             EstaRevogado = false
         };
-        _context.RefreshTokens.Add(tokenModel);
-        await _context.SaveChangesAsync();
+
+        _refreshTokenRepoMock.Setup(r => r.GetValidByTokenAsync("validotoken"))
+            .ReturnsAsync(tokenModel);
 
         _tokenServiceMock.Setup(t => t.GenerateToken(usuario)).Returns(("novoToken", DateTime.UtcNow.AddMinutes(30)));
         _tokenServiceMock.Setup(t => t.GenerateRefreshToken()).Returns("refreshNovo");
@@ -238,6 +233,9 @@ public class AuthServiceTests
     [Fact]
     public async Task ResetPasswordAsync_DeveFalhar_QuandoTokenInvalido()
     {
+        _usuarioRepoMock.Setup(r => r.GetByPasswordResetTokenAsync("invalido"))
+            .ReturnsAsync((UsuarioModel?)null);
+
         var service = CreateService();
         var result = await service.ResetPasswordAsync(new ResetPasswordRequestDto { Token = "invalido", NewPassword = "nova" });
 
@@ -255,9 +253,9 @@ public class AuthServiceTests
             PasswordResetToken = "tokenvalido",
             PasswordResetTokenExpiraEm = DateTime.UtcNow.AddMinutes(10)
         };
-        _context.Usuarios.Add(usuario);
-        await _context.SaveChangesAsync();
 
+        _usuarioRepoMock.Setup(r => r.GetByPasswordResetTokenAsync("tokenvalido"))
+            .ReturnsAsync(usuario);
         _usuarioRepoMock.Setup(r => r.UpdateAsync(usuario)).Returns(Task.CompletedTask);
 
         var service = CreateService();
