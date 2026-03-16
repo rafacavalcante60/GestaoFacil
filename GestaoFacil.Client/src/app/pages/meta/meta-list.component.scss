@@ -1,3 +1,18 @@
+:host {
+  display: contents;
+}
+
+.app-container {
+  max-width: 1400px;
+  width: min(96%, 1400px);
+  min-height: 85vh;
+  margin: 0 auto;
+}
+
+.app-container .card {
+  min-height: 85vh;
+}
+
 .list-panel {
   align-items: flex-start;
   justify-content: flex-start;
