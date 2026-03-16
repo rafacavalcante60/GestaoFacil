@@ -1,3 +1,14 @@
+:host {
+  display: contents;
+}
+
+.app-container {
+  max-width: 1400px;
+  width: min(96%, 1400px);
+  min-height: 65vh;
+  margin: 0 auto;
+}
+
 .panel--light.cadastro-left {
   align-items: flex-start;
 }
