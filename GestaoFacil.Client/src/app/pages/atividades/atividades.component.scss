@@ -40,6 +40,16 @@
   flex: 1;
 }
 
+.menu-grid--compact {
+  grid-auto-rows: minmax(230px, auto);
+  align-content: start;
+  flex: 0 0 auto;
+}
+
+.menu-grid--compact .menu-card {
+  min-height: 230px;
+}
+
 .menu-card {
   background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(255,255,255,0.92));
   width: auto;

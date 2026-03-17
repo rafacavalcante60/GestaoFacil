@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -8,6 +8,32 @@ import '../../shared/chart-config';
 import { CHART_COLORS, categoryPalette } from '../../shared/chart-colors';
 import { ReportService } from './report.service';
 
+const brlAxisFormatter = new Intl.NumberFormat('pt-BR', {
+  style: 'currency',
+  currency: 'BRL',
+  maximumFractionDigits: 0
+});
+
+const brlCompactFormatter = new Intl.NumberFormat('pt-BR', {
+  notation: 'compact',
+  compactDisplay: 'short',
+  maximumFractionDigits: 1
+});
+
+function formatCurrencyAxisTick(value: string | number): string {
+  const amount = typeof value === 'string' ? Number(value) : value;
+  if (!Number.isFinite(amount)) return String(value);
+  return brlAxisFormatter.format(amount);
+}
+
+function formatCurrencyCompactTick(value: string | number): string {
+  const amount = typeof value === 'string' ? Number(value) : value;
+  if (!Number.isFinite(amount)) return String(value);
+
+  if (Math.abs(amount) < 1000) return brlAxisFormatter.format(amount);
+  return `R$ ${brlCompactFormatter.format(amount)}`;
+}
+
 @Component({
   selector: 'app-relatorio',
   standalone: true,
@@ -15,7 +41,7 @@ import { ReportService } from './report.service';
   templateUrl: './relatorio.component.html',
   styleUrls: ['./relatorio.component.scss']
 })
-export class RelatorioComponent {
+export class RelatorioComponent implements OnInit, OnDestroy {
   filtros = {
     tipo: 'ambos' as 'ambos' | 'despesa' | 'receita',
     dataInicial: this.firstDayOfMonth(),
@@ -85,7 +111,12 @@ export class RelatorioComponent {
     },
     scales: {
       x: { grid: { display: false } },
-      y: { beginAtZero: false }
+      y: {
+        beginAtZero: false,
+        ticks: {
+          callback: (value) => formatCurrencyAxisTick(value)
+        }
+      }
     }
   };
 
@@ -93,18 +124,36 @@ export class RelatorioComponent {
   mensalChartOptions: ChartOptions<'bar'> = {
     responsive: true,
     maintainAspectRatio: false,
+    animation: {
+      onComplete: ({ chart }) => this.drawMensalValueLabels(chart)
+    },
     plugins: {
       legend: { position: 'bottom', labels: { padding: 16 } },
       title: { display: true, text: 'Resumo Mensal', font: { size: 14 } }
     },
     scales: {
       x: { grid: { display: false } },
-      y: { beginAtZero: true }
+      y: {
+        beginAtZero: true,
+        ticks: {
+          maxTicksLimit: 5,
+          autoSkip: true,
+          callback: (value) => formatCurrencyCompactTick(value)
+        }
+      }
     }
   };
 
   constructor(private svc: ReportService, private router: Router) {
     this.syncDateInputsFromFiltros();
+  }
+
+  ngOnInit() {
+    document.body.classList.add('reports-page-open');
+  }
+
+  ngOnDestroy() {
+    document.body.classList.remove('reports-page-open');
   }
 
   today() { return this.toLocalIsoDate(new Date()); }
@@ -356,22 +405,102 @@ export class RelatorioComponent {
     if (!this.mensal.length) return;
     const meses = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
     const labels = this.mensal.map(m => meses[(m.mes - 1) % 12] || String(m.mes));
+    const receitas = this.mensal.map(m => m.totalReceitas);
+    const despesas = this.mensal.map(m => m.totalDespesas);
+    const positivos = [...receitas, ...despesas].filter(v => v > 0);
+    const maxValor = Math.max(...receitas, ...despesas, 0);
+    const minPositivo = positivos.length ? Math.min(...positivos) : 0;
+    const razaoAmplitude = minPositivo > 0 ? maxValor / minPositivo : 1;
+    const minBarLength = razaoAmplitude >= 100 ? 4 : undefined;
+    const stepSize = this.getNiceStep(maxValor);
+    const eixoMax = maxValor > 0 ? Math.ceil(maxValor / stepSize) * stepSize : 10;
+
     this.mensalChartData = {
       labels,
       datasets: [
         {
           label: 'Receitas',
-          data: this.mensal.map(m => m.totalReceitas),
+          data: receitas,
           backgroundColor: CHART_COLORS.green,
-          borderRadius: 4
+          borderRadius: 4,
+          minBarLength
         },
         {
           label: 'Despesas',
-          data: this.mensal.map(m => m.totalDespesas),
+          data: despesas,
           backgroundColor: CHART_COLORS.red,
-          borderRadius: 4
+          borderRadius: 4,
+          minBarLength
         }
       ]
     };
+
+    this.mensalChartOptions = {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: {
+        onComplete: ({ chart }) => this.drawMensalValueLabels(chart)
+      },
+      plugins: {
+        legend: { position: 'bottom', labels: { padding: 16 } },
+        title: { display: true, text: 'Resumo Mensal', font: { size: 14 } }
+      },
+      scales: {
+        x: { grid: { display: false } },
+        y: {
+          type: 'linear',
+          min: 0,
+          max: eixoMax,
+          beginAtZero: true,
+          ticks: {
+            stepSize,
+            maxTicksLimit: 5,
+            autoSkip: true,
+            callback: (value) => formatCurrencyCompactTick(value)
+          }
+        }
+      }
+    };
+  }
+
+  private getNiceStep(maxValue: number): number {
+    if (maxValue <= 0) return 1;
+
+    const targetTicks = 6;
+    const rawStep = maxValue / targetTicks;
+    const magnitude = Math.pow(10, Math.floor(Math.log10(rawStep)));
+    const normalized = rawStep / magnitude;
+
+    if (normalized <= 1) return 1 * magnitude;
+    if (normalized <= 2) return 2 * magnitude;
+    if (normalized <= 5) return 5 * magnitude;
+    return 10 * magnitude;
+  }
+
+  private drawMensalValueLabels(chart: any): void {
+    if (chart.config.type !== 'bar') return;
+
+    const ctx = chart.ctx;
+    ctx.save();
+    ctx.font = '600 10px Poppins, sans-serif';
+    ctx.fillStyle = '#3b0f03';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'bottom';
+
+    chart.data.datasets.forEach((dataset: any, datasetIndex: number) => {
+      const meta = chart.getDatasetMeta(datasetIndex);
+      if (!meta?.data) return;
+
+      meta.data.forEach((bar: any, index: number) => {
+        const rawValue = dataset.data?.[index];
+        const value = typeof rawValue === 'number' ? rawValue : Number(rawValue);
+        if (!Number.isFinite(value)) return;
+
+        const label = formatCurrencyCompactTick(value);
+        ctx.fillText(label, bar.x, bar.y - 4 - (datasetIndex * 12));
+      });
+    });
+
+    ctx.restore();
   }
 }
