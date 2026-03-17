@@ -26,6 +26,11 @@ body{
   -webkit-font-smoothing:antialiased;
 }
 
+body.reports-page-open{
+  align-items:flex-start;
+  overflow-y:auto;
+}
+
 /* optional full-screen background image silhouette:
 body::before{
   content:"";
