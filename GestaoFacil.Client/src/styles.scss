@@ -4,6 +4,7 @@
 :root{
   --orange:#f16518;
   --peach:#ffe5cc;
+  --yellow:#F59E0B;
   --deep-bg:#3b0f03; /* fallback */
   --card-radius:18px;
   --card-shadow: 0 10px 30px rgba(0,0,0,0.35);
@@ -158,12 +159,30 @@ body::before{
   color:white;
   box-shadow:0 6px 18px rgba(241,101,24,0.18);
 }
+.btn-yellow{
+  background:var(--yellow);
+  color:#333;
+  box-shadow:0 6px 18px rgba(245, 158, 11, 0.25);
+}
 .btn--outline{
   background:transparent;
   border:1.8px solid rgba(255,255,255,0.95);
   color:white;
   padding:10px 22px;
   border-radius:22px;
+}
+
+.btn--nav-toggle{
+  background:transparent;
+  border:1.8px solid rgba(255,255,255,0.95);
+  color:white;
+  padding:12px 26px;
+  border-radius:22px;
+  font-size:15px;
+  cursor:pointer;
+  font-weight:600;
+  min-width:280px;
+  text-align:center;
 }
 
 /* utility for right-aligned small column actions */

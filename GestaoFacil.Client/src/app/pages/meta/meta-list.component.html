@@ -10,10 +10,6 @@
             Metas Financeiras
           </h1>
         </div>
-        <div class="head-actions">
-          <button class="btn btn-light" type="button" (click)="irAtividades()">Voltar</button>
-          <button class="btn" type="button" (click)="novaMeta()">Nova Meta</button>
-        </div>
       </div>
 
       <p class="error" *ngIf="errorMsg">{{ errorMsg }}</p>
@@ -64,7 +60,7 @@
                 </span>
               </td>
               <td class="actions">
-                <button class="btn btn-small" type="button" (click)="editar(item)">Editar</button>
+                <button class="btn btn-small btn-yellow" type="button" (click)="editar(item)">Editar</button>
                 <button class="btn btn-small btn-danger" type="button" (click)="excluir(item)">Excluir</button>
               </td>
             </tr>
@@ -73,6 +69,11 @@
             </tr>
           </tbody>
         </table>
+      </div>
+
+      <div class="bottom-actions">
+        <button class="btn" type="button" (click)="novaMeta()">Nova Meta</button>
+        <button class="btn btn-light" type="button" (click)="irAtividades()">Voltar</button>
       </div>
     </div>
 

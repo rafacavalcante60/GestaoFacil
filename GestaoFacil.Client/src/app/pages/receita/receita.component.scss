@@ -30,13 +30,21 @@
 }
 
 .btn-limpar {
-  background-color: white;  
-  color: black;             
-  border: 1px solid #ccc;    
-  padding: 8px 16px;
-  border-radius: 6px;
+  display: inline-block;
+  background-color: white;
+  color: black;
+  border: none;
+  padding: 12px 26px;
+  border-radius: 22px;
   cursor: pointer;
   font-weight: 600;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.btn-limpar:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.15);
 }
 
 .descricao-box {

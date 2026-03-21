@@ -10,14 +10,6 @@
             Receitas
           </h1>
         </div>
-        <div class="head-actions">
-          <button class="btn btn-light" type="button" (click)="irAtividades()">
-            Voltar
-          </button>
-          <button class="btn" type="button" (click)="novaReceita()">
-            Nova Receita
-          </button>
-        </div>
       </div>
 
       <div class="filters-row">
@@ -67,7 +59,7 @@
               <td>{{ nomeCategoria(item.categoriaReceitaId) }}</td>
               <td>{{ nomeFormaPagamento(item.formaPagamentoId) }}</td>
               <td class="actions">
-                <button class="btn btn-small" type="button" (click)="editar(item)" [disabled]="!item.id">Editar</button>
+                <button class="btn btn-small btn-yellow" type="button" (click)="editar(item)" [disabled]="!item.id">Editar</button>
                 <button class="btn btn-small btn-danger" type="button" (click)="excluir(item)" [disabled]="!item.id">Excluir</button>
               </td>
             </tr>
@@ -88,6 +80,15 @@
             Proxima
           </button>
         </div>
+      </div>
+
+      <div class="bottom-actions">
+        <button class="btn" type="button" (click)="novaReceita()">
+          Nova Receita
+        </button>
+        <button class="btn btn-light" type="button" (click)="irAtividades()">
+          Voltar
+        </button>
       </div>
     </div>
 
