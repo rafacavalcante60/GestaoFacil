@@ -5,24 +5,29 @@
 }
 
 .app-container.relatorio-page {
-  width: min(98%, 1560px);
-  max-width: 1560px;
-  padding: clamp(12px, 2vw, 32px);
-  min-height: calc(100vh - 60px);
-  margin: 10px auto;
+  width: 1347px;
+  max-width: 1347px;
+  height: 810px;
+  min-height: 810px;
+  padding: 0;
+  margin: 40px auto 10px;
   box-sizing: border-box;
   overflow: visible;
-  align-self: flex-start;
+  align-self: center;
+  border: none !important;
+  outline: none !important;
 }
 
 .app-container.relatorio-page .card {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(500px, 1.05fr);
   width: 100%;
-  min-height: min(860px, calc(100vh - 120px));
+  height: 100%;
+  min-height: 100%;
   border-radius: var(--card-radius);
   overflow: hidden;
   padding: 0;
+  border: none !important;
 }
 
 .rel-main,
@@ -259,15 +264,25 @@
   white-space: nowrap;
 }
 
+
 .btn-cream {
-  background-color: #fff;
-  color: #000;
-  border: 1px solid #ccc;
-  padding: 8px 16px;
-  border-radius: 6px;
+  display: inline-block;
+  padding: 12px 26px;
+  border-radius: 22px;
+  border: none;
   cursor: pointer;
   font-weight: 600;
+  background-color: #fff;
+  color: #000;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
 }
+
+.btn-cream:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.15);
+}
+
 
 @media (max-width: 1180px) {
   .app-container.relatorio-page .card {
