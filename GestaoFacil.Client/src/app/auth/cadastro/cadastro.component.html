@@ -2,9 +2,13 @@
   <section class="card" aria-labelledby="cadastro-title">
     <div class="panel--accent" style="align-items:center;">
       <div class="brand"><img src="assets/img/monkey.png" alt="logo" /></div>
-      <button class="btn--nav-toggle" type="button" (click)="goToLogin()">
-        Já tem conta? Logar
-      </button>
+      
+      <div class="toggle-group">
+        <p class="muted">Já tem conta?</p>
+        <button class="btn--nav-toggle" type="button" (click)="goToLogin()">
+          Logar-se
+        </button>
+      </div>
     </div>
 
     <aside class="panel--light cadastro-left" id="cadastro-title" style="align-items:flex-start;">
