@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { AuthService } from '../../auth/auth.service';
@@ -11,7 +11,7 @@ import { Meta } from '../../models/meta.model';
   templateUrl: './atividades.component.html',
   styleUrl: './atividades.component.scss'
 })
-export class AtividadesComponent implements OnInit {
+export class AtividadesComponent implements OnInit, OnDestroy {
   isAdmin = false;
   metasAtivas: Meta[] = [];
 
@@ -20,6 +20,7 @@ export class AtividadesComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    document.body.classList.add('fullscreen-layout');
     this.metaSvc.getAtivas().subscribe({
       next: (metas) => {
         this.metasAtivas = metas.slice(0, 3);
@@ -28,6 +29,10 @@ export class AtividadesComponent implements OnInit {
         this.metasAtivas = [];
       }
     });
+  }
+
+  ngOnDestroy(): void {
+    document.body.classList.remove('fullscreen-layout');
   }
 
   goToDespesa() {

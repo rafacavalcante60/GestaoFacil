@@ -1,4 +1,4 @@
-<main class="app-container">
+<main class="app-container fullscreen">
   <section class="card" aria-labelledby="meta-list-title">
     <div class="panel--light list-panel">
       <div class="list-head">
@@ -76,11 +76,17 @@
         <button class="btn btn-light" type="button" (click)="irAtividades()">Voltar</button>
       </div>
     </div>
-
-    <aside class="panel--accent">
-      <p class="sub">
-        Acompanhe suas metas financeiras com barras de progresso em tempo real.
-      </p>
-    </aside>
   </section>
+
+  <!-- MODAL -->
+  <div class="modal-overlay" *ngIf="modalAberto" (click)="fecharModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <app-meta-form
+        [meta]="metaEditando"
+        [isEdit]="modoEdicao"
+        (salvo)="aoSalvarModal()"
+        (cancelado)="fecharModal()"
+      ></app-meta-form>
+    </div>
+  </div>
 </main>

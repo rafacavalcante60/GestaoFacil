@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -12,7 +12,7 @@ import { finalize } from 'rxjs';
   templateUrl: './cadastro.component.html',
   styleUrls: ['./cadastro.component.scss']
 })
-export class CadastroComponent {
+export class CadastroComponent implements OnInit, OnDestroy {
   //variaveis
   nome = ''; 
   email = '';
@@ -25,6 +25,14 @@ export class CadastroComponent {
   constructor(private router: Router, 
               private auth: AuthService
   ) {}
+
+  ngOnInit(): void {
+    document.body.classList.add('centered-layout');
+  }
+
+  ngOnDestroy(): void {
+    document.body.classList.remove('centered-layout');
+  }
 
   submit() {
     if (this.isSubmitting) return;

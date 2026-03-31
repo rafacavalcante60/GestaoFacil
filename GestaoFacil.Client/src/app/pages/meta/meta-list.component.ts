@@ -1,17 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { MetaService } from './meta.service';
 import { Meta } from '../../models/meta.model';
+import { MetaFormComponent } from './meta-form.component';
 
 @Component({
   selector: 'app-meta-list',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, MetaFormComponent],
   templateUrl: './meta-list.component.html',
   styleUrls: ['./meta-list.component.scss']
 })
-export class MetaListComponent implements OnInit {
+export class MetaListComponent implements OnInit, OnDestroy {
   metas: Meta[] = [];
   loading = false;
   errorMsg = '';
@@ -38,7 +39,12 @@ export class MetaListComponent implements OnInit {
   constructor(private svc: MetaService, private router: Router) {}
 
   ngOnInit(): void {
+    document.body.classList.add('fullscreen-layout');
     this.carregar();
+  }
+
+  ngOnDestroy(): void {
+    document.body.classList.remove('fullscreen-layout');
   }
 
   carregar(): void {
@@ -58,12 +64,31 @@ export class MetaListComponent implements OnInit {
     });
   }
 
+  modalAberto = false;
+  modoEdicao = false;
+  metaEditando: Meta | null = null;
+
   novaMeta(): void {
-    this.router.navigate(['/meta/nova']);
+    this.metaEditando = null;
+    this.modoEdicao = false;
+    this.modalAberto = true;
   }
 
   editar(item: Meta): void {
-    this.router.navigate(['/meta', item.id, 'editar']);
+    this.metaEditando = item;
+    this.modoEdicao = true;
+    this.modalAberto = true;
+  }
+
+  fecharModal(): void {
+    this.modalAberto = false;
+    this.metaEditando = null;
+    this.modoEdicao = false;
+  }
+
+  aoSalvarModal(): void {
+    this.fecharModal();
+    this.carregar();
   }
 
   excluir(item: Meta): void {
