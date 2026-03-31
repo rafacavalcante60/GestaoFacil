@@ -1,0 +1,85 @@
+<div class="modal-form-container">
+  <button type="button" class="modal-close-btn" (click)="cancelar()" aria-label="Fechar modal">×</button>
+  <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px; justify-content: center">
+    <h1 class="h1" style="color: var(--orange)">
+      {{ isEdit ? 'Editar Meta' : 'Nova Meta' }}
+    </h1>
+  </div>
+
+  <form class="form-centered" (ngSubmit)="salvar()" aria-label="Formulário de meta financeira">
+
+    <label class="muted">Nome da meta</label>
+    <input
+      type="text"
+      class="input"
+      placeholder="Ex: Limite alimentação, Meta de renda..."
+      [(ngModel)]="nome"
+      name="nome"
+      required
+    />
+
+    <label class="muted">Tipo</label>
+    <select class="input" [(ngModel)]="tipo" name="tipo" required>
+      <option [value]="1">Despesa (limite de gasto)</option>
+      <option [value]="2">Receita (meta de entrada)</option>
+    </select>
+
+    <label class="muted">Valor da Meta (R$)</label>
+    <input
+      type="number"
+      step="0.01"
+      class="input"
+      placeholder="R$ 0,00"
+      [(ngModel)]="valorMeta"
+      name="valorMeta"
+      required
+    />
+
+    <ng-container *ngIf="tipo == 1">
+      <label class="muted">Categoria de Despesa (opcional)</label>
+      <select class="input" [(ngModel)]="categoriaDespesaId" name="categoriaDespesaId">
+        <option [value]="null">Todas as categorias</option>
+        <option *ngFor="let c of categoriasDespesa" [value]="c.id">{{ c.nome }}</option>
+      </select>
+    </ng-container>
+
+    <ng-container *ngIf="tipo == 2">
+      <label class="muted">Categoria de Receita (opcional)</label>
+      <select class="input" [(ngModel)]="categoriaReceitaId" name="categoriaReceitaId">
+        <option [value]="null">Todas as categorias</option>
+        <option *ngFor="let c of categoriasReceita" [value]="c.id">{{ c.nome }}</option>
+      </select>
+    </ng-container>
+
+    <label class="muted">Data de Início</label>
+    <input
+      type="date"
+      class="input"
+      [(ngModel)]="dataInicio"
+      name="dataInicio"
+      required
+    />
+
+    <label class="muted">Data de Fim</label>
+    <input
+      type="date"
+      class="input"
+      [(ngModel)]="dataFim"
+      name="dataFim"
+      required
+    />
+
+    <label class="muted" style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+      <input type="checkbox" [(ngModel)]="ativo" name="ativo" />
+      Meta ativa
+    </label>
+
+    <p class="error" *ngIf="errorMsg">{{ errorMsg }}</p>
+
+    <div style="display: flex; gap: 12px; margin-top: 8px; justify-content: flex-start">
+      <button class="btn" type="submit">Salvar</button>
+      <button class="btn-limpar" type="button" (click)="limpar()">Limpar</button>
+      <button class="btn" type="button" (click)="cancelar()">Cancelar</button>
+    </div>
+  </form>
+</div>

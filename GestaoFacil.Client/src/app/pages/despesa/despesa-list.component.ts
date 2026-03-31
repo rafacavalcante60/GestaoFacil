@@ -1,18 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Despesa } from '../../models/despesa.model';
 import { DespesaService } from './despesa.service';
+import { DespesaFormComponent } from './despesa-form.component';
 
 @Component({
   selector: 'app-despesa-list',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, DespesaFormComponent],
   templateUrl: './despesa-list.component.html',
   styleUrls: ['./despesa-list.component.scss']
 })
-export class DespesaListComponent implements OnInit {
+export class DespesaListComponent implements OnInit, OnDestroy {
   despesas: Despesa[] = [];
   loading = false;
   errorMsg = '';
@@ -52,7 +53,12 @@ export class DespesaListComponent implements OnInit {
   constructor(private svc: DespesaService, private router: Router) {}
 
   ngOnInit(): void {
+    document.body.classList.add('fullscreen-layout');
     this.carregar();
+  }
+
+  ngOnDestroy(): void {
+    document.body.classList.remove('fullscreen-layout');
   }
 
   carregar(): void {
@@ -114,8 +120,14 @@ export class DespesaListComponent implements OnInit {
     this.carregar();
   }
 
+  modalAberto = false;
+  modoEdicao = false;
+  despesaEditando: Despesa | null = null;
+
   novaDespesa(): void {
-    this.router.navigate(['/despesa/nova']);
+    this.despesaEditando = null;
+    this.modoEdicao = false;
+    this.modalAberto = true;
   }
 
   irAtividades(): void {
@@ -124,7 +136,20 @@ export class DespesaListComponent implements OnInit {
 
   editar(item: Despesa): void {
     if (!item.id) return;
-    this.router.navigate(['/despesa', item.id, 'editar']);
+    this.despesaEditando = item;
+    this.modoEdicao = true;
+    this.modalAberto = true;
+  }
+
+  fecharModal(): void {
+    this.modalAberto = false;
+    this.despesaEditando = null;
+    this.modoEdicao = false;
+  }
+
+  aoSalvarModal(): void {
+    this.fecharModal();
+    this.carregar();
   }
 
   excluir(item: Despesa): void {

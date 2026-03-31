@@ -124,12 +124,24 @@ export class RelatorioComponent implements OnInit, OnDestroy {
   mensalChartOptions: ChartOptions<'bar'> = {
     responsive: true,
     maintainAspectRatio: false,
-    animation: {
-      onComplete: ({ chart }) => this.drawMensalValueLabels(chart)
+    layout: {
+      padding: {
+        top: 20
+      }
     },
     plugins: {
       legend: { position: 'bottom', labels: { padding: 16 } },
-      title: { display: true, text: 'Resumo Mensal', font: { size: 14 } }
+      title: { display: true, text: 'Resumo Mensal', font: { size: 14 } },
+      tooltip: {
+        callbacks: {
+          label: (context) => {
+            const label = context.dataset.label || '';
+            const value = context.parsed.y;
+            if (value === null || value === undefined) return label;
+            return `${label}: ${formatCurrencyAxisTick(value)}`;
+          }
+        }
+      }
     },
     scales: {
       x: { grid: { display: false } },
@@ -149,11 +161,11 @@ export class RelatorioComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    document.body.classList.add('reports-page-open');
+    document.body.classList.add('fullscreen-layout', 'reports-page-open');
   }
 
   ngOnDestroy() {
-    document.body.classList.remove('reports-page-open');
+    document.body.classList.remove('fullscreen-layout', 'reports-page-open');
   }
 
   today() { return this.toLocalIsoDate(new Date()); }
@@ -438,12 +450,24 @@ export class RelatorioComponent implements OnInit, OnDestroy {
     this.mensalChartOptions = {
       responsive: true,
       maintainAspectRatio: false,
-      animation: {
-        onComplete: ({ chart }) => this.drawMensalValueLabels(chart)
+      layout: {
+        padding: {
+          top: 20
+        }
       },
       plugins: {
         legend: { position: 'bottom', labels: { padding: 16 } },
-        title: { display: true, text: 'Resumo Mensal', font: { size: 14 } }
+        title: { display: true, text: 'Resumo Mensal', font: { size: 14 } },
+        tooltip: {
+          callbacks: {
+            label: (context) => {
+              const label = context.dataset.label || '';
+              const value = context.parsed.y;
+              if (value === null || value === undefined) return label;
+              return `${label}: ${formatCurrencyAxisTick(value)}`;
+            }
+          }
+        }
       },
       scales: {
         x: { grid: { display: false } },
@@ -475,32 +499,5 @@ export class RelatorioComponent implements OnInit, OnDestroy {
     if (normalized <= 2) return 2 * magnitude;
     if (normalized <= 5) return 5 * magnitude;
     return 10 * magnitude;
-  }
-
-  private drawMensalValueLabels(chart: any): void {
-    if (chart.config.type !== 'bar') return;
-
-    const ctx = chart.ctx;
-    ctx.save();
-    ctx.font = '600 10px Poppins, sans-serif';
-    ctx.fillStyle = '#3b0f03';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'bottom';
-
-    chart.data.datasets.forEach((dataset: any, datasetIndex: number) => {
-      const meta = chart.getDatasetMeta(datasetIndex);
-      if (!meta?.data) return;
-
-      meta.data.forEach((bar: any, index: number) => {
-        const rawValue = dataset.data?.[index];
-        const value = typeof rawValue === 'number' ? rawValue : Number(rawValue);
-        if (!Number.isFinite(value)) return;
-
-        const label = formatCurrencyCompactTick(value);
-        ctx.fillText(label, bar.x, bar.y - 4 - (datasetIndex * 12));
-      });
-    });
-
-    ctx.restore();
   }
 }

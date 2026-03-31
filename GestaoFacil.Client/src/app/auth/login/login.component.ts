@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { CommonModule } from '@angular/common';
@@ -11,12 +11,20 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit, OnDestroy {
   email = '';
   senha = '';
   errorMsg = '';
 
   constructor(private auth: AuthService, private router: Router) {}
+
+  ngOnInit(): void {
+    document.body.classList.add('centered-layout');
+  }
+
+  ngOnDestroy(): void {
+    document.body.classList.remove('centered-layout');
+  }
 
   submit() {
     this.errorMsg = '';

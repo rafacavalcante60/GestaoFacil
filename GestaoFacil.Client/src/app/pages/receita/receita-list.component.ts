@@ -1,18 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Receita } from '../../models/receita.model';
 import { ReceitaService } from './receita.service';
+import { ReceitaFormComponent } from './receita-form.component';
 
 @Component({
   selector: 'app-receita-list',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ReceitaFormComponent],
   templateUrl: './receita-list.component.html',
   styleUrls: ['./receita-list.component.scss']
 })
-export class ReceitaListComponent implements OnInit {
+export class ReceitaListComponent implements OnInit, OnDestroy {
   receitas: Receita[] = [];
   loading = false;
   errorMsg = '';
@@ -50,7 +51,12 @@ export class ReceitaListComponent implements OnInit {
   constructor(private svc: ReceitaService, private router: Router) {}
 
   ngOnInit(): void {
+    document.body.classList.add('fullscreen-layout');
     this.carregar();
+  }
+
+  ngOnDestroy(): void {
+    document.body.classList.remove('fullscreen-layout');
   }
 
   carregar(): void {
@@ -112,8 +118,14 @@ export class ReceitaListComponent implements OnInit {
     this.carregar();
   }
 
+  modalAberto = false;
+  modoEdicao = false;
+  receitaEditando: Receita | null = null;
+
   novaReceita(): void {
-    this.router.navigate(['/receita/nova']);
+    this.receitaEditando = null;
+    this.modoEdicao = false;
+    this.modalAberto = true;
   }
 
   irAtividades(): void {
@@ -122,7 +134,20 @@ export class ReceitaListComponent implements OnInit {
 
   editar(item: Receita): void {
     if (!item.id) return;
-    this.router.navigate(['/receita', item.id, 'editar']);
+    this.receitaEditando = item;
+    this.modoEdicao = true;
+    this.modalAberto = true;
+  }
+
+  fecharModal(): void {
+    this.modalAberto = false;
+    this.receitaEditando = null;
+    this.modoEdicao = false;
+  }
+
+  aoSalvarModal(): void {
+    this.fecharModal();
+    this.carregar();
   }
 
   excluir(item: Receita): void {

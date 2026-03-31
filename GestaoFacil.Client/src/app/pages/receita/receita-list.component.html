@@ -1,4 +1,4 @@
-<main class="app-container">
+<main class="app-container fullscreen">
   <section class="card" aria-labelledby="receitas-list-title">
     <div class="panel--light list-panel">
       <div class="list-head">
@@ -91,12 +91,17 @@
         </button>
       </div>
     </div>
-
-    <aside class="panel--accent">
-      <p class="sub">
-        A listagem e o ponto central da gestao de receitas. Aqui voce filtra,
-        revisa dados e segue para criar, editar ou excluir.
-      </p>
-    </aside>
   </section>
+
+  <!-- MODAL -->
+  <div class="modal-overlay" *ngIf="modalAberto" (click)="fecharModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <app-receita-form
+        [receita]="receitaEditando"
+        [isEdit]="modoEdicao"
+        (salvo)="aoSalvarModal()"
+        (cancelado)="fecharModal()"
+      ></app-receita-form>
+    </div>
+  </div>
 </main>

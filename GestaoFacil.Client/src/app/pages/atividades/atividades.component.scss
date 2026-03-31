@@ -2,13 +2,6 @@
   display: contents;
 }
 
-.app-container {
-  max-width: 1400px;
-  width: min(96%, 1400px);
-  min-height: 85vh;
-  margin: 0 auto;
-}
-
 .panel--light {
   align-items: flex-start;
   padding-top: 28px;
@@ -16,10 +9,6 @@
 
 #menu-title{
   color: #F16618;
-}
-
-.card--menu {
-  min-height: 85vh;
 }
 
 .card--menu .panel--light {
