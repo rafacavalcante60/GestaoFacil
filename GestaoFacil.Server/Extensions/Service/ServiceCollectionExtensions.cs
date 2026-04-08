@@ -187,9 +187,15 @@ namespace GestaoFacil.Server.Extensions.Service
                     options.OnRejected = async (context, token) =>
                     {
                         context.HttpContext.Response.StatusCode = 429;
-                        await context.HttpContext.Response.WriteAsync(
-                            "Muitas requisições. Tente novamente mais tarde.",
-                            cancellationToken: token);
+                        context.HttpContext.Response.ContentType = "application/json";
+                        
+                        var response = new 
+                        { 
+                            mensagem = "Você está fazendo requisições muito rapidamente. Por favor, aguarde um momento e tente novamente.",
+                            status = false
+                        };
+                        
+                        await context.HttpContext.Response.WriteAsJsonAsync(response, cancellationToken: token);
                     };
                 });
 
