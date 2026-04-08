@@ -140,6 +140,7 @@ export class AuthService {
 
   static parseError(err: any, fallback = 'Algo deu errado. Tente novamente.'): string {
     if (err.status === 0) return 'Não foi possível conectar ao servidor.';
+    if (err.status === 429) return 'Você está fazendo requisições muito rapidamente. Por favor, aguarde um momento e tente novamente.';
     return err.error?.mensagem || err.error?.Mensagem || err.error?.message || fallback;
   }
 
