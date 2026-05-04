@@ -49,11 +49,6 @@ export class RelatorioComponent implements OnInit, OnDestroy {
     categoriaId: null as number | null,
     formaPagamentoId: null as number | null
   };
-  dateInputs = {
-    dataInicial: '',
-    dataFinal: ''
-  };
-
   categorias = [
     { id: 1, nome: 'Alimentação' },
     { id: 2, nome: 'Transporte' },
@@ -69,16 +64,19 @@ export class RelatorioComponent implements OnInit, OnDestroy {
   // dados da API
   resumo: any = null;
   porCategoria: Array<{ categoria: string; total: number }> = [];
+  porCategoriaReceita: Array<{ categoria: string; total: number }> = [];
   fluxo: Array<{ data: string; saldoAcumulado: number }> = [];
   mensal: Array<{ mes: number; totalReceitas: number; totalDespesas: number; saldo: number }> = [];
 
   // flags de carregamento
   resumoLoaded = false;
   porCategoriaLoaded = false;
+  porCategoriaReceitaLoaded = false;
   fluxoLoaded = false;
   mensalLoaded = false;
 
   anoSelecionado = new Date().getFullYear();
+  activeTab: 'graficos' | 'resumos' = 'graficos';
 
   // Chart data
   resumoChartData: ChartData<'doughnut'> = { labels: [], datasets: [] };
@@ -97,7 +95,17 @@ export class RelatorioComponent implements OnInit, OnDestroy {
     maintainAspectRatio: false,
     plugins: {
       legend: { position: 'bottom', labels: { padding: 12, font: { size: 11 } } },
-      title: { display: true, text: 'Distribuição por Categoria', font: { size: 14 } }
+      title: { display: true, text: 'Despesas por Categoria', font: { size: 14 } }
+    }
+  };
+
+  receitaCategoriaChartData: ChartData<'pie'> = { labels: [], datasets: [] };
+  receitaCategoriaChartOptions: ChartOptions<'pie'> = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'bottom', labels: { padding: 12, font: { size: 11 } } },
+      title: { display: true, text: 'Receitas por Categoria', font: { size: 14 } }
     }
   };
 
@@ -156,16 +164,14 @@ export class RelatorioComponent implements OnInit, OnDestroy {
     }
   };
 
-  constructor(private svc: ReportService, private router: Router) {
-    this.syncDateInputsFromFiltros();
-  }
+  constructor(private svc: ReportService, private router: Router) {}
 
   ngOnInit() {
-    document.body.classList.add('fullscreen-layout', 'reports-page-open');
+    document.body.classList.add('fullscreen-layout');
   }
 
   ngOnDestroy() {
-    document.body.classList.remove('fullscreen-layout', 'reports-page-open');
+    document.body.classList.remove('fullscreen-layout');
   }
 
   today() { return this.toLocalIsoDate(new Date()); }
@@ -180,68 +186,6 @@ export class RelatorioComponent implements OnInit, OnDestroy {
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
-  }
-
-  private syncDateInputsFromFiltros() {
-    this.dateInputs.dataInicial = this.formatIsoToBr(this.filtros.dataInicial);
-    this.dateInputs.dataFinal = this.formatIsoToBr(this.filtros.dataFinal);
-  }
-
-  onDateInputChange(field: 'dataInicial' | 'dataFinal', rawValue: string) {
-    const maskedValue = this.maskDateInput(rawValue);
-    this.dateInputs[field] = maskedValue;
-
-    const isoValue = this.parseBrToIso(maskedValue);
-    if (isoValue) {
-      this.filtros[field] = isoValue;
-    }
-  }
-
-  onDateInputBlur(field: 'dataInicial' | 'dataFinal') {
-    const isoValue = this.parseBrToIso(this.dateInputs[field]);
-    this.dateInputs[field] = isoValue
-      ? this.formatIsoToBr(isoValue)
-      : this.formatIsoToBr(this.filtros[field]);
-  }
-
-  private maskDateInput(rawValue: string) {
-    const digits = rawValue.replace(/\D/g, '').slice(0, 8);
-    if (digits.length <= 2) return digits;
-    if (digits.length <= 4) return `${digits.slice(0, 2)}/${digits.slice(2)}`;
-    return `${digits.slice(0, 2)}/${digits.slice(2, 4)}/${digits.slice(4)}`;
-  }
-
-  private formatIsoToBr(isoValue: string | null | undefined) {
-    if (!isoValue) return '';
-
-    const match = isoValue.match(/^(\d{4})-(\d{2})-(\d{2})$/);
-    if (!match) return isoValue;
-
-    const [, year, month, day] = match;
-    return `${day}/${month}/${year}`;
-  }
-
-  private parseBrToIso(brValue: string | null | undefined) {
-    if (!brValue) return null;
-
-    const normalized = brValue.trim();
-    const match = normalized.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
-    if (!match) return null;
-
-    const [, dayStr, monthStr, yearStr] = match;
-    const day = Number(dayStr);
-    const month = Number(monthStr);
-    const year = Number(yearStr);
-
-    const parsed = new Date(year, month - 1, day);
-    const isValid =
-      parsed.getFullYear() === year &&
-      parsed.getMonth() === month - 1 &&
-      parsed.getDate() === day;
-
-    if (!isValid) return null;
-
-    return `${yearStr}-${monthStr}-${dayStr}`;
   }
 
   private buildQueryForRange() {
@@ -267,16 +211,26 @@ export class RelatorioComponent implements OnInit, OnDestroy {
       }
     });
 
-    // categoria
+    // despesas por categoria
     this.porCategoriaLoaded = false;
-    const despesasFlag = this.filtros.tipo === 'despesa' ? true : (this.filtros.tipo === 'receita' ? false : true);
-    this.svc.categoria({ ...q, despesas: despesasFlag }).subscribe({
+    this.svc.categoria({ ...q, despesas: true }).subscribe({
       next: r => {
         this.porCategoria = r;
         this.porCategoriaLoaded = true;
         this.updateCategoriaChart();
       },
       error: () => { this.porCategoria = []; this.porCategoriaLoaded = false; }
+    });
+
+    // receitas por categoria
+    this.porCategoriaReceitaLoaded = false;
+    this.svc.categoria({ ...q, despesas: false }).subscribe({
+      next: r => {
+        this.porCategoriaReceita = r;
+        this.porCategoriaReceitaLoaded = true;
+        this.updateReceitaCategoriaChart();
+      },
+      error: () => { this.porCategoriaReceita = []; this.porCategoriaReceitaLoaded = false; }
     });
 
     // fluxo
@@ -290,11 +244,26 @@ export class RelatorioComponent implements OnInit, OnDestroy {
       error: () => { this.fluxo = []; this.fluxoLoaded = false; }
     });
 
-    // mensal
+    // mensal — usa o ano do período inicial e filtra meses no range com movimentação
     this.mensalLoaded = false;
+    const dataInicio = new Date(this.filtros.dataInicial + 'T00:00:00');
+    const dataFim    = new Date(this.filtros.dataFinal   + 'T00:00:00');
+    this.anoSelecionado = dataInicio.getFullYear();
+    const mesInicio = dataInicio.getMonth() + 1; // 1–12
+    const mesFim    = dataFim.getMonth()    + 1;
+    const anoFim    = dataFim.getFullYear();
+
     this.svc.mensal({ ano: this.anoSelecionado }).subscribe({
       next: r => {
-        this.mensal = r;
+        this.mensal = r.filter(m => {
+          const temMovimento = m.totalReceitas > 0 || m.totalDespesas > 0;
+          // Se o período não ultrapassa o ano, restringe pelo mês
+          if (this.anoSelecionado === anoFim) {
+            return temMovimento && m.mes >= mesInicio && m.mes <= mesFim;
+          }
+          // Período cruza anos: mostra meses a partir do início
+          return temMovimento && m.mes >= mesInicio;
+        });
         this.mensalLoaded = true;
         this.updateMensalChart();
       },
@@ -385,12 +354,18 @@ export class RelatorioComponent implements OnInit, OnDestroy {
     const colors = categoryPalette(data.length);
     this.categoriaChartData = {
       labels,
-      datasets: [{
-        data,
-        backgroundColor: colors,
-        borderWidth: 2,
-        borderColor: '#fff'
-      }]
+      datasets: [{ data, backgroundColor: colors, borderWidth: 2, borderColor: '#fff' }]
+    };
+  }
+
+  private updateReceitaCategoriaChart() {
+    if (!this.porCategoriaReceita.length) return;
+    const labels = this.porCategoriaReceita.map(c => c.categoria);
+    const data = this.porCategoriaReceita.map(c => c.total);
+    const colors = categoryPalette(data.length);
+    this.receitaCategoriaChartData = {
+      labels,
+      datasets: [{ data, backgroundColor: colors, borderWidth: 2, borderColor: '#fff' }]
     };
   }
 

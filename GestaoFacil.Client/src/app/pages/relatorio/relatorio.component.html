@@ -1,181 +1,221 @@
 <main class="app-container fullscreen relatorio-page">
   <section class="card" aria-labelledby="reports-title">
-    <div class="rel-top-section">
-      <div class="panel--accent rel-main">
+
+    <!-- ===== SIDEBAR ESQUERDA: FILTROS ===== -->
+    <aside class="panel--accent rel-sidebar">
+      <div class="rel-sidebar-inner">
+
         <div class="rel-header">
           <div class="brand"><img src="assets/img/monkey.png" alt="logo" /></div>
           <h1 class="h1" id="reports-title">Relatórios</h1>
         </div>
 
-        <div class="rel-main-content">
-          <div class="filters">
-            <div class="filter">
-              <label class="muted">Tipo</label>
-              <select class="input" [(ngModel)]="filtros.tipo">
-                <option value="ambos">Ambos</option>
-                <option value="despesa">Despesas</option>
-                <option value="receita">Receitas</option>
-              </select>
-            </div>
-
-            <div class="filter">
-              <label class="muted">Período inicial</label>
-              <input
-                class="input date-input"
-                type="text"
-                inputmode="numeric"
-                placeholder="DD/MM/AAAA"
-                maxlength="10"
-                [ngModel]="dateInputs.dataInicial"
-                (ngModelChange)="onDateInputChange('dataInicial', $event)"
-                (blur)="onDateInputBlur('dataInicial')"
-              />
-            </div>
-
-            <div class="filter">
-              <label class="muted">Período final</label>
-              <input
-                class="input date-input"
-                type="text"
-                inputmode="numeric"
-                placeholder="DD/MM/AAAA"
-                maxlength="10"
-                [ngModel]="dateInputs.dataFinal"
-                (ngModelChange)="onDateInputChange('dataFinal', $event)"
-                (blur)="onDateInputBlur('dataFinal')"
-              />
-            </div>
-
-            <div class="filter">
-              <label class="muted">Categoria</label>
-              <select class="input" [(ngModel)]="filtros.categoriaId">
-                <option [ngValue]="null">Todas</option>
-                <option *ngFor="let c of categorias" [ngValue]="c.id">{{ c.nome }}</option>
-              </select>
-            </div>
-
-            <div class="filter">
-              <label class="muted">Forma Pagto</label>
-              <select class="input" [(ngModel)]="filtros.formaPagamentoId">
-                <option [ngValue]="null">Todas</option>
-                <option *ngFor="let f of formasPagamento" [ngValue]="f.id">{{ f.nome }}</option>
-              </select>
-            </div>
+        <div class="rel-filters">
+          <div class="filter-item">
+            <label class="filter-label">Tipo</label>
+            <select class="input" [(ngModel)]="filtros.tipo">
+              <option value="ambos">Ambos</option>
+              <option value="despesa">Despesas</option>
+              <option value="receita">Receitas</option>
+            </select>
           </div>
 
-          <div class="actions-left">
-            <button class="btn-cream" type="button" (click)="atualizar()">Atualizar</button>
-            <button class="btn-cream" type="button" (click)="gerarRelatorio()">Gerar Relatório</button>
-            <button class="btn-cream" type="button" (click)="exportar()">Exportar (Excel)</button>
-            <button class="btn-cream" type="button" (click)="voltar()">Voltar</button>
+          <div class="filter-item">
+            <label class="filter-label">Período inicial</label>
+            <input class="input date-input" type="date" [(ngModel)]="filtros.dataInicial" />
+          </div>
+
+          <div class="filter-item">
+            <label class="filter-label">Período final</label>
+            <input class="input date-input" type="date" [(ngModel)]="filtros.dataFinal" />
+          </div>
+
+          <div class="filter-item">
+            <label class="filter-label">Categoria</label>
+            <select class="input" [(ngModel)]="filtros.categoriaId">
+              <option [ngValue]="null">Todas</option>
+              <option *ngFor="let c of categorias" [ngValue]="c.id">{{ c.nome }}</option>
+            </select>
+          </div>
+
+          <div class="filter-item">
+            <label class="filter-label">Forma de Pagamento</label>
+            <select class="input" [(ngModel)]="filtros.formaPagamentoId">
+              <option [ngValue]="null">Todas</option>
+              <option *ngFor="let f of formasPagamento" [ngValue]="f.id">{{ f.nome }}</option>
+            </select>
           </div>
         </div>
+
+        <div class="sidebar-actions">
+          <button class="btn-sidebar" type="button" (click)="gerarRelatorio()">Gerar Relatório</button>
+          <button class="btn-sidebar btn-sidebar--outline" type="button" (click)="exportar()">Exportar (Excel)</button>
+          <button class="btn-sidebar btn-sidebar--outline" type="button" (click)="voltar()">Voltar</button>
+        </div>
+
+      </div>
+    </aside>
+
+    <!-- ===== PAINEL DIREITO: TABS ===== -->
+    <div class="panel--light rel-main">
+
+      <!-- Cabeçalho das tabs -->
+      <div class="rel-tabs">
+        <button
+          class="tab-btn"
+          [class.tab-btn--active]="activeTab === 'graficos'"
+          type="button"
+          (click)="activeTab = 'graficos'"
+        >Gráficos</button>
+        <button
+          class="tab-btn"
+          [class.tab-btn--active]="activeTab === 'resumos'"
+          type="button"
+          (click)="activeTab = 'resumos'"
+        >Resumos</button>
       </div>
 
-      <aside class="panel--light rel-side">
-        <div class="rel-side-content">
-          <h2 class="h2 rel-side-title">Resumos</h2>
+      <!-- Estado vazio -->
+      <div
+        *ngIf="!resumoLoaded && !porCategoriaLoaded && !fluxoLoaded && !mensalLoaded"
+        class="empty-state"
+      >
+        <p class="muted">Clique em "Gerar Relatório" para visualizar os dados.</p>
+      </div>
 
-          <div class="report-list" aria-live="polite">
-            <div class="menu-card" *ngIf="resumoLoaded">
-              <div class="menu-head"><h3>Resumo</h3></div>
-              <p class="sub">Total receitas: {{ resumo?.totalReceitas | number:'1.2-2' }}</p>
-              <p class="sub">Total despesas: {{ resumo?.totalDespesas | number:'1.2-2' }}</p>
-              <p class="sub">Saldo: {{ resumo?.saldo | number:'1.2-2' }}</p>
-            </div>
+      <!-- ===== TAB: GRÁFICOS ===== -->
+      <div *ngIf="activeTab === 'graficos' && (resumoLoaded || porCategoriaLoaded || porCategoriaReceitaLoaded || fluxoLoaded || mensalLoaded)"
+           class="tab-content charts-grid"
+           [class.charts-grid--5]="filtros.tipo === 'ambos'">
 
-            <div class="menu-card" *ngIf="porCategoriaLoaded">
-              <div class="menu-head"><h3>Por Categoria</h3></div>
-              <div class="card-rows" *ngIf="porCategoria.length; else categoriaVazia">
-                <div class="line" *ngFor="let p of porCategoria">
-                  <small>{{ p.categoria }}</small>
-                  <strong class="val">{{ p.total | number:'1.2-2' }}</strong>
-                </div>
-              </div>
-              <ng-template #categoriaVazia>
-                <p class="sub card-empty">Sem dados por categoria para o período selecionado.</p>
-              </ng-template>
-            </div>
-
-            <div class="menu-card" *ngIf="fluxoLoaded">
-              <div class="menu-head"><h3>Fluxo</h3></div>
-              <div class="card-scroll" *ngIf="fluxo.length; else fluxoVazio">
-                <div class="line flow-line" *ngFor="let f of fluxo">
-                  <small>{{ formatDateBr(f.data) }}</small>
-                  <strong class="val">Saldo: {{ f.saldoAcumulado | number:'1.2-2' }}</strong>
-                </div>
-              </div>
-              <ng-template #fluxoVazio>
-                <p class="sub card-empty">Sem registros de fluxo no período selecionado.</p>
-              </ng-template>
-            </div>
-
-            <div class="menu-card mensal" *ngIf="mensalLoaded">
-              <div class="menu-head"><h3>Mensal</h3></div>
-
-              <div class="grid-months" *ngIf="mensal.length; else mensalVazio">
-                <div class="line" *ngFor="let m of mensal">
-                  <small>{{ formatMes(m.mes) }}/{{ anoSelecionado }}</small>
-                  <strong class="val">{{ m.saldo | number:'1.2-2' }}</strong>
-                </div>
-              </div>
-              <ng-template #mensalVazio>
-                <p class="sub card-empty">Sem resumo mensal disponível para {{ anoSelecionado }}.</p>
-              </ng-template>
-            </div>
-
-            <div class="menu-card" *ngIf="!resumoLoaded && !porCategoriaLoaded && !fluxoLoaded && !mensalLoaded">
-              <p class="sub">Nenhum resumo carregado. Clique em "Gerar Relatório".</p>
-            </div>
+        <div class="chart-card" *ngIf="resumoLoaded">
+          <div class="chart-wrapper">
+            <canvas baseChart [type]="'doughnut'" [data]="resumoChartData" [options]="resumoChartOptions"></canvas>
           </div>
         </div>
-      </aside>
-    </div>
 
-    <div class="rel-content">
-      <div *ngIf="!resumoLoaded && !porCategoriaLoaded && !fluxoLoaded && !mensalLoaded" class="chart-placeholder">
-        <p class="sub">Clique em "Gerar Relatório" para visualizar os gráficos.</p>
-      </div>
-
-      <div class="chart-card" *ngIf="resumoLoaded">
-        <div class="chart-wrapper">
-          <canvas baseChart
-            [type]="'doughnut'"
-            [data]="resumoChartData"
-            [options]="resumoChartOptions">
-          </canvas>
+        <div class="chart-card" *ngIf="porCategoriaLoaded && porCategoria.length && filtros.tipo !== 'receita'">
+          <div class="chart-wrapper">
+            <canvas baseChart [type]="'pie'" [data]="categoriaChartData" [options]="categoriaChartOptions"></canvas>
+          </div>
         </div>
+
+        <div class="chart-card" *ngIf="porCategoriaReceitaLoaded && porCategoriaReceita.length && filtros.tipo !== 'despesa'">
+          <div class="chart-wrapper">
+            <canvas baseChart [type]="'pie'" [data]="receitaCategoriaChartData" [options]="receitaCategoriaChartOptions"></canvas>
+          </div>
+        </div>
+
+        <div class="chart-card" *ngIf="fluxoLoaded && fluxo.length">
+          <div class="chart-wrapper">
+            <canvas baseChart [type]="'line'" [data]="fluxoChartData" [options]="fluxoChartOptions"></canvas>
+          </div>
+        </div>
+
+        <div class="chart-card"
+             [class.chart-card--span2]="filtros.tipo === 'ambos'"
+             *ngIf="mensalLoaded && mensal.length">
+          <div class="chart-wrapper">
+            <canvas baseChart [type]="'bar'" [data]="mensalChartData" [options]="mensalChartOptions"></canvas>
+          </div>
+        </div>
+
       </div>
 
-      <div class="chart-card" *ngIf="porCategoriaLoaded && porCategoria.length">
-        <div class="chart-wrapper">
-          <canvas baseChart
-            [type]="'pie'"
-            [data]="categoriaChartData"
-            [options]="categoriaChartOptions">
-          </canvas>
+      <!-- ===== TAB: RESUMOS ===== -->
+      <div *ngIf="activeTab === 'resumos' && (resumoLoaded || porCategoriaLoaded || porCategoriaReceitaLoaded || fluxoLoaded || mensalLoaded)"
+           class="tab-content resumos-grid"
+           [class.resumos-grid--5]="filtros.tipo === 'ambos'">
+
+        <!-- Resumo Geral -->
+        <div class="resumo-card" *ngIf="resumoLoaded">
+          <div class="resumo-card-head"><h3>Resumo Geral</h3></div>
+          <div class="resumo-row">
+            <span class="resumo-label">Total Receitas</span>
+            <strong class="resumo-val resumo-val--green">R$ {{ resumo?.totalReceitas | number:'1.2-2' }}</strong>
+          </div>
+          <div class="resumo-row">
+            <span class="resumo-label">Total Despesas</span>
+            <strong class="resumo-val resumo-val--red">R$ {{ resumo?.totalDespesas | number:'1.2-2' }}</strong>
+          </div>
+          <div class="resumo-row resumo-row--saldo">
+            <span class="resumo-label">Saldo</span>
+            <strong class="resumo-val" [class.resumo-val--green]="(resumo?.saldo ?? 0) >= 0" [class.resumo-val--red]="(resumo?.saldo ?? 0) < 0">
+              R$ {{ resumo?.saldo | number:'1.2-2' }}
+            </strong>
+          </div>
         </div>
+
+        <!-- Despesas por Categoria -->
+        <div class="resumo-card" *ngIf="porCategoriaLoaded && filtros.tipo !== 'receita'">
+          <div class="resumo-card-head"><h3>Despesas por Categoria</h3></div>
+          <div *ngIf="porCategoria.length; else despCatVazia" class="resumo-list">
+            <div class="resumo-row" *ngFor="let p of porCategoria">
+              <span class="resumo-label">{{ p.categoria }}</span>
+              <strong class="resumo-val resumo-val--red">R$ {{ p.total | number:'1.2-2' }}</strong>
+            </div>
+          </div>
+          <ng-template #despCatVazia>
+            <p class="resumo-empty">Sem despesas por categoria no período.</p>
+          </ng-template>
+        </div>
+
+        <!-- Receitas por Categoria -->
+        <div class="resumo-card" *ngIf="porCategoriaReceitaLoaded && filtros.tipo !== 'despesa'">
+          <div class="resumo-card-head"><h3>Receitas por Categoria</h3></div>
+          <div *ngIf="porCategoriaReceita.length; else recCatVazia" class="resumo-list">
+            <div class="resumo-row" *ngFor="let p of porCategoriaReceita">
+              <span class="resumo-label">{{ p.categoria }}</span>
+              <strong class="resumo-val resumo-val--green">R$ {{ p.total | number:'1.2-2' }}</strong>
+            </div>
+          </div>
+          <ng-template #recCatVazia>
+            <p class="resumo-empty">Sem receitas por categoria no período.</p>
+          </ng-template>
+        </div>
+
+        <!-- Fluxo de Caixa -->
+        <div class="resumo-card" *ngIf="fluxoLoaded">
+          <div class="resumo-card-head"><h3>Fluxo de Caixa</h3></div>
+          <div *ngIf="fluxo.length; else fluxoVazio" class="resumo-scroll">
+            <div class="resumo-row" *ngFor="let f of fluxo">
+              <span class="resumo-label">{{ formatDateBr(f.data) }}</span>
+              <strong class="resumo-val">R$ {{ f.saldoAcumulado | number:'1.2-2' }}</strong>
+            </div>
+          </div>
+          <ng-template #fluxoVazio>
+            <p class="resumo-empty">Sem registros de fluxo no período.</p>
+          </ng-template>
+        </div>
+
+        <!-- Resumo Mensal -->
+        <div class="resumo-card"
+             [class.resumo-card--span2]="filtros.tipo === 'ambos'"
+             *ngIf="mensalLoaded">
+          <div class="resumo-card-head"><h3>Resumo Mensal{{ filtros.dataInicial ? ' — ' + anoSelecionado : '' }}</h3></div>
+          <div *ngIf="mensal.length; else mensalVazio" class="resumo-list">
+            <div class="resumo-row resumo-row--mensal resumo-row--header">
+              <span></span>
+              <span class="resumo-col-label">Receitas</span>
+              <span class="resumo-col-label">Despesas</span>
+              <span class="resumo-col-label">Saldo</span>
+            </div>
+            <div class="resumo-row resumo-row--mensal" *ngFor="let m of mensal">
+              <span class="resumo-mes">{{ formatMes(m.mes) }}/{{ anoSelecionado }}</span>
+              <span class="resumo-val--green">R$ {{ m.totalReceitas | number:'1.2-2' }}</span>
+              <span class="resumo-val--red">R$ {{ m.totalDespesas | number:'1.2-2' }}</span>
+              <strong class="resumo-val" [class.resumo-val--green]="m.saldo >= 0" [class.resumo-val--red]="m.saldo < 0">
+                R$ {{ m.saldo | number:'1.2-2' }}
+              </strong>
+            </div>
+          </div>
+          <ng-template #mensalVazio>
+            <p class="resumo-empty">Sem movimentação no período selecionado.</p>
+          </ng-template>
+        </div>
+
       </div>
 
-      <div class="chart-card" *ngIf="fluxoLoaded && fluxo.length">
-        <div class="chart-wrapper">
-          <canvas baseChart
-            [type]="'line'"
-            [data]="fluxoChartData"
-            [options]="fluxoChartOptions">
-          </canvas>
-        </div>
-      </div>
-
-      <div class="chart-card" *ngIf="mensalLoaded && mensal.length">
-        <div class="chart-wrapper">
-          <canvas baseChart
-            [type]="'bar'"
-            [data]="mensalChartData"
-            [options]="mensalChartOptions">
-          </canvas>
-        </div>
-      </div>
     </div>
   </section>
 </main>
