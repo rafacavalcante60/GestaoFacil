@@ -8,7 +8,7 @@
 
   <form class="form-centered" (ngSubmit)="salvar()" aria-label="Formulário de meta financeira">
 
-    <label class="muted">Nome da meta</label>
+    <label class="muted">Nome da meta *</label>
     <input
       type="text"
       class="input"
@@ -18,13 +18,13 @@
       required
     />
 
-    <label class="muted">Tipo</label>
+    <label class="muted">Tipo *</label>
     <select class="input" [(ngModel)]="tipo" name="tipo" required>
       <option [value]="1">Despesa (limite de gasto)</option>
       <option [value]="2">Receita (meta de entrada)</option>
     </select>
 
-    <label class="muted">Valor da Meta (R$)</label>
+    <label class="muted">Valor da Meta (R$) *</label>
     <input
       type="number"
       step="0.01"
@@ -36,7 +36,7 @@
     />
 
     <ng-container *ngIf="tipo == 1">
-      <label class="muted">Categoria de Despesa (opcional)</label>
+      <label class="muted">Categoria de Despesa</label>
       <select class="input" [(ngModel)]="categoriaDespesaId" name="categoriaDespesaId">
         <option [value]="null">Todas as categorias</option>
         <option *ngFor="let c of categoriasDespesa" [value]="c.id">{{ c.nome }}</option>
@@ -44,14 +44,14 @@
     </ng-container>
 
     <ng-container *ngIf="tipo == 2">
-      <label class="muted">Categoria de Receita (opcional)</label>
+      <label class="muted">Categoria de Receita</label>
       <select class="input" [(ngModel)]="categoriaReceitaId" name="categoriaReceitaId">
         <option [value]="null">Todas as categorias</option>
         <option *ngFor="let c of categoriasReceita" [value]="c.id">{{ c.nome }}</option>
       </select>
     </ng-container>
 
-    <label class="muted">Data de Início</label>
+    <label class="muted">Data de Início *</label>
     <input
       type="date"
       class="input"
@@ -60,7 +60,7 @@
       required
     />
 
-    <label class="muted">Data de Fim</label>
+    <label class="muted">Data de Fim *</label>
     <input
       type="date"
       class="input"

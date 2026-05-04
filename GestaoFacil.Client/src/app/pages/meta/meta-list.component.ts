@@ -17,6 +17,8 @@ export class MetaListComponent implements OnInit, OnDestroy {
   loading = false;
   errorMsg = '';
   infoMsg = '';
+  confirmacaoExclusaoAberta = false;
+  metaParaExcluir: Meta | null = null;
 
   categoriasDespesa = [
     { id: 1, nome: 'Alimentação' },
@@ -92,8 +94,19 @@ export class MetaListComponent implements OnInit, OnDestroy {
   }
 
   excluir(item: Meta): void {
-    const ok = window.confirm(`Deseja excluir a meta "${item.nome}"?`);
-    if (!ok) return;
+    this.metaParaExcluir = item;
+    this.confirmacaoExclusaoAberta = true;
+  }
+
+  cancelarExclusao(): void {
+    this.confirmacaoExclusaoAberta = false;
+    this.metaParaExcluir = null;
+  }
+
+  confirmarExclusao(): void {
+    const item = this.metaParaExcluir;
+    if (!item) return;
+    this.cancelarExclusao();
 
     this.svc.delete(item.id).subscribe({
       next: () => {

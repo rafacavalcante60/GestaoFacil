@@ -24,8 +24,15 @@ interface LoginResponseRaw {
     refreshToken?: string;
     expiraEm?: string; // ISO
   };
+  Dados?: {
+    token?: string;
+    refreshToken?: string;
+    expiraEm?: string; // ISO
+  };
   mensagem?: string;
+  Mensagem?: string;
   status?: boolean;
+  Status?: boolean;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -39,9 +46,10 @@ export class AuthService {
     return this.http.post<LoginResponseRaw>(`${this.baseUrl}/login`, data).pipe(
       tap(res => {
         console.log('Login response (raw):', res);
-        const token = res?.dados?.token;
-        const refreshToken = res?.dados?.refreshToken;
-        const expiraEm = res?.dados?.expiraEm;
+        const dados = res?.dados ?? res?.Dados;
+        const token = dados?.token;
+        const refreshToken = dados?.refreshToken;
+        const expiraEm = dados?.expiraEm;
 
         if (token) {
           localStorage.setItem('token', token);
@@ -49,6 +57,9 @@ export class AuthService {
           if (expiraEm) localStorage.setItem('tokenExpiraEm', expiraEm);
           console.log('Token salvo no localStorage (length):', token.length);
         } else {
+          localStorage.removeItem('token');
+          localStorage.removeItem('refreshToken');
+          localStorage.removeItem('tokenExpiraEm');
           console.error('Login response não contém token em dados.token', res);
         }
       }),

@@ -18,10 +18,9 @@
       placeholder="Ex: Mercado, Uber, Internet..."
       [(ngModel)]="nome"
       name="nome"
-      required
     />
 
-    <label class="muted">Data</label>
+    <label class="muted">Data *</label>
     <input
       type="date"
       class="input"
@@ -30,7 +29,7 @@
       required
     />
 
-    <label class="muted">Valor</label>
+    <label class="muted">Valor *</label>
     <input
       type="number"
       step="1"
@@ -41,7 +40,7 @@
       required
     />
 
-    <label class="muted">Forma de Pagamento</label>
+    <label class="muted">Forma de Pagamento *</label>
     <select
       class="input"
       [(ngModel)]="formaPagamentoId"
@@ -53,7 +52,7 @@
       </option>
     </select>
 
-    <label class="muted">Categoria</label>
+    <label class="muted">Categoria *</label>
     <select
       class="input"
       [(ngModel)]="categoriaDespesaId"

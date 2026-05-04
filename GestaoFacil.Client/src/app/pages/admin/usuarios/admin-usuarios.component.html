@@ -1,4 +1,4 @@
-<main class="app-container">
+<main class="app-container fullscreen">
   <section class="card" aria-labelledby="admin-usuarios-title">
     <div class="panel--light list-panel">
       <div class="list-head">
@@ -7,16 +7,8 @@
             <img src="assets/img/monkey.png" alt="logo" />
           </div>
           <h1 class="h1" id="admin-usuarios-title" style="color: var(--orange)">
-            Usuarios (Admin)
+            Usuários (Admin)
           </h1>
-        </div>
-        <div class="head-actions">
-          <button class="btn btn-light" type="button" (click)="irAtividades()">
-            Voltar
-          </button>
-          <button class="btn" type="button" (click)="carregar()">
-            Atualizar
-          </button>
         </div>
       </div>
 
@@ -45,7 +37,7 @@
               <th>Nome</th>
               <th>Email</th>
               <th>Tipo</th>
-              <th>Acoes</th>
+              <th>Ações</th>
             </tr>
           </thead>
           <tbody>
@@ -57,14 +49,14 @@
               <td>{{ item.email || '-' }}</td>
               <td>{{ nomeTipo(item.tipoUsuarioId) }}</td>
               <td class="actions">
-                <button class="btn btn-small" type="button" (click)="editar(item)">Editar</button>
+                <button class="btn btn-small btn-yellow" type="button" (click)="editar(item)">Editar</button>
                 <button class="btn btn-small btn-danger" type="button" (click)="excluir(item)">
                   Excluir
                 </button>
               </td>
             </tr>
             <tr *ngIf="!loading && usuariosFiltrados.length === 0">
-              <td colspan="4" class="center muted">Nenhum usuario encontrado.</td>
+              <td colspan="4" class="center muted">Nenhum usuário encontrado.</td>
             </tr>
           </tbody>
         </table>
@@ -80,6 +72,15 @@
             Proxima
           </button>
         </div>
+      </div>
+
+      <div class="bottom-actions">
+        <button class="btn" type="button" (click)="carregar()">
+          Atualizar
+        </button>
+        <button class="btn btn-light" type="button" (click)="irAtividades()">
+          Voltar
+        </button>
       </div>
     </div>
 
@@ -106,11 +107,11 @@
         </label>
 
         <div class="admin-actions">
+          <button class="btn btn-save" type="submit" [disabled]="saving">
+            {{ saving ? 'Salvando...' : 'Salvar' }}
+          </button>
           <button class="btn btn-light" type="button" (click)="cancelarEdicao()">
             Cancelar
-          </button>
-          <button class="btn" type="submit" [disabled]="saving">
-            {{ saving ? 'Salvando...' : 'Salvar' }}
           </button>
         </div>
       </form>
@@ -120,4 +121,19 @@
       </div>
     </aside>
   </section>
+
+  <div class="modal-overlay" *ngIf="confirmacaoExclusaoAberta" (click)="cancelarExclusao()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="confirm-modal-card">
+        <h2 class="confirm-modal-title">Confirmar exclusão</h2>
+        <p class="confirm-modal-message">
+          Deseja excluir o usuário "{{ usuarioParaExcluir?.nome || '' }}"?
+        </p>
+        <div class="confirm-modal-actions">
+          <button class="btn btn-danger" type="button" (click)="confirmarExclusao()">Excluir</button>
+          <button class="btn btn-light" type="button" (click)="cancelarExclusao()">Cancelar</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </main>

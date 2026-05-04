@@ -208,3 +208,27 @@
   }
 }
 
+.confirm-modal-card {
+  background: var(--peach);
+  border-radius: var(--card-radius);
+  padding: 28px;
+  box-shadow: var(--card-shadow);
+}
+
+.confirm-modal-title {
+  margin: 0 0 10px;
+  color: var(--orange);
+  font-size: 24px;
+  line-height: 1.2;
+}
+
+.confirm-modal-message {
+  margin: 0 0 20px;
+}
+
+.confirm-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+

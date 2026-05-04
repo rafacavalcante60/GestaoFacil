@@ -18,6 +18,8 @@ export class AdminUsuariosComponent implements OnInit {
   saving = false;
   errorMsg = '';
   infoMsg = '';
+  confirmacaoExclusaoAberta = false;
+  usuarioParaExcluir: Usuario | null = null;
 
   pageNumber = 1;
   pageSize = 10;
@@ -146,19 +148,30 @@ export class AdminUsuariosComponent implements OnInit {
   }
 
   excluir(item: Usuario): void {
-    const ok = window.confirm(`Deseja excluir o usuario "${item.nome}"?`);
-    if (!ok) return;
+    this.usuarioParaExcluir = item;
+    this.confirmacaoExclusaoAberta = true;
+  }
+
+  cancelarExclusao(): void {
+    this.confirmacaoExclusaoAberta = false;
+    this.usuarioParaExcluir = null;
+  }
+
+  confirmarExclusao(): void {
+    const item = this.usuarioParaExcluir;
+    if (!item) return;
+    this.cancelarExclusao();
 
     this.svc.delete(item.id).subscribe({
       next: (res) => {
-        this.infoMsg = res?.mensagem || 'Usuario excluido com sucesso.';
+        this.infoMsg = res?.mensagem || 'Usuário excluído com sucesso.';
         if (this.usuarios.length === 1 && this.pageNumber > 1) {
           this.pageNumber--;
         }
         this.carregar();
       },
       error: (err) => {
-        this.errorMsg = err.error?.mensagem || err.error?.message || 'Erro ao excluir usuario.';
+        this.errorMsg = err.error?.mensagem || err.error?.message || 'Erro ao excluir usuário.';
       }
     });
   }
