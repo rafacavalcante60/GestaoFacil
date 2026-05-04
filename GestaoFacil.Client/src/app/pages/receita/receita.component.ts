@@ -65,8 +65,8 @@ export class ReceitaComponent {
   salvarReceita() {
     this.errorMsg = '';
 
-    if (!this.data || this.valor === null || this.valor === undefined || !this.categoriaReceitaId || !this.formaPagamentoId || !this.nome) {
-      this.errorMsg = 'Preencha Nome, Data, Valor, Categoria e Forma de Pagamento.';
+    if (!this.data || this.valor === null || this.valor === undefined || !this.categoriaReceitaId || !this.formaPagamentoId) {
+      this.errorMsg = 'Preencha Data, Valor, Categoria e Forma de Pagamento.';
       return;
     }
 

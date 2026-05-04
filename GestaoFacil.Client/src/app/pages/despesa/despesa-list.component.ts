@@ -18,6 +18,8 @@ export class DespesaListComponent implements OnInit, OnDestroy {
   loading = false;
   errorMsg = '';
   infoMsg = '';
+  confirmacaoExclusaoAberta = false;
+  despesaParaExcluir: Despesa | null = null;
 
   pageNumber = 1;
   pageSize = 10;
@@ -154,8 +156,19 @@ export class DespesaListComponent implements OnInit, OnDestroy {
 
   excluir(item: Despesa): void {
     if (!item.id) return;
-    const ok = window.confirm(`Deseja excluir a despesa "${item.nome ?? ''}"?`);
-    if (!ok) return;
+    this.despesaParaExcluir = item;
+    this.confirmacaoExclusaoAberta = true;
+  }
+
+  cancelarExclusao(): void {
+    this.confirmacaoExclusaoAberta = false;
+    this.despesaParaExcluir = null;
+  }
+
+  confirmarExclusao(): void {
+    const item = this.despesaParaExcluir;
+    if (!item?.id) return;
+    this.cancelarExclusao();
 
     this.svc.delete(item.id).subscribe({
       next: () => {

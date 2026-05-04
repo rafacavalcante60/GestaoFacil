@@ -89,4 +89,19 @@
       ></app-meta-form>
     </div>
   </div>
+
+  <div class="modal-overlay" *ngIf="confirmacaoExclusaoAberta" (click)="cancelarExclusao()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="confirm-modal-card">
+        <h2 class="confirm-modal-title">Confirmar exclusão</h2>
+        <p class="confirm-modal-message">
+          Deseja excluir a meta "{{ metaParaExcluir?.nome || '' }}"?
+        </p>
+        <div class="confirm-modal-actions">
+          <button class="btn btn-danger" type="button" (click)="confirmarExclusao()">Excluir</button>
+          <button class="btn btn-light" type="button" (click)="cancelarExclusao()">Cancelar</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </main>

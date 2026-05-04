@@ -24,11 +24,10 @@
           placeholder="Ex: Salário, Venda, Juros..."
           [(ngModel)]="nome"
           name="nome"
-          required
         />
 
         <!-- DATA E HORA (mantive data-only, você pode trocar para datetime-local se quiser) -->
-        <label class="muted">Data</label>
+        <label class="muted">Data *</label>
         <input
           type="date"
           class="input"
@@ -38,7 +37,7 @@
         />
 
         <!-- VALOR -->
-        <label class="muted">Valor</label>
+        <label class="muted">Valor *</label>
         <input
           type="number"
           step="1"
@@ -50,7 +49,7 @@
         />
 
         <!-- FORMA PAGAMENTO -->
-        <label class="muted">Forma de Pagamento</label>
+        <label class="muted">Forma de Pagamento *</label>
         <select
           class="input"
           [(ngModel)]="formaPagamentoId"
@@ -63,7 +62,7 @@
         </select>
 
         <!-- CATEGORIA (específica para receita) -->
-        <label class="muted">Categoria</label>
+        <label class="muted">Categoria *</label>
         <select
           class="input"
           [(ngModel)]="categoriaReceitaId"
