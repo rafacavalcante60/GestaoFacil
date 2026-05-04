@@ -1,381 +1,665 @@
-/* Layout responsivo da tela de relatórios com cards fluidos e overflow controlado */
+/* =============================================
+   Relatórios — layout 100vh sem scroll de página
+   sidebar 300px + painel direito flex column
+   ============================================= */
 
 :host {
   display: contents;
 }
 
-.panel--accent {
-  padding-top: 26px;
-}
-
+/* Trava o container no viewport */
 .app-container.fullscreen.relatorio-page {
   width: 100%;
   max-width: 100%;
-  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
   padding: 0;
   margin: 0;
-  box-sizing: border-box;
-  overflow: visible;
-  border: none !important;
-  outline: none !important;
+  box-shadow: none;
+  border-radius: 0;
 }
 
 .app-container.fullscreen.relatorio-page .card {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  min-height: 100vh;
+  flex-direction: row;
+  height: 100vh;
+  min-height: unset;
+  overflow: hidden;
   border-radius: 0;
-  overflow: visible;
-  padding: 0;
-  border: none !important;
-}
-
-.rel-top-section {
-  display: flex;
   width: 100%;
-  max-height: 450px;
 }
 
-.rel-main {
-  flex: 1;
-  padding: 24px 34px;
-  overflow-y: visible;
-  max-height: 450px;
+/* Neutraliza min-height:100vh do global fullscreen nos painéis */
+.app-container.fullscreen.relatorio-page .card .panel--accent,
+.app-container.fullscreen.relatorio-page .card .panel--light {
+  min-height: unset !important;
+  height: 100% !important;
 }
 
-.rel-side {
-  width: 380px;
-  flex-shrink: 0;
-  padding: 20px 16px;
+/* =========================================
+   SIDEBAR ESQUERDA — 300px fixo
+   ========================================= */
+.rel-sidebar {
+  flex: 0 0 300px;
+  width: 300px;
+  height: 100%;
+  overflow: hidden;
+  padding: 0 !important;
+  justify-content: flex-start !important;
   display: flex;
   flex-direction: column;
-  background-color: #f9f9f9;
-  border-left: 1px solid rgba(0,0,0,0.05);
+}
+
+/* Área interna da sidebar é scrollável se precisar */
+.rel-sidebar-inner {
+  flex: 1;
+  min-height: 0;
   overflow-y: auto;
-  max-height: 450px;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 28px 22px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+}
+
+.rel-sidebar-inner::-webkit-scrollbar { width: 5px; }
+.rel-sidebar-inner::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 999px;
 }
 
 .rel-header {
   display: flex;
-  gap: 12px;
+  flex-direction: column;
   align-items: center;
-}
-
-.rel-main-content {
-  margin-top: 18px;
-  width: 100%;
-}
-
-.filters {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
   gap: 8px;
-  margin-bottom: 12px;
-  align-items: end;
+  text-align: center;
+  flex-shrink: 0;
 }
 
-.filter {
-  background: rgba(255, 255, 255, 0.9);
-  padding: 6px 10px;
-  border-radius: 8px;
-  display: grid;
-  gap: 4px;
-  border: 1px solid rgba(0, 0, 0, 0.05);
-  box-sizing: border-box;
+.rel-header .brand {
+  width: 70px;
+  height: 70px;
+}
+
+.rel-header .h1 {
+  font-size: 18px;
+  color: #fff;
+  margin: 0;
+}
+
+/* Filtros */
+.rel-filters {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  flex-shrink: 0;
+}
+
+.filter-item {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.filter-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.8);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.filter-item .input {
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #fff;
   font-size: 14px;
+  padding: 7px 10px;
+  border-radius: 8px;
+  width: 100%;
 }
 
-.filter .input {
-  width: 100%;
-  min-width: 0;
+.filter-item .input option {
+  color: #222;
+  background: #fff;
+}
+
+.filter-item .input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
 }
 
 .date-input {
   font-variant-numeric: tabular-nums;
+  cursor: pointer;
 }
 
-.actions-left {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  flex-wrap: wrap;
-  margin-bottom: 16px;
+/* Ícone de calendário branco no fundo laranja */
+.date-input::-webkit-calendar-picker-indicator {
+  filter: invert(1) brightness(2);
+  cursor: pointer;
+  opacity: 0.85;
 }
 
-.actions-left button {
-  white-space: nowrap;
-}
-
-.rel-content {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
-  padding: 24px 34px 40px 34px;
-  width: 100%;
-  box-sizing: border-box;
-  background: transparent;
-}
-
-.chart-placeholder {
-  grid-column: 1 / -1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 150px;
-  color: rgba(0, 0, 0, 0.5);
-}
-
-/* Remove old grid styles if no longer needed or repurpose them */
-.chart-grid-top {
-  display: contents; /* Just in case it's still used somewhere */
-}
-
-.chart-card {
-  background: rgba(255, 255, 255, 0.98);
-  border-radius: 12px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  min-height: 300px;
-}
-
-.chart-wrapper {
-  position: relative;
-  height: 280px;
-  width: 100%;
-}
-
-.chart-wrapper--top,
-.chart-wrapper--wide {
-  height: 280px;
-}
-
-.rel-side {
-  padding: 24px 20px;
-  display: flex;
-  align-items: flex-start;
-  box-sizing: border-box;
-  overflow: hidden;
-}
-
-.rel-side-content {
-  width: 100%;
-}
-
-.rel-side-title {
-  margin-bottom: 10px;
-  text-align: left;
-  color: #2b2b2b;
-  font-size: 1.1rem;
-}
-
-.report-list {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
-  align-items: start;
-  width: 100%;
-  margin-top: 6px;
-}
-
-.menu-card {
-  padding: 10px;
-  border-radius: 10px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-  background: #fff;
-  font-size: 13px;
-  line-height: 1.3;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  box-sizing: border-box;
-  min-height: 80px;
-  max-height: 160px;
-  overflow: hidden;
-  min-width: 0;
-}
-
-/* Removed .menu-card.mensal rule to allow it to sit next to Fluxo */
-
-.menu-head h3 {
-  font-size: 0.85rem;
-  padding: 5px 8px;
-  border-radius: 6px;
-  background: var(--orange);
+.date-input::-webkit-datetime-edit {
   color: #fff;
+}
+
+.date-input::-webkit-datetime-edit-fields-wrapper {
+  color: #fff;
+}
+
+/* Botões — empurrados para baixo */
+.sidebar-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: auto;
+  flex-shrink: 0;
+}
+
+.btn-sidebar {
   display: block;
   width: 100%;
-  margin: 0;
-  box-sizing: border-box;
-}
-
-.menu-card .sub {
-  margin: 0;
-}
-
-.card-empty {
-  color: rgba(0, 0, 0, 0.65);
-}
-
-.card-rows {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.line {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-  padding: 4px 0;
-  min-width: 0;
-}
-
-.line small {
-  min-width: 0;
-  color: rgba(0, 0, 0, 0.72);
-}
-
-.line .val {
-  white-space: nowrap;
-  font-weight: 700;
-  font-variant-numeric: tabular-nums;
-}
-
-.flow-line {
-  align-items: flex-start;
-}
-
-.flow-line small {
-  white-space: nowrap;
-}
-
-.card-scroll {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  max-height: 100px;
-  overflow-y: auto;
-  overflow-x: hidden;
-  padding-right: 4px;
-}
-
-.card-scroll::-webkit-scrollbar {
-  width: 8px;
-}
-
-.card-scroll::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.18);
-  border-radius: 999px;
-}
-
-.grid-months {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 4px 16px;
-  min-width: 0;
-}
-
-.grid-months .line small,
-.grid-months .line .val {
-  white-space: nowrap;
-}
-
-
-.btn-cream {
-  display: inline-block;
-  padding: 12px 26px;
+  padding: 10px 14px;
   border-radius: 22px;
   border: none;
   cursor: pointer;
   font-weight: 600;
-  background-color: #fff;
-  color: #000;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s, box-shadow 0.2s;
+  font-size: 13px;
+  background: #fff;
+  color: var(--orange);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+  transition: transform 0.18s, box-shadow 0.18s;
+  text-align: center;
 }
 
-.btn-cream:hover {
+.btn-sidebar:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
 }
 
+.btn-sidebar--outline {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  border: 1.5px solid rgba(255, 255, 255, 0.5);
+  box-shadow: none;
+}
 
-@media (max-width: 1180px) {
-  .app-container.fullscreen.relatorio-page .card {
-    min-height: auto;
+.btn-sidebar--outline:hover {
+  background: rgba(255, 255, 255, 0.25);
+  box-shadow: none;
+}
+
+/* =========================================
+   PAINEL DIREITO — flex column, sem scroll externo
+   ========================================= */
+.rel-main {
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+  height: 100% !important;
+  min-height: unset !important;
+  overflow: hidden !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;   /* anula o align-items:flex-start do global */
+  padding: 24px 28px 0 28px !important;
+  gap: 0;
+  box-sizing: border-box;
+}
+
+/* Tabs — altura fixa, não encolhem */
+.rel-tabs {
+  flex-shrink: 0;
+  width: 100%;
+  display: flex;
+  gap: 0;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+  margin-bottom: 0;
+}
+
+.tab-btn {
+  padding: 9px 28px;
+  border: none;
+  background: transparent;
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -2px;
+  border-radius: 0;
+  transition: color 0.18s, border-color 0.18s;
+}
+
+.tab-btn:hover { color: var(--orange); }
+
+.tab-btn--active {
+  color: var(--orange);
+  border-bottom-color: var(--orange);
+}
+
+/* Estado vazio */
+.empty-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  width: 100%;
+  min-height: 0;
+  color: rgba(0, 0, 0, 0.45);
+}
+
+/* =========================================
+   TAB CONTENT — ocupa o espaço restante
+   ========================================= */
+.tab-content {
+  flex: 1;
+  width: 100%;
+  min-height: 0;        /* fundamental para flex não crescer além do pai */
+  overflow: hidden;     /* sem scroll aqui — scroll fica nos cards */
+  padding: 18px 0 20px;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+/* =========================================
+   GRÁFICOS — grid adaptável que preenche o espaço
+   4 itens → 2 linhas | 5 itens (ambos) → 3 linhas
+   ========================================= */
+.charts-grid {
+  flex: 1;
+  width: 100%;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;       /* padrão: 4 cards */
+  gap: 16px;
+  box-sizing: border-box;
+}
+
+.charts-grid--5 {
+  grid-template-rows: 1fr 1fr 1fr;   /* 5 cards: 3 linhas */
+}
+
+.chart-card {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 14px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.chart-card--span2 {
+  grid-column: span 2;
+}
+
+/* Wrapper cresce para preencher o card */
+.chart-wrapper {
+  flex: 1;
+  min-height: 0;
+  position: relative;
+  width: 100%;
+}
+
+/* =========================================
+   RESUMOS — grid adaptável que preenche o espaço
+   4 itens → 2 linhas | 5 itens (ambos) → 3 linhas
+   ========================================= */
+.resumos-grid {
+  flex: 1;
+  width: 100%;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;       /* padrão: 4 cards */
+  gap: 16px;
+  box-sizing: border-box;
+}
+
+.resumos-grid--5 {
+  grid-template-rows: 1fr 1fr 1fr;   /* 5 cards: 3 linhas */
+}
+
+.resumo-card {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 14px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-height: 0;        /* grid controla a altura */
+  overflow: hidden;     /* clip externo */
+}
+
+.resumo-card--span2 {
+  grid-column: span 2;
+}
+
+.resumo-card-head {
+  background: var(--orange);
+  border-radius: 8px;
+  padding: 6px 12px;
+  flex-shrink: 0;
+}
+
+.resumo-card-head h3 {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+}
+
+/* Lista de linhas — scrollável dentro do card */
+.resumo-list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.12) transparent;
+}
+
+.resumo-list::-webkit-scrollbar { width: 4px; }
+.resumo-list::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.12);
+  border-radius: 999px;
+}
+
+/* Fluxo de caixa — também scrollável */
+.resumo-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.12) transparent;
+}
+
+.resumo-scroll::-webkit-scrollbar { width: 4px; }
+.resumo-scroll::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.12);
+  border-radius: 999px;
+}
+
+.resumo-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 5px 2px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  font-size: 13px;
+  flex-shrink: 0;
+}
+
+.resumo-row:last-child { border-bottom: none; }
+
+.resumo-row--saldo {
+  margin-top: 2px;
+  padding-top: 7px;
+  border-top: 2px solid rgba(0, 0, 0, 0.08);
+  border-bottom: none;
+  flex-shrink: 0;
+}
+
+.resumo-label {
+  color: rgba(0, 0, 0, 0.6);
+  font-size: 13px;
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.resumo-val {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  font-size: 13px;
+}
+
+.resumo-val--green {
+  color: #1d8c3f;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  font-size: 13px;
+}
+
+.resumo-val--red {
+  color: #c0392b;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  font-size: 13px;
+}
+
+.resumo-empty {
+  font-size: 13px;
+  color: rgba(0, 0, 0, 0.45);
+  margin: 4px 0 0;
+}
+
+/* Linha mensal — 4 colunas internas */
+.resumo-row--mensal {
+  display: grid;
+  grid-template-columns: 52px 1fr 1fr 1fr;
+  gap: 6px;
+  text-align: right;
+  justify-items: end;
+}
+
+.resumo-row--mensal .resumo-mes {
+  text-align: left;
+  justify-self: start;
+  font-weight: 600;
+  color: #333;
+}
+
+.resumo-row--header {
+  border-bottom: 2px solid rgba(0, 0, 0, 0.1) !important;
+  padding-bottom: 5px;
+  flex-shrink: 0;
+}
+
+.resumo-col-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: rgba(0, 0, 0, 0.45);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* =========================================
+   RESPONSIVO
+   ========================================= */
+
+/* --- Tablet: 601px – 960px ---
+   Sidebar vai para cima em linha compacta,
+   conteúdo abaixo com scroll natural da página  */
+@media (max-width: 960px) {
+
+  /* Página volta a scroll natural */
+  .app-container.fullscreen.relatorio-page {
+    height: auto;
+    overflow: visible;
   }
-  
-  .rel-top-section {
+
+  .app-container.fullscreen.relatorio-page .card {
+    flex-direction: column;
+    height: auto;
+    min-height: 100vh;
+    overflow: visible;
+  }
+
+  .app-container.fullscreen.relatorio-page .card .panel--accent,
+  .app-container.fullscreen.relatorio-page .card .panel--light {
+    height: auto !important;
+    min-height: unset !important;
+  }
+
+  /* Sidebar ocupa toda a largura em cima */
+  .rel-sidebar {
+    flex: 0 0 auto;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  .rel-sidebar-inner {
+    overflow: visible;
+    padding: 20px 24px;
+    gap: 16px;
+  }
+
+  /* Header da sidebar fica horizontal */
+  .rel-header {
+    flex-direction: row;
+    gap: 14px;
+    text-align: left;
+    align-items: center;
+    margin-bottom: 4px;
+  }
+
+  .rel-header .brand {
+    width: 54px;
+    height: 54px;
+    flex-shrink: 0;
+  }
+
+  .rel-header .h1 {
+    font-size: 20px;
+  }
+
+  /* Filtros em grid 2 colunas */
+  .rel-filters {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  /* Botões em linha */
+  .sidebar-actions {
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-top: 0;
+    gap: 10px;
+  }
+
+  .btn-sidebar {
+    flex: 1 1 130px;
+    width: auto;
+  }
+
+  /* Painel principal: scroll pelo conteúdo */
+  .rel-main {
+    height: auto !important;
+    min-height: 60vh !important;
+    overflow: visible !important;
+    padding: 20px 24px 32px !important;
+  }
+
+  .tab-content {
+    overflow: visible;
+    flex: unset;
+    min-height: unset;
+    padding: 16px 0 0;
+  }
+
+  /* Grids com altura fixa por linha em vez de 1fr */
+  .charts-grid,
+  .resumos-grid {
+    flex: unset;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: unset;
+    grid-auto-rows: 300px;
+    gap: 16px;
+  }
+
+  .chart-card {
+    min-height: unset;
+  }
+
+  .chart-wrapper {
+    flex: unset;
+    height: 250px;
+  }
+
+  .resumo-card {
+    min-height: unset;
+    overflow: hidden;
+  }
+
+  .resumo-list,
+  .resumo-scroll {
+    flex: unset;
+    max-height: 180px;
+    overflow-y: auto;
+  }
+}
+
+/* --- Mobile: até 600px ---
+   Tudo em coluna única  */
+@media (max-width: 600px) {
+
+  .rel-sidebar-inner {
+    padding: 16px 16px;
+  }
+
+  /* Filtros em coluna única */
+  .rel-filters {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar-actions {
     flex-direction: column;
   }
 
-  .rel-side {
+  .btn-sidebar {
+    flex: unset;
     width: 100%;
-    border-left: none;
-    border-top: 1px solid rgba(0,0,0,0.05);
-  }
-
-  .rel-content {
-    grid-template-columns: 1fr;
-    padding: 20px;
-  }
-}
-
-@media (max-width: 760px) {
-  .app-container.fullscreen.relatorio-page {
-    width: 100%;
-    padding: 0;
-    margin: 0;
   }
 
   .rel-main {
-    padding: 16px;
+    padding: 16px 16px 28px !important;
   }
 
-  .rel-side {
-    padding: 14px;
-  }
-
-  .rel-content {
+  /* Grids em coluna única */
+  .charts-grid,
+  .resumos-grid {
     grid-template-columns: 1fr;
-    padding: 10px 16px 24px 16px;
+    grid-auto-rows: 280px;
+    gap: 14px;
   }
 
-  .filters {
-    grid-template-columns: 1fr;
-  }
-
-  .report-list {
-    gap: 12px;
-    grid-template-columns: 1fr;
-  }
-
-  .menu-card.mensal {
-    grid-column: auto;
-  }
-
-  .grid-months {
-    grid-template-columns: 1fr;
-    gap: 2px;
-  }
-
-  .flow-line {
-    align-items: flex-start;
-  }
-
-  .flow-line small {
-    white-space: normal;
-  }
-
-  .chart-grid-top {
-    grid-template-columns: 1fr;
-  }
-  
   .chart-wrapper {
-    height: 250px;
+    height: 240px;
+  }
+
+  .tab-btn {
+    padding: 9px 18px;
+    font-size: 13px;
+  }
+
+  /* Tabela mensal mais compacta */
+  .resumo-row--mensal {
+    grid-template-columns: 46px 1fr 1fr 1fr;
+    font-size: 12px;
+    gap: 4px;
   }
 }
