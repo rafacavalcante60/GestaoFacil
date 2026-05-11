@@ -61,8 +61,8 @@ export class MetaFormComponent implements OnInit {
       return;
     }
 
-    if (this.valorMeta <= 0) {
-      this.errorMsg = 'O valor da meta deve ser maior que zero.';
+    if (this.valorMeta <= 0 || this.valorMeta > 9999999.99) {
+      this.errorMsg = 'O valor da meta deve estar entre 0,01 e 9.999.999,99.';
       return;
     }
 

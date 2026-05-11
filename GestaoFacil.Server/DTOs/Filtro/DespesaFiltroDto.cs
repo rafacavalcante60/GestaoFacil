@@ -5,10 +5,10 @@ namespace GestaoFacil.Server.DTOs.Filtro
 {
     public class DespesaFiltroDto : QueryStringParameters, IFiltroData
     {
-        [Range(0.01, 999999.99, ErrorMessage = "O valor deve ser maior que zero.")]
+        [Range(0.01, 999999.99, ErrorMessage = "O valor deve estar entre 0,01 e 999.999,99.")]
         public decimal? ValorMin { get; set; }
 
-        [Range(0.01, 999999.99, ErrorMessage = "O valor deve ser maior que zero.")]
+        [Range(0.01, 999999.99, ErrorMessage = "O valor deve estar entre 0,01 e 999.999,99.")]
         public decimal? ValorMax { get; set; }
 
         public DateTime? DataInicial { get; set; }

@@ -4,7 +4,10 @@
       <div style="display:flex; align-items:center; gap:14px; width:100%;">
         <div class="brand"><img src="assets/img/monkey.png" alt="logo" /></div>
         <h1 class="h1" id="menu-title" style="flex:1; text-align:center; font-size:5rem;"><span style="color:white; text-shadow: -2px -2px 0 #ff6b35, 2px -2px 0 #ff6b35, -2px 2px 0 #ff6b35, 2px 2px 0 #ff6b35, -2px 0 0 #ff6b35, 2px 0 0 #ff6b35, 0 -2px 0 #ff6b35, 0 2px 0 #ff6b35;">Gestão</span><span style="color:#ff6b35;">Fácil</span></h1>
-        <button class="btn btn--logout" type="button" (click)="logout()">Deslogar</button>
+        <div class="top-actions">
+          <button class="btn btn--admin-top" type="button" *ngIf="isAdmin" (click)="goToAdminUsuarios()">Admin</button>
+          <button class="btn btn--logout" type="button" (click)="logout()">Deslogar</button>
+        </div>
       </div>
 
       <div class="menu-grid" [class.menu-grid--compact]="metasAtivas.length === 0" role="list">
@@ -53,16 +56,6 @@
           </div>
         </article>
 
-        <article class="menu-card admin-card" role="listitem" *ngIf="isAdmin">
-          <div class="menu-head">
-            <svg width="26" height="26" aria-hidden="true"></svg>
-            <h3>Admin</h3>
-          </div>
-          <p>Gerencie usuários, atualize perfis e controle permissões.</p>
-          <div style="margin-top:auto; display:flex; justify-content:flex-end;">
-            <button class="btn" (click)="goToAdminUsuarios()">Acessar</button>
-          </div>
-        </article>
       </div>
 
       <!-- Widget: metas ativas -->

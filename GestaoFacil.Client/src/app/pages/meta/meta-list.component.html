@@ -12,8 +12,8 @@
         </div>
       </div>
 
-      <p class="error" *ngIf="errorMsg">{{ errorMsg }}</p>
-      <p class="ok" *ngIf="!errorMsg && infoMsg">{{ infoMsg }}</p>
+      <p class="error feedback-msg" *ngIf="errorMsg">{{ errorMsg }}</p>
+      <p class="ok feedback-msg" *ngIf="!errorMsg && infoMsg">{{ infoMsg }}</p>
 
       <div class="table-wrap">
         <table class="table">

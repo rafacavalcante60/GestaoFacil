@@ -118,8 +118,8 @@ namespace GestaoFacil.Server.Services.Meta
 
         private static string? ValidarMeta(decimal valorMeta, DateTime dataInicio, DateTime dataFim)
         {
-            if (valorMeta <= 0)
-                return "O valor da meta deve ser maior que zero.";
+            if (valorMeta <= 0 || valorMeta > 9999999.99m)
+                return "O valor da meta deve estar entre 0,01 e 9.999.999,99.";
             if (dataInicio > dataFim)
                 return "A data de início não pode ser maior que a data de fim.";
             return null;

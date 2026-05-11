@@ -72,7 +72,7 @@ namespace GestaoFacil.Server.xUnitTests.UnitTestsServices.Meta
 
             // Assert
             result.Status.Should().BeFalse();
-            result.Mensagem.Should().Be("O valor da meta deve ser maior que zero.");
+            result.Mensagem.Should().Be("O valor da meta deve estar entre 0,01 e 9.999.999,99.");
         }
 
         [Fact]

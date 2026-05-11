@@ -150,7 +150,11 @@ export class DespesaListComponent implements OnInit, OnDestroy {
   }
 
   aoSalvarModal(): void {
+    const mensagem = this.modoEdicao ? 'Despesa editada com sucesso.' : '';
     this.fecharModal();
+    if (mensagem) {
+      this.infoMsg = mensagem;
+    }
     this.carregar();
   }
 

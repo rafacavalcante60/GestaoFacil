@@ -75,6 +75,11 @@ export class DespesaComponent {
       return;
     }
 
+    if (this.valor <= 0 || this.valor > 999999.99) {
+      this.errorMsg = 'O valor deve estar entre 0,01 e 999.999,99.';
+      return;
+    }
+
     // monta payload conforme swagger
     const payload: Despesa = {
       nome: this.nome,

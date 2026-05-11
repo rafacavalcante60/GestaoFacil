@@ -10,7 +10,7 @@ namespace GestaoFacil.Server.DTOs.Meta
         public string Nome { get; set; } = string.Empty;
 
         [Required]
-        [Range(0.01, 9999999.99, ErrorMessage = "O valor da meta deve ser maior que zero.")]
+        [Range(0.01, 9999999.99, ErrorMessage = "O valor da meta deve estar entre 0,01 e 9.999.999,99.")]
         public decimal ValorMeta { get; set; }
 
         [Required]

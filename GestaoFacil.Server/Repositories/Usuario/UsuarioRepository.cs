@@ -18,7 +18,6 @@ namespace GestaoFacil.Server.Repositories.Usuario
         {
             var usuario = await _context.Usuarios
                 .AsNoTracking()
-                .Include(u => u.TipoUsuario)
                 .FirstOrDefaultAsync(u => u.Id == id);
 
             return usuario;

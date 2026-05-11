@@ -23,7 +23,7 @@ export class AtividadesComponent implements OnInit, OnDestroy {
     document.body.classList.add('fullscreen-layout');
     this.metaSvc.getAtivas().subscribe({
       next: (metas) => {
-        this.metasAtivas = metas.slice(0, 3);
+        this.metasAtivas = metas;
       },
       error: () => {
         this.metasAtivas = [];
