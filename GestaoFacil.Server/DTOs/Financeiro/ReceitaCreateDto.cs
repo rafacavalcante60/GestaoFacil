@@ -13,7 +13,7 @@ namespace GestaoFacil.Server.DTOs.Financeiro
         [StringLength(200, ErrorMessage = "A descrição deve ter no máximo 200 caracteres.")]
         public string? Descricao { get; set; }
 
-        [Range(0.01, 999999.99, ErrorMessage = "O valor deve ser maior que zero.")]
+        [Range(0.01, 999999.99, ErrorMessage = "O valor deve estar entre 0,01 e 999.999,99.")]
         public decimal Valor { get; set; }
 
         [Required(ErrorMessage = "A categoria é obrigatória.")]

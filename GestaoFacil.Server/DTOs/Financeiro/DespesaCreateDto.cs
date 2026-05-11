@@ -14,7 +14,7 @@ namespace GestaoFacil.Server.DTOs.Despesa
         public string? Descricao { get; set; }
 
         [Required(ErrorMessage = "O valor é obrigatório.")]
-        [Range(0.01, 999999.99, ErrorMessage = "O valor deve ser maior que zero.")]
+        [Range(0.01, 999999.99, ErrorMessage = "O valor deve estar entre 0,01 e 999.999,99.")]
         public decimal Valor { get; set; }
 
         [Required(ErrorMessage = "A categoria é obrigatória.")]

@@ -72,7 +72,9 @@ namespace GestaoFacil.Server.Services.Usuario
                     return ResponseHelper.Falha<bool>("Usuário não encontrado.");
                 }
 
-                _mapper.Map(dto, usuario);
+                usuario.Nome = dto.Nome.Trim();
+                usuario.Email = dto.Email.Trim();
+                usuario.TipoUsuarioId = dto.TipoUsuarioId;
                 await _repository.UpdateAsync(usuario);
 
                 _logger.LogInformation("Usuário {Id} atualizado por administrador", id);

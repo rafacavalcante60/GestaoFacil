@@ -148,7 +148,11 @@ export class ReceitaListComponent implements OnInit, OnDestroy {
   }
 
   aoSalvarModal(): void {
+    const mensagem = this.modoEdicao ? 'Receita editada com sucesso.' : '';
     this.fecharModal();
+    if (mensagem) {
+      this.infoMsg = mensagem;
+    }
     this.carregar();
   }
 

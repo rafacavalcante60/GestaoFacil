@@ -52,7 +52,6 @@ export class MetaListComponent implements OnInit, OnDestroy {
   carregar(): void {
     this.loading = true;
     this.errorMsg = '';
-    this.infoMsg = '';
 
     this.svc.getAll().subscribe({
       next: (metas) => {
@@ -89,7 +88,11 @@ export class MetaListComponent implements OnInit, OnDestroy {
   }
 
   aoSalvarModal(): void {
+    const mensagem = this.modoEdicao ? 'Meta editada com sucesso.' : '';
     this.fecharModal();
+    if (mensagem) {
+      this.infoMsg = mensagem;
+    }
     this.carregar();
   }
 

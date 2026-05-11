@@ -112,6 +112,12 @@
   margin: 0;
 }
 
+.feedback-msg {
+  width: 100%;
+  max-width: calc(100% - 400px);
+  margin: 0 auto;
+}
+
 @media (max-width: 980px) {
   .filters-row {
     grid-template-columns: 1fr 1fr;
