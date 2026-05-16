@@ -22,12 +22,8 @@ export class CategoriaService {
 
   // DESPESA
   getDespesas(): Observable<Categoria[]> {
-    console.log('Carregando despesas de:', this.baseDespesa);
     return this.http.get<ApiResponse<Categoria[]>>(this.baseDespesa).pipe(
-      map((res) => {
-        console.log('Resposta getDespesas:', res);
-        return this.extractList(res);
-      })
+      map((res) => this.extractList(res))
     );
   }
 
@@ -51,12 +47,8 @@ export class CategoriaService {
 
   // RECEITA
   getReceitas(): Observable<Categoria[]> {
-    console.log('Carregando receitas de:', this.baseReceita);
     return this.http.get<ApiResponse<Categoria[]>>(this.baseReceita).pipe(
-      map((res) => {
-        console.log('Resposta getReceitas:', res);
-        return this.extractList(res);
-      })
+      map((res) => this.extractList(res))
     );
   }
 
@@ -79,7 +71,7 @@ export class CategoriaService {
   }
 
   private extractData(res: ApiResponse<Categoria>): Categoria {
-    const data = res?.dados ?? res?.Dados;
+    const data = this.normalizeCategoria(res?.dados ?? res?.Dados);
     if (!data) {
       throw new Error('Resposta inválida.');
     }
@@ -88,11 +80,36 @@ export class CategoriaService {
 
   private extractList(res: ApiResponse<Categoria[]>): Categoria[] {
     const data = res?.dados ?? res?.Dados;
-    if (!Array.isArray(data)) return [];
-    return data.filter((item): item is Categoria => {
-      if (!item || typeof item !== 'object') return false;
-      const id = (item as any).id ?? (item as any).Id;
-      return typeof id === 'number' && id > 0;
-    });
+    if (!Array.isArray(data)) {
+      return [];
+    }
+
+    return data
+      .map((item) => this.normalizeCategoria(item))
+      .filter((item): item is Categoria => item !== null);
+  }
+
+  private normalizeCategoria(item: unknown): Categoria | null {
+    if (!item || typeof item !== 'object') {
+      return null;
+    }
+
+    const data = item as Record<string, unknown>;
+    const rawId = data['id'] ?? data['Id'];
+    const id = typeof rawId === 'number' ? rawId : Number(rawId);
+    const rawNome = data['nome'] ?? data['Nome'];
+    const nome = typeof rawNome === 'string' ? rawNome.trim() : '';
+    const rawAtivo = data['ativo'] ?? data['Ativo'];
+
+    if (!Number.isFinite(id) || id <= 0 || !nome) {
+      return null;
+    }
+
+    const categoria: Categoria = { id, nome };
+    if (typeof rawAtivo === 'boolean') {
+      categoria.ativo = rawAtivo;
+    }
+
+    return categoria;
   }
 }

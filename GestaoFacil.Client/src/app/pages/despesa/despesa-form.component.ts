@@ -1,25 +1,27 @@
-import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DespesaService } from './despesa.service';
 import { Despesa } from '../../models/despesa.model';
 import { AuthService } from '../../auth/auth.service';
 import { LookupService } from '../../shared/lookup.service';
-import { CategoriaModalComponent } from '../../shared/categoria-modal/categoria-modal.component';
 import { CategoriaService } from '../../shared/categoria.service';
+import { Categoria } from '../../models/categoria.model';
 
 @Component({
   selector: 'app-despesa-form',
   standalone: true,
-  imports: [CommonModule, FormsModule, CategoriaModalComponent],
+  imports: [CommonModule, FormsModule],
   templateUrl: './despesa-form.component.html',
   styleUrls: ['./despesa-form.component.scss']
 })
-export class DespesaFormComponent implements OnInit {
+export class DespesaFormComponent implements OnInit, OnChanges {
   @Input() despesa: Despesa | null = null;
   @Input() isEdit = false;
+  @Input() categoriaRefreshToken = 0;
   @Output() salvo = new EventEmitter<void>();
   @Output() cancelado = new EventEmitter<void>();
+  @Output() abrirCategorias = new EventEmitter<void>();
 
   nome: string = '';
   data = new Date().toISOString().substring(0, 10);
@@ -30,9 +32,7 @@ export class DespesaFormComponent implements OnInit {
 
   errorMsg = '';
   formasPagamento;
-  categoriasDespesa;
-  
-  modalCategoriaAberto = false;
+  categoriasDespesa: Categoria[];
 
   constructor(
     private svc: DespesaService,
@@ -44,6 +44,8 @@ export class DespesaFormComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.carregarCategorias();
+
     if (this.despesa && this.isEdit) {
       this.nome = this.despesa.nome ?? '';
       this.data = this.despesa.data ? this.despesa.data.substring(0, 10) : new Date().toISOString().substring(0, 10);
@@ -51,6 +53,12 @@ export class DespesaFormComponent implements OnInit {
       this.descricao = this.despesa.descricao ?? '';
       this.categoriaDespesaId = this.despesa.categoriaDespesaId ?? null;
       this.formaPagamentoId = this.despesa.formaPagamentoId ?? null;
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['categoriaRefreshToken'] && !changes['categoriaRefreshToken'].firstChange) {
+      this.carregarCategorias();
     }
   }
 
@@ -104,19 +112,17 @@ export class DespesaFormComponent implements OnInit {
   }
 
   abrirModalCategorias() {
-    this.modalCategoriaAberto = true;
+    this.abrirCategorias.emit();
   }
 
-  fecharModalCategorias() {
-    this.modalCategoriaAberto = false;
-  }
-
-  aoAtualizarCategorias() {
+  private carregarCategorias() {
     this.categoriaService.getDespesas().subscribe({
       next: (categorias) => {
-        this.categoriasDespesa = categorias as any;
+        this.categoriasDespesa = categorias.filter((categoria) => categoria.ativo !== false);
       },
-      error: (err) => console.error('Erro ao recarregar categorias:', err)
+      error: (err) => {
+        console.error('Erro ao recarregar categorias:', err);
+      }
     });
   }
 }

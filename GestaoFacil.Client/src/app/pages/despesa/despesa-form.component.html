@@ -1,9 +1,9 @@
 <div class="modal-form-container">
-  <button type="button" class="modal-close-btn" (click)="cancelar()" aria-label="Fechar modal">×</button>
-  <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px; justify-content: center">
-    <h1 class="h1" style="color: var(--orange)">
+  <div class="modal-header">
+    <h1 class="h1">
       {{ isEdit ? 'Editar Despesa' : 'Nova Despesa' }}
     </h1>
+    <button type="button" class="modal-close-btn" (click)="cancelar()" aria-label="Fechar modal">×</button>
   </div>
 
   <form
@@ -53,13 +53,12 @@
     </select>
 
     <label class="muted">Categoria *</label>
-    <div style="display: flex; gap: 8px; align-items: center;">
+    <div class="categoria-row">
       <select
-        class="input"
+        class="input categoria-select"
         [(ngModel)]="categoriaDespesaId"
         name="categoriaDespesaId"
         required
-        style="flex: 1;"
       >
         <option *ngFor="let c of categoriasDespesa" [value]="c.id">
           {{ c.nome }}
@@ -86,7 +85,7 @@
 
     <p class="error" *ngIf="errorMsg">{{ errorMsg }}</p>
 
-    <div style="display: flex; gap: 12px; margin-top: 8px; justify-content: flex-start">
+    <div class="form-actions">
       <button class="btn" type="submit">Salvar</button>
       <button class="btn-limpar" type="button" (click)="limpar()">
         Limpar
@@ -97,14 +96,4 @@
     </div>
   </form>
 
-  <!-- Modal de Categorias -->
-  <div class="modal-overlay-inner" *ngIf="modalCategoriaAberto" (click)="fecharModalCategorias()">
-    <div class="modal-content-inner" (click)="$event.stopPropagation()">
-      <app-categoria-modal
-        [tipo]="'despesa'"
-        (fechar)="fecharModalCategorias()"
-        (atualizar)="aoAtualizarCategorias()"
-      ></app-categoria-modal>
-    </div>
-  </div>
 </div>

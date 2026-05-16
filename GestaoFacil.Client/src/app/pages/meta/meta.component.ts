@@ -5,7 +5,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MetaService } from './meta.service';
 import { Meta } from '../../models/meta.model';
 import { AuthService } from '../../auth/auth.service';
-import { LookupService } from '../../shared/lookup.service';
+import { CategoriaService } from '../../shared/categoria.service';
+import { Categoria } from '../../models/categoria.model';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-meta',
@@ -28,17 +30,16 @@ export class MetaComponent {
   isEdit = false;
   id?: number;
 
-  categoriasDespesa;
-  categoriasReceita;
+  categoriasDespesa: Categoria[] = [];
+  categoriasReceita: Categoria[] = [];
 
   constructor(
     private svc: MetaService,
     private router: Router,
     private route: ActivatedRoute,
-    private lookup: LookupService
+    private categoriaService: CategoriaService
   ) {
-    this.categoriasDespesa = this.lookup.categoriasDespesa;
-    this.categoriasReceita = this.lookup.categoriasReceita;
+    this.carregarCategorias();
     const idParam = this.route.snapshot.paramMap.get('id');
     if (idParam) {
       this.isEdit = true;
@@ -121,5 +122,20 @@ export class MetaComponent {
 
   voltar() {
     this.router.navigate(['/meta']);
+  }
+
+  private carregarCategorias() {
+    forkJoin({
+      despesas: this.categoriaService.getDespesas(),
+      receitas: this.categoriaService.getReceitas()
+    }).subscribe({
+      next: ({ despesas, receitas }) => {
+        this.categoriasDespesa = despesas.filter((categoria) => categoria.ativo !== false);
+        this.categoriasReceita = receitas.filter((categoria) => categoria.ativo !== false);
+      },
+      error: (err) => {
+        this.errorMsg = AuthService.parseError(err, 'Erro ao carregar categorias.');
+      }
+    });
   }
 }
