@@ -5,11 +5,12 @@ import { Router } from '@angular/router';
 import { Receita } from '../../models/receita.model';
 import { ReceitaService } from './receita.service';
 import { ReceitaFormComponent } from './receita-form.component';
+import { CategoriaModalComponent } from '../../shared/categoria-modal/categoria-modal.component';
 
 @Component({
   selector: 'app-receita-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReceitaFormComponent],
+  imports: [CommonModule, FormsModule, ReceitaFormComponent, CategoriaModalComponent],
   templateUrl: './receita-list.component.html',
   styleUrls: ['./receita-list.component.scss']
 })
@@ -20,6 +21,7 @@ export class ReceitaListComponent implements OnInit, OnDestroy {
   infoMsg = '';
   confirmacaoExclusaoAberta = false;
   receitaParaExcluir: Receita | null = null;
+  modalCategoriaAberto = false;
 
   pageNumber = 1;
   pageSize = 10;
@@ -192,6 +194,18 @@ export class ReceitaListComponent implements OnInit, OnDestroy {
 
   nomeFormaPagamento(id?: number): string {
     return this.formasPagamento.find((f) => f.id === id)?.nome ?? '-';
+  }
+
+  abrirModalCategorias(): void {
+    this.modalCategoriaAberto = true;
+  }
+
+  fecharModalCategorias(): void {
+    this.modalCategoriaAberto = false;
+  }
+
+  aoAtualizarCategorias(): void {
+    this.carregar();
   }
 
   private isReceitaValida(item: unknown): item is Receita {

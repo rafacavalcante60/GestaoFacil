@@ -82,3 +82,25 @@
   font-weight: 700;
   margin: 0;
 }
+
+.btn-categoria-add {
+  padding: 10px 14px;
+  background-color: var(--orange);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  height: 44px;
+}
+
+.btn-categoria-add:hover {
+  background-color: #ff8c3a;
+  transform: scale(1.05);
+}

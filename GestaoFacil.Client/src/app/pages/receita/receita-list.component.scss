@@ -70,6 +70,24 @@
   color: rgba(0, 0, 0, 0.68);
 }
 
+.table th:nth-child(1),
+.table td:nth-child(1) {
+  /* Nome column */
+  min-width: 350px;
+  max-width: 500px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.table th:nth-child(6),
+.table td:nth-child(6) {
+  /* Acoes column */
+  width: auto;
+  min-width: 40px;
+  white-space: nowrap;
+}
+
 .actions {
   display: flex;
   gap: 8px;
@@ -210,5 +228,32 @@
   display: flex;
   justify-content: flex-end;
   gap: 10px;
+}
+
+.head-right {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.btn-categories {
+  background: #5a9fd4;
+  color: white;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  transition: all 0.2s;
+
+  &:hover {
+    background: #4a8dc0;
+    transform: translateY(-2px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
 }
 
