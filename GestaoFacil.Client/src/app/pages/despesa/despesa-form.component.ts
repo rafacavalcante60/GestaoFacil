@@ -5,11 +5,13 @@ import { DespesaService } from './despesa.service';
 import { Despesa } from '../../models/despesa.model';
 import { AuthService } from '../../auth/auth.service';
 import { LookupService } from '../../shared/lookup.service';
+import { CategoriaModalComponent } from '../../shared/categoria-modal/categoria-modal.component';
+import { CategoriaService } from '../../shared/categoria.service';
 
 @Component({
   selector: 'app-despesa-form',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, CategoriaModalComponent],
   templateUrl: './despesa-form.component.html',
   styleUrls: ['./despesa-form.component.scss']
 })
@@ -29,10 +31,13 @@ export class DespesaFormComponent implements OnInit {
   errorMsg = '';
   formasPagamento;
   categoriasDespesa;
+  
+  modalCategoriaAberto = false;
 
   constructor(
     private svc: DespesaService,
-    private lookup: LookupService
+    private lookup: LookupService,
+    private categoriaService: CategoriaService
   ) {
     this.formasPagamento = this.lookup.formasPagamento;
     this.categoriasDespesa = this.lookup.categoriasDespesa;
@@ -96,5 +101,22 @@ export class DespesaFormComponent implements OnInit {
 
   cancelar() {
     this.cancelado.emit();
+  }
+
+  abrirModalCategorias() {
+    this.modalCategoriaAberto = true;
+  }
+
+  fecharModalCategorias() {
+    this.modalCategoriaAberto = false;
+  }
+
+  aoAtualizarCategorias() {
+    this.categoriaService.getDespesas().subscribe({
+      next: (categorias) => {
+        this.categoriasDespesa = categorias as any;
+      },
+      error: (err) => console.error('Erro ao recarregar categorias:', err)
+    });
   }
 }

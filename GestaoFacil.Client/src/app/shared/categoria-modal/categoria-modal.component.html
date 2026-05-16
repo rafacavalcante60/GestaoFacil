@@ -1,0 +1,93 @@
+<div class="modal-form-container">
+  <div class="modal-header">
+    <h2>Gerenciar Categorias {{ tipo === 'despesa' ? 'de Despesa' : 'de Receita' }}</h2>
+    <button type="button" class="modal-close-btn" (click)="fecharModal()">×</button>
+  </div>
+
+  <div class="modal-body">
+    <!-- Mensagens -->
+    <p class="success" *ngIf="successMsg">{{ successMsg }}</p>
+    <p class="error" *ngIf="errorMsg">{{ errorMsg }}</p>
+
+    <!-- Seção de adição -->
+    <div class="categoria-section">
+      <h3>Adicionar Nova Categoria</h3>
+      <div class="input-group">
+        <input
+          type="text"
+          class="input"
+          [(ngModel)]="novaCategoria"
+          placeholder="Digite o nome da categoria"
+          (keyup.enter)="adicionarCategoria()"
+        />
+        <button class="btn btn-add" type="button" (click)="adicionarCategoria()">
+          Adicionar
+        </button>
+      </div>
+    </div>
+
+    <!-- Lista de categorias -->
+    <div class="categoria-section">
+      <h3>Categorias Existentes</h3>
+      <div class="categoria-list">
+        <div *ngIf="categorias.length === 0" class="empty-state">
+          Nenhuma categoria cadastrada.
+        </div>
+
+        <div *ngFor="let cat of categorias" class="categoria-item">
+          <div *ngIf="editandoId !== cat.id" class="categoria-view">
+            <span class="categoria-nome">{{ cat.nome }}</span>
+            <div class="categoria-actions">
+              <button
+                type="button"
+                class="btn-icon btn-edit"
+                (click)="iniciarEdicao(cat)"
+                title="Editar"
+              >
+                ✎
+              </button>
+              <button
+                type="button"
+                class="btn-icon btn-delete"
+                (click)="deletarCategoria(cat.id!)"
+                title="Deletar"
+              >
+                🗑
+              </button>
+            </div>
+          </div>
+
+          <div *ngIf="editandoId === cat.id" class="categoria-edit">
+            <input
+              type="text"
+              class="input input-small"
+              [(ngModel)]="editandoNome"
+              (keyup.enter)="salvarEdicao()"
+              (keyup.escape)="cancelarEdicao()"
+            />
+            <div class="categoria-actions-edit">
+              <button
+                type="button"
+                class="btn btn-small btn-save"
+                (click)="salvarEdicao()"
+              >
+                Salvar
+              </button>
+              <button
+                type="button"
+                class="btn btn-small btn-cancel"
+                (click)="cancelarEdicao()"
+              >
+                Cancelar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button class="btn" type="button" (click)="fecharModal()">Fechar</button>
+  </div>
+</div>

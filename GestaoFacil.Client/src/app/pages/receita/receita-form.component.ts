@@ -5,11 +5,13 @@ import { ReceitaService } from './receita.service';
 import { Receita } from '../../models/receita.model';
 import { AuthService } from '../../auth/auth.service';
 import { LookupService } from '../../shared/lookup.service';
+import { CategoriaModalComponent } from '../../shared/categoria-modal/categoria-modal.component';
+import { CategoriaService } from '../../shared/categoria.service';
 
 @Component({
   selector: 'app-receita-form',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, CategoriaModalComponent],
   templateUrl: './receita-form.component.html',
   styleUrls: ['./receita-form.component.scss']
 })
@@ -29,10 +31,13 @@ export class ReceitaFormComponent implements OnInit {
   errorMsg = '';
   formasPagamento;
   categoriasReceita;
+  
+  modalCategoriaAberto = false;
 
   constructor(
     private svc: ReceitaService,
-    private lookup: LookupService
+    private lookup: LookupService,
+    private categoriaService: CategoriaService
   ) {
     this.formasPagamento = this.lookup.formasPagamento;
     this.categoriasReceita = this.lookup.categoriasReceita;
@@ -96,5 +101,22 @@ export class ReceitaFormComponent implements OnInit {
 
   cancelar() {
     this.cancelado.emit();
+  }
+
+  abrirModalCategorias() {
+    this.modalCategoriaAberto = true;
+  }
+
+  fecharModalCategorias() {
+    this.modalCategoriaAberto = false;
+  }
+
+  aoAtualizarCategorias() {
+    this.categoriaService.getReceitas().subscribe({
+      next: (categorias) => {
+        this.categoriasReceita = categorias as any;
+      },
+      error: (err) => console.error('Erro ao recarregar categorias:', err)
+    });
   }
 }

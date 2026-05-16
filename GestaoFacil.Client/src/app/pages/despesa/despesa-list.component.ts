@@ -5,11 +5,12 @@ import { Router } from '@angular/router';
 import { Despesa } from '../../models/despesa.model';
 import { DespesaService } from './despesa.service';
 import { DespesaFormComponent } from './despesa-form.component';
+import { CategoriaModalComponent } from '../../shared/categoria-modal/categoria-modal.component';
 
 @Component({
   selector: 'app-despesa-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, DespesaFormComponent],
+  imports: [CommonModule, FormsModule, DespesaFormComponent, CategoriaModalComponent],
   templateUrl: './despesa-list.component.html',
   styleUrls: ['./despesa-list.component.scss']
 })
@@ -20,6 +21,7 @@ export class DespesaListComponent implements OnInit, OnDestroy {
   infoMsg = '';
   confirmacaoExclusaoAberta = false;
   despesaParaExcluir: Despesa | null = null;
+  modalCategoriaAberto = false;
 
   pageNumber = 1;
   pageSize = 10;
@@ -194,6 +196,18 @@ export class DespesaListComponent implements OnInit, OnDestroy {
 
   nomeFormaPagamento(id?: number): string {
     return this.formasPagamento.find((f) => f.id === id)?.nome ?? '-';
+  }
+
+  abrirModalCategorias(): void {
+    this.modalCategoriaAberto = true;
+  }
+
+  fecharModalCategorias(): void {
+    this.modalCategoriaAberto = false;
+  }
+
+  aoAtualizarCategorias(): void {
+    this.carregar();
   }
 
   private isDespesaValida(item: unknown): item is Despesa {

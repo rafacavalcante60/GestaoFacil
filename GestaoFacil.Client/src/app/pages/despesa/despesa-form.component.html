@@ -53,16 +53,27 @@
     </select>
 
     <label class="muted">Categoria *</label>
-    <select
-      class="input"
-      [(ngModel)]="categoriaDespesaId"
-      name="categoriaDespesaId"
-      required
-    >
-      <option *ngFor="let c of categoriasDespesa" [value]="c.id">
-        {{ c.nome }}
-      </option>
-    </select>
+    <div style="display: flex; gap: 8px; align-items: center;">
+      <select
+        class="input"
+        [(ngModel)]="categoriaDespesaId"
+        name="categoriaDespesaId"
+        required
+        style="flex: 1;"
+      >
+        <option *ngFor="let c of categoriasDespesa" [value]="c.id">
+          {{ c.nome }}
+        </option>
+      </select>
+      <button
+        type="button"
+        class="btn-categoria-add"
+        (click)="abrirModalCategorias()"
+        title="Adicionar nova categoria"
+      >
+        +
+      </button>
+    </div>
 
     <label class="muted">Descrição</label>
     <textarea
@@ -85,4 +96,15 @@
       </button>
     </div>
   </form>
+
+  <!-- Modal de Categorias -->
+  <div class="modal-overlay-inner" *ngIf="modalCategoriaAberto" (click)="fecharModalCategorias()">
+    <div class="modal-content-inner" (click)="$event.stopPropagation()">
+      <app-categoria-modal
+        [tipo]="'despesa'"
+        (fechar)="fecharModalCategorias()"
+        (atualizar)="aoAtualizarCategorias()"
+      ></app-categoria-modal>
+    </div>
+  </div>
 </div>
