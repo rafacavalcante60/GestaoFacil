@@ -5,6 +5,8 @@ import { Router } from '@angular/router';
 import { Despesa } from '../../models/despesa.model';
 import { DespesaService } from './despesa.service';
 import { DespesaFormComponent } from './despesa-form.component';
+import { Categoria } from '../../models/categoria.model';
+import { CategoriaService } from '../../shared/categoria.service';
 import { CategoriaModalComponent } from '../../shared/categoria-modal/categoria-modal.component';
 
 @Component({
@@ -21,7 +23,6 @@ export class DespesaListComponent implements OnInit, OnDestroy {
   infoMsg = '';
   confirmacaoExclusaoAberta = false;
   despesaParaExcluir: Despesa | null = null;
-  modalCategoriaAberto = false;
 
   pageNumber = 1;
   pageSize = 10;
@@ -44,20 +45,17 @@ export class DespesaListComponent implements OnInit, OnDestroy {
     { id: 7, nome: 'Outro' }
   ];
 
-  categoriasDespesa = [
-    { id: 1, nome: 'Alimentacao' },
-    { id: 2, nome: 'Transporte' },
-    { id: 3, nome: 'Moradia' },
-    { id: 4, nome: 'Lazer' },
-    { id: 5, nome: 'Educacao' },
-    { id: 6, nome: 'Saude' },
-    { id: 7, nome: 'Outra' }
-  ];
+  categoriasDespesa: Categoria[] = [];
 
-  constructor(private svc: DespesaService, private router: Router) {}
+  constructor(
+    private svc: DespesaService,
+    private router: Router,
+    private categoriaService: CategoriaService
+  ) {}
 
   ngOnInit(): void {
     document.body.classList.add('fullscreen-layout');
+    this.carregarCategorias();
     this.carregar();
   }
 
@@ -125,8 +123,10 @@ export class DespesaListComponent implements OnInit, OnDestroy {
   }
 
   modalAberto = false;
+  modalCategoriaAberto = false;
   modoEdicao = false;
   despesaEditando: Despesa | null = null;
+  categoriaRefreshToken = 0;
 
   novaDespesa(): void {
     this.despesaEditando = null;
@@ -147,6 +147,7 @@ export class DespesaListComponent implements OnInit, OnDestroy {
 
   fecharModal(): void {
     this.modalAberto = false;
+    this.modalCategoriaAberto = false;
     this.despesaEditando = null;
     this.modoEdicao = false;
   }
@@ -157,6 +158,21 @@ export class DespesaListComponent implements OnInit, OnDestroy {
     if (mensagem) {
       this.infoMsg = mensagem;
     }
+    this.carregarCategorias();
+    this.carregar();
+  }
+
+  abrirModalCategorias(): void {
+    this.modalCategoriaAberto = true;
+  }
+
+  fecharModalCategorias(): void {
+    this.modalCategoriaAberto = false;
+  }
+
+  aoAtualizarCategorias(): void {
+    this.categoriaRefreshToken++;
+    this.carregarCategorias();
     this.carregar();
   }
 
@@ -198,21 +214,20 @@ export class DespesaListComponent implements OnInit, OnDestroy {
     return this.formasPagamento.find((f) => f.id === id)?.nome ?? '-';
   }
 
-  abrirModalCategorias(): void {
-    this.modalCategoriaAberto = true;
-  }
-
-  fecharModalCategorias(): void {
-    this.modalCategoriaAberto = false;
-  }
-
-  aoAtualizarCategorias(): void {
-    this.carregar();
-  }
-
   private isDespesaValida(item: unknown): item is Despesa {
     if (!item || typeof item !== 'object') return false;
     const despesa = item as Partial<Despesa>;
     return typeof despesa.id === 'number' && despesa.id > 0;
+  }
+
+  private carregarCategorias(): void {
+    this.categoriaService.getDespesas().subscribe({
+      next: (categorias) => {
+        this.categoriasDespesa = categorias.filter((categoria) => categoria.ativo !== false);
+      },
+      error: () => {
+        this.categoriasDespesa = [];
+      }
+    });
   }
 }

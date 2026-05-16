@@ -4,6 +4,9 @@ import { Router } from '@angular/router';
 import { MetaService } from './meta.service';
 import { Meta } from '../../models/meta.model';
 import { MetaFormComponent } from './meta-form.component';
+import { CategoriaService } from '../../shared/categoria.service';
+import { Categoria } from '../../models/categoria.model';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-meta-list',
@@ -20,28 +23,18 @@ export class MetaListComponent implements OnInit, OnDestroy {
   confirmacaoExclusaoAberta = false;
   metaParaExcluir: Meta | null = null;
 
-  categoriasDespesa = [
-    { id: 1, nome: 'Alimentação' },
-    { id: 2, nome: 'Transporte' },
-    { id: 3, nome: 'Moradia' },
-    { id: 4, nome: 'Lazer' },
-    { id: 5, nome: 'Educação' },
-    { id: 6, nome: 'Saúde' },
-    { id: 7, nome: 'Outra' }
-  ];
+  categoriasDespesa: Categoria[] = [];
+  categoriasReceita: Categoria[] = [];
 
-  categoriasReceita = [
-    { id: 1, nome: 'Salário' },
-    { id: 2, nome: 'Presente' },
-    { id: 3, nome: 'Venda' },
-    { id: 4, nome: 'Investimento' },
-    { id: 5, nome: 'Outros' }
-  ];
-
-  constructor(private svc: MetaService, private router: Router) {}
+  constructor(
+    private svc: MetaService,
+    private router: Router,
+    private categoriaService: CategoriaService
+  ) {}
 
   ngOnInit(): void {
     document.body.classList.add('fullscreen-layout');
+    this.carregarCategorias();
     this.carregar();
   }
 
@@ -93,6 +86,7 @@ export class MetaListComponent implements OnInit, OnDestroy {
     if (mensagem) {
       this.infoMsg = mensagem;
     }
+    this.carregarCategorias();
     this.carregar();
   }
 
@@ -154,5 +148,21 @@ export class MetaListComponent implements OnInit, OnDestroy {
       if (!meta.categoriaReceitaId) return 'Todas';
       return this.categoriasReceita.find(c => c.id === meta.categoriaReceitaId)?.nome ?? '-';
     }
+  }
+
+  private carregarCategorias(): void {
+    forkJoin({
+      despesas: this.categoriaService.getDespesas(),
+      receitas: this.categoriaService.getReceitas()
+    }).subscribe({
+      next: ({ despesas, receitas }) => {
+        this.categoriasDespesa = despesas.filter((categoria) => categoria.ativo !== false);
+        this.categoriasReceita = receitas.filter((categoria) => categoria.ativo !== false);
+      },
+      error: () => {
+        this.categoriasDespesa = [];
+        this.categoriasReceita = [];
+      }
+    });
   }
 }

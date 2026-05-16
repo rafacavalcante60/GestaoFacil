@@ -1,25 +1,27 @@
-import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ReceitaService } from './receita.service';
 import { Receita } from '../../models/receita.model';
 import { AuthService } from '../../auth/auth.service';
 import { LookupService } from '../../shared/lookup.service';
-import { CategoriaModalComponent } from '../../shared/categoria-modal/categoria-modal.component';
 import { CategoriaService } from '../../shared/categoria.service';
+import { Categoria } from '../../models/categoria.model';
 
 @Component({
   selector: 'app-receita-form',
   standalone: true,
-  imports: [CommonModule, FormsModule, CategoriaModalComponent],
+  imports: [CommonModule, FormsModule],
   templateUrl: './receita-form.component.html',
   styleUrls: ['./receita-form.component.scss']
 })
-export class ReceitaFormComponent implements OnInit {
+export class ReceitaFormComponent implements OnInit, OnChanges {
   @Input() receita: Receita | null = null;
   @Input() isEdit = false;
+  @Input() categoriaRefreshToken = 0;
   @Output() salvo = new EventEmitter<void>();
   @Output() cancelado = new EventEmitter<void>();
+  @Output() abrirCategorias = new EventEmitter<void>();
 
   nome: string = '';
   data = new Date().toISOString().substring(0, 10);
@@ -30,9 +32,7 @@ export class ReceitaFormComponent implements OnInit {
 
   errorMsg = '';
   formasPagamento;
-  categoriasReceita;
-  
-  modalCategoriaAberto = false;
+  categoriasReceita: Categoria[];
 
   constructor(
     private svc: ReceitaService,
@@ -44,6 +44,8 @@ export class ReceitaFormComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.carregarCategorias();
+
     if (this.receita && this.isEdit) {
       this.nome = this.receita.nome ?? '';
       this.data = this.receita.data ? this.receita.data.substring(0, 10) : new Date().toISOString().substring(0, 10);
@@ -51,6 +53,12 @@ export class ReceitaFormComponent implements OnInit {
       this.descricao = this.receita.descricao ?? '';
       this.categoriaReceitaId = this.receita.categoriaReceitaId ?? null;
       this.formaPagamentoId = this.receita.formaPagamentoId ?? null;
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['categoriaRefreshToken'] && !changes['categoriaRefreshToken'].firstChange) {
+      this.carregarCategorias();
     }
   }
 
@@ -104,19 +112,17 @@ export class ReceitaFormComponent implements OnInit {
   }
 
   abrirModalCategorias() {
-    this.modalCategoriaAberto = true;
+    this.abrirCategorias.emit();
   }
 
-  fecharModalCategorias() {
-    this.modalCategoriaAberto = false;
-  }
-
-  aoAtualizarCategorias() {
+  private carregarCategorias() {
     this.categoriaService.getReceitas().subscribe({
       next: (categorias) => {
-        this.categoriasReceita = categorias as any;
+        this.categoriasReceita = categorias.filter((categoria) => categoria.ativo !== false);
       },
-      error: (err) => console.error('Erro ao recarregar categorias:', err)
+      error: (err) => {
+        console.error('Erro ao recarregar categorias:', err);
+      }
     });
   }
 }

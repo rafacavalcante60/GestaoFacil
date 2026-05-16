@@ -5,6 +5,8 @@ import { Router } from '@angular/router';
 import { Receita } from '../../models/receita.model';
 import { ReceitaService } from './receita.service';
 import { ReceitaFormComponent } from './receita-form.component';
+import { Categoria } from '../../models/categoria.model';
+import { CategoriaService } from '../../shared/categoria.service';
 import { CategoriaModalComponent } from '../../shared/categoria-modal/categoria-modal.component';
 
 @Component({
@@ -21,7 +23,6 @@ export class ReceitaListComponent implements OnInit, OnDestroy {
   infoMsg = '';
   confirmacaoExclusaoAberta = false;
   receitaParaExcluir: Receita | null = null;
-  modalCategoriaAberto = false;
 
   pageNumber = 1;
   pageSize = 10;
@@ -44,18 +45,17 @@ export class ReceitaListComponent implements OnInit, OnDestroy {
     { id: 7, nome: 'Outro' }
   ];
 
-  categoriasReceita = [
-    { id: 1, nome: 'Salario' },
-    { id: 2, nome: 'Presente' },
-    { id: 3, nome: 'Venda' },
-    { id: 4, nome: 'Investimento' },
-    { id: 5, nome: 'Outros' }
-  ];
+  categoriasReceita: Categoria[] = [];
 
-  constructor(private svc: ReceitaService, private router: Router) {}
+  constructor(
+    private svc: ReceitaService,
+    private router: Router,
+    private categoriaService: CategoriaService
+  ) {}
 
   ngOnInit(): void {
     document.body.classList.add('fullscreen-layout');
+    this.carregarCategorias();
     this.carregar();
   }
 
@@ -123,8 +123,10 @@ export class ReceitaListComponent implements OnInit, OnDestroy {
   }
 
   modalAberto = false;
+  modalCategoriaAberto = false;
   modoEdicao = false;
   receitaEditando: Receita | null = null;
+  categoriaRefreshToken = 0;
 
   novaReceita(): void {
     this.receitaEditando = null;
@@ -145,6 +147,7 @@ export class ReceitaListComponent implements OnInit, OnDestroy {
 
   fecharModal(): void {
     this.modalAberto = false;
+    this.modalCategoriaAberto = false;
     this.receitaEditando = null;
     this.modoEdicao = false;
   }
@@ -155,6 +158,21 @@ export class ReceitaListComponent implements OnInit, OnDestroy {
     if (mensagem) {
       this.infoMsg = mensagem;
     }
+    this.carregarCategorias();
+    this.carregar();
+  }
+
+  abrirModalCategorias(): void {
+    this.modalCategoriaAberto = true;
+  }
+
+  fecharModalCategorias(): void {
+    this.modalCategoriaAberto = false;
+  }
+
+  aoAtualizarCategorias(): void {
+    this.categoriaRefreshToken++;
+    this.carregarCategorias();
     this.carregar();
   }
 
@@ -196,21 +214,20 @@ export class ReceitaListComponent implements OnInit, OnDestroy {
     return this.formasPagamento.find((f) => f.id === id)?.nome ?? '-';
   }
 
-  abrirModalCategorias(): void {
-    this.modalCategoriaAberto = true;
-  }
-
-  fecharModalCategorias(): void {
-    this.modalCategoriaAberto = false;
-  }
-
-  aoAtualizarCategorias(): void {
-    this.carregar();
-  }
-
   private isReceitaValida(item: unknown): item is Receita {
     if (!item || typeof item !== 'object') return false;
     const receita = item as Partial<Receita>;
     return typeof receita.id === 'number' && receita.id > 0;
+  }
+
+  private carregarCategorias(): void {
+    this.categoriaService.getReceitas().subscribe({
+      next: (categorias) => {
+        this.categoriasReceita = categorias.filter((categoria) => categoria.ativo !== false);
+      },
+      error: () => {
+        this.categoriasReceita = [];
+      }
+    });
   }
 }

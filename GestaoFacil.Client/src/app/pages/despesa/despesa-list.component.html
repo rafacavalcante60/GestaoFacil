@@ -10,11 +10,6 @@
             Despesas
           </h1>
         </div>
-        <div class="head-right">
-          <button class="btn btn-categories" type="button" (click)="abrirModalCategorias()" title="Gerenciar categorias de despesa">
-            ⚙️ Categorias
-          </button>
-        </div>
       </div>
 
       <div class="filters-row">
@@ -100,13 +95,23 @@
 
   <!-- MODAL -->
   <div class="modal-overlay" *ngIf="modalAberto" (click)="fecharModal()">
-    <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-content modal-content-stack" (click)="$event.stopPropagation()">
       <app-despesa-form
         [despesa]="despesaEditando"
         [isEdit]="modoEdicao"
+        [categoriaRefreshToken]="categoriaRefreshToken"
+        (abrirCategorias)="abrirModalCategorias()"
         (salvo)="aoSalvarModal()"
         (cancelado)="fecharModal()"
       ></app-despesa-form>
+
+      <div class="side-category-modal" *ngIf="modalCategoriaAberto">
+        <app-categoria-modal
+          [tipo]="'despesa'"
+          (fechar)="fecharModalCategorias()"
+          (atualizar)="aoAtualizarCategorias()"
+        ></app-categoria-modal>
+      </div>
     </div>
   </div>
 
@@ -125,14 +130,4 @@
     </div>
   </div>
 
-  <!-- Modal de Categorias -->
-  <div class="modal-overlay" *ngIf="modalCategoriaAberto" (click)="fecharModalCategorias()">
-    <div class="modal-content" (click)="$event.stopPropagation()">
-      <app-categoria-modal
-        [tipo]="'despesa'"
-        (fechar)="fecharModalCategorias()"
-        (atualizar)="aoAtualizarCategorias()"
-      ></app-categoria-modal>
-    </div>
-  </div>
 </main>

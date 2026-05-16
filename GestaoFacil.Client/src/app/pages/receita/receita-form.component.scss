@@ -5,9 +5,45 @@
 .modal-form-container {
   background: var(--peach);
   border-radius: var(--card-radius);
-  padding: 30px;
+  padding: 24px;
   max-width: 500px;
   width: 100%;
+  max-height: min(86vh, 720px);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  overflow-y: auto;
+  position: relative;
+  overflow-x: visible;
+  z-index: 2;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.modal-close-btn {
+  flex-shrink: 0;
+  background: transparent;
+  border: none;
+  color: var(--orange);
+  font-size: 30px;
+  line-height: 1;
+  cursor: pointer;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+}
+
+.modal-close-btn:hover {
+  background: rgba(0, 0, 0, 0.08);
 }
 
 .brand-small {
@@ -29,12 +65,12 @@
 
 .form-centered {
   width: 100%;
-  max-width: 400px;
+  max-width: 100%;
   display: flex;
   flex-direction: column;
   gap: 12px;
   text-align: left;
-  margin: 0 auto;
+  margin: 0;
 }
 
 .input, select, textarea {
@@ -78,9 +114,20 @@
 }
 
 .h1 {
-  font-size: 28px;
+  color: var(--orange);
+  font-size: 26px;
   font-weight: 700;
   margin: 0;
+}
+
+.categoria-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.categoria-select {
+  flex: 1;
 }
 
 .btn-categoria-add {
@@ -103,4 +150,12 @@
 .btn-categoria-add:hover {
   background-color: #ff8c3a;
   transform: scale(1.05);
+}
+
+.form-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+  justify-content: flex-start;
+  flex-wrap: wrap;
 }

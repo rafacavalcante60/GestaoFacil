@@ -34,11 +34,9 @@ export class CategoriaModalComponent implements OnInit {
     const obs$ = this.tipo === 'despesa' ? this.svc.getDespesas() : this.svc.getReceitas();
     obs$.subscribe({
       next: (data) => {
-        console.log('Categorias carregadas:', data);
         this.categorias = data.filter(c => c.ativo !== false);
       },
       error: (err) => {
-        console.error('Erro ao carregar categorias:', err);
         this.errorMsg = AuthService.parseError(err, 'Erro ao carregar categorias.');
       }
     });
@@ -54,22 +52,16 @@ export class CategoriaModalComponent implements OnInit {
     }
 
     const dto: Categoria = { nome: this.novaCategoria.trim() };
-    console.log('Adicionando categoria:', { tipo: this.tipo, dto });
-    
     const obs$ = this.tipo === 'despesa' ? this.svc.createDespesa(dto) : this.svc.createReceita(dto);
 
     obs$.subscribe({
-      next: (response) => {
-        console.log('Categoria criada com sucesso:', response);
+      next: () => {
         this.successMsg = 'Categoria criada com sucesso!';
         this.novaCategoria = '';
-        setTimeout(() => {
-          this.carregarCategorias();
-          this.atualizar.emit();
-        }, 500);
+        this.carregarCategorias();
+        this.atualizar.emit();
       },
       error: (err) => {
-        console.error('Erro ao criar categoria:', err);
         this.errorMsg = AuthService.parseError(err, 'Erro ao criar categoria.');
       }
     });
@@ -107,10 +99,8 @@ export class CategoriaModalComponent implements OnInit {
         this.successMsg = 'Categoria atualizada com sucesso!';
         this.editandoId = null;
         this.editandoNome = '';
-        setTimeout(() => {
-          this.carregarCategorias();
-          this.atualizar.emit();
-        }, 500);
+        this.carregarCategorias();
+        this.atualizar.emit();
       },
       error: (err) => {
         this.errorMsg = AuthService.parseError(err, 'Erro ao atualizar categoria.');
@@ -134,10 +124,8 @@ export class CategoriaModalComponent implements OnInit {
     obs$.subscribe({
       next: () => {
         this.successMsg = 'Categoria removida com sucesso!';
-        setTimeout(() => {
-          this.carregarCategorias();
-          this.atualizar.emit();
-        }, 500);
+        this.carregarCategorias();
+        this.atualizar.emit();
       },
       error: (err) => {
         this.errorMsg = AuthService.parseError(err, 'Erro ao deletar categoria.');

@@ -4,7 +4,9 @@ import { FormsModule } from '@angular/forms';
 import { MetaService } from './meta.service';
 import { Meta } from '../../models/meta.model';
 import { AuthService } from '../../auth/auth.service';
-import { LookupService } from '../../shared/lookup.service';
+import { CategoriaService } from '../../shared/categoria.service';
+import { Categoria } from '../../models/categoria.model';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-meta-form',
@@ -29,18 +31,17 @@ export class MetaFormComponent implements OnInit {
   ativo = true;
 
   errorMsg = '';
-  categoriasDespesa;
-  categoriasReceita;
+  categoriasDespesa: Categoria[] = [];
+  categoriasReceita: Categoria[] = [];
 
   constructor(
     private svc: MetaService,
-    private lookup: LookupService
-  ) {
-    this.categoriasDespesa = this.lookup.categoriasDespesa;
-    this.categoriasReceita = this.lookup.categoriasReceita;
-  }
+    private categoriaService: CategoriaService
+  ) {}
 
   ngOnInit() {
+    this.carregarCategorias();
+
     if (this.meta && this.isEdit) {
       this.nome = this.meta.nome;
       this.valorMeta = this.meta.valorMeta;
@@ -109,5 +110,20 @@ export class MetaFormComponent implements OnInit {
 
   cancelar() {
     this.cancelado.emit();
+  }
+
+  private carregarCategorias() {
+    forkJoin({
+      despesas: this.categoriaService.getDespesas(),
+      receitas: this.categoriaService.getReceitas()
+    }).subscribe({
+      next: ({ despesas, receitas }) => {
+        this.categoriasDespesa = despesas.filter((categoria) => categoria.ativo !== false);
+        this.categoriasReceita = receitas.filter((categoria) => categoria.ativo !== false);
+      },
+      error: (err) => {
+        this.errorMsg = AuthService.parseError(err, 'Erro ao carregar categorias.');
+      }
+    });
   }
 }

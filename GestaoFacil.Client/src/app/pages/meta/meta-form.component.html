@@ -1,9 +1,9 @@
 <div class="modal-form-container">
-  <button type="button" class="modal-close-btn" (click)="cancelar()" aria-label="Fechar modal">×</button>
-  <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px; justify-content: center">
-    <h1 class="h1" style="color: var(--orange)">
+  <div class="modal-header">
+    <h1 class="h1">
       {{ isEdit ? 'Editar Meta' : 'Nova Meta' }}
     </h1>
+    <button type="button" class="modal-close-btn" (click)="cancelar()" aria-label="Fechar modal">×</button>
   </div>
 
   <form class="form-centered" (ngSubmit)="salvar()" aria-label="Formulário de meta financeira">
@@ -69,14 +69,14 @@
       required
     />
 
-    <label class="muted" style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+    <label class="muted checkbox-label">
       <input type="checkbox" [(ngModel)]="ativo" name="ativo" />
       Meta ativa
     </label>
 
     <p class="error" *ngIf="errorMsg">{{ errorMsg }}</p>
 
-    <div style="display: flex; gap: 12px; margin-top: 8px; justify-content: flex-start">
+    <div class="form-actions">
       <button class="btn" type="submit">Salvar</button>
       <button class="btn-limpar" type="button" (click)="limpar()">Limpar</button>
       <button class="btn" type="button" (click)="cancelar()">Cancelar</button>
