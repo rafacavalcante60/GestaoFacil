@@ -55,12 +55,28 @@
   border-collapse: collapse;
 }
 
+.table thead tr {
+  display: grid;
+  grid-template-columns: 1fr 10ch 13ch 20ch 18ch 180px;
+  gap: 0;
+}
+
+.table tbody tr {
+  display: grid;
+  grid-template-columns: 1fr 13ch 13ch 20ch 18ch 180px;
+  gap: 0;
+}
+
 .table th,
 .table td {
-  padding: 12px 10px;
+  padding: 12px 4px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-  text-align: left;
   font-size: 14px;
+  vertical-align: middle;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: left;
 }
 
 .table th {
@@ -68,29 +84,50 @@
   text-transform: uppercase;
   letter-spacing: 0.02em;
   color: rgba(0, 0, 0, 0.68);
+  font-weight: 600;
+  text-align: left;
 }
 
 .table th:nth-child(1),
 .table td:nth-child(1) {
   /* Nome column */
-  min-width: 350px;
-  max-width: 500px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  text-align: left;
+}
+
+.table th:nth-child(2),
+.table td:nth-child(2) {
+  /* Data column - 10ch */
+  text-align: left;
+}
+
+.table th:nth-child(3),
+.table td:nth-child(3) {
+  /* Valor column - 13ch */
+  text-align: left;
+}
+
+.table th:nth-child(4),
+.table td:nth-child(4) {
+  /* Categoria column - 20ch */
+  text-align: left;
+}
+
+.table th:nth-child(5),
+.table td:nth-child(5) {
+  /* Pagamento column - 18ch */
+  text-align: left;
 }
 
 .table th:nth-child(6),
 .table td:nth-child(6) {
   /* Acoes column */
-  width: auto;
-  min-width: 40px;
-  white-space: nowrap;
+  text-align: center;
 }
 
 .actions {
   display: flex;
   gap: 8px;
+  justify-content: flex-end;
 }
 
 .btn-small {
