@@ -18,7 +18,7 @@ namespace GestaoFacil.Server.DTOs.Despesa
         public decimal Valor { get; set; }
 
         [Required(ErrorMessage = "A categoria é obrigatória.")]
-        [Range(1, 7, ErrorMessage = "Selecione uma categoria válida.")]
+        [Range(1, int.MaxValue, ErrorMessage = "Selecione uma categoria válida.")]
         public int CategoriaDespesaId { get; set; }
 
         [Required(ErrorMessage = "A forma de pagamento é obrigatória.")]
