@@ -184,6 +184,36 @@
   }
 }
 
+@media (max-width: 640px) {
+  .filters-row {
+    grid-template-columns: 1fr;
+    align-items: stretch;
+  }
+
+  .page-size {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .bottom-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .bottom-actions .btn {
+    width: 100%;
+  }
+
+  .actions {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+
+  .admin-actions {
+    flex-wrap: wrap;
+  }
+}
+
 .modal-overlay {
   position: fixed;
   top: 0;

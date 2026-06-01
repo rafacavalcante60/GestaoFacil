@@ -7,6 +7,21 @@
   padding-top: 28px;
 }
 
+.menu-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+}
+
+.menu-title {
+  flex: 1;
+  text-align: center;
+  font-size: 5rem;
+  line-height: 1.05;
+  margin: 0;
+}
+
 #menu-title{
   color: #F16618;
 }
@@ -132,6 +147,23 @@
 }
 
 @media (max-width: 640px) {
+  .menu-header {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .top-actions {
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .menu-title {
+    flex: 0 0 100%;
+    text-align: center;
+    font-size: clamp(2.4rem, 8vw, 3.2rem);
+  }
+
   .menu-grid {
     grid-template-columns: 1fr;
     gap: 16px;

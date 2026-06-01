@@ -17,6 +17,16 @@
 
       <div class="table-wrap">
         <table class="table">
+          <colgroup>
+            <col class="col-nome" />
+            <col class="col-default" />
+            <col class="col-default" />
+            <col class="col-periodo" />
+            <col class="col-default" />
+            <col class="col-default" />
+            <col class="col-default" />
+            <col class="col-default" />
+          </colgroup>
           <thead>
             <tr>
               <th>Nome</th>
@@ -26,7 +36,7 @@
               <th>Meta</th>
               <th>Progresso</th>
               <th>Status</th>
-              <th>Ações</th>
+              <th class="actions-head">Ações</th>
             </tr>
           </thead>
           <tbody>
@@ -60,8 +70,28 @@
                 </span>
               </td>
               <td class="actions">
-                <button class="btn btn-small btn-yellow" type="button" (click)="editar(item)">Editar</button>
-                <button class="btn btn-small btn-danger" type="button" (click)="excluir(item)">Excluir</button>
+                <button
+                  class="btn btn-small btn-yellow btn-icon"
+                  type="button"
+                  (click)="editar(item)"
+                  aria-label="Editar"
+                  title="Editar"
+                >
+                  <svg class="btn-icon__svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"></path>
+                  </svg>
+                </button>
+                <button
+                  class="btn btn-small btn-danger btn-icon"
+                  type="button"
+                  (click)="excluir(item)"
+                  aria-label="Excluir"
+                  title="Excluir"
+                >
+                  <svg class="btn-icon__svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zm13-15h-3.5l-1-1h-5l-1 1H5v2h14V4z"></path>
+                  </svg>
+                </button>
               </td>
             </tr>
             <tr *ngIf="!loading && metas.length === 0">
