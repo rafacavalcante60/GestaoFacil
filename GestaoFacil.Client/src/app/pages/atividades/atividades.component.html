@@ -1,9 +1,9 @@
 <main class="app-container fullscreen">
   <section class="card card--menu" aria-labelledby="menu-title">
     <div class="panel--light" style="align-items:flex-start; padding-top:28px;">
-      <div style="display:flex; align-items:center; gap:14px; width:100%;">
+      <div class="menu-header">
         <div class="brand"><img src="assets/img/monkey.png" alt="logo" /></div>
-        <h1 class="h1" id="menu-title" style="flex:1; text-align:center; font-size:5rem;"><span style="color:white; text-shadow: -2px -2px 0 #ff6b35, 2px -2px 0 #ff6b35, -2px 2px 0 #ff6b35, 2px 2px 0 #ff6b35, -2px 0 0 #ff6b35, 2px 0 0 #ff6b35, 0 -2px 0 #ff6b35, 0 2px 0 #ff6b35;">Gestão</span><span style="color:#ff6b35;">Fácil</span></h1>
+        <h1 class="h1 menu-title" id="menu-title"><span style="color:white; text-shadow: -2px -2px 0 #ff6b35, 2px -2px 0 #ff6b35, -2px 2px 0 #ff6b35, 2px 2px 0 #ff6b35, -2px 0 0 #ff6b35, 2px 0 0 #ff6b35, 0 -2px 0 #ff6b35, 0 2px 0 #ff6b35;">Gestão</span><span style="color:#ff6b35;">Fácil</span></h1>
         <div class="top-actions">
           <button class="btn btn--admin-top" type="button" *ngIf="isAdmin" (click)="goToAdminUsuarios()">Admin</button>
           <button class="btn btn--logout" type="button" (click)="logout()">Deslogar</button>
