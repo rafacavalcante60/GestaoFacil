@@ -20,8 +20,8 @@
 
     <label class="muted">Tipo *</label>
     <select class="input" [(ngModel)]="tipo" name="tipo" required>
-      <option [value]="1">Despesa (limite de gasto)</option>
-      <option [value]="2">Receita (meta de entrada)</option>
+      <option [ngValue]="1">Despesa (limite de gasto)</option>
+      <option [ngValue]="2">Receita (meta de entrada)</option>
     </select>
 
     <label class="muted">Valor da Meta (R$) *</label>
@@ -38,16 +38,16 @@
     <ng-container *ngIf="tipo == 1">
       <label class="muted">Categoria de Despesa</label>
       <select class="input" [(ngModel)]="categoriaDespesaId" name="categoriaDespesaId">
-        <option [value]="null">Todas as categorias</option>
-        <option *ngFor="let c of categoriasDespesa" [value]="c.id">{{ c.nome }}</option>
+        <option [ngValue]="null">Todas as categorias</option>
+        <option *ngFor="let c of categoriasDespesa" [ngValue]="c.id">{{ c.nome }}</option>
       </select>
     </ng-container>
 
     <ng-container *ngIf="tipo == 2">
       <label class="muted">Categoria de Receita</label>
       <select class="input" [(ngModel)]="categoriaReceitaId" name="categoriaReceitaId">
-        <option [value]="null">Todas as categorias</option>
-        <option *ngFor="let c of categoriasReceita" [value]="c.id">{{ c.nome }}</option>
+        <option [ngValue]="null">Todas as categorias</option>
+        <option *ngFor="let c of categoriasReceita" [ngValue]="c.id">{{ c.nome }}</option>
       </select>
     </ng-container>
 

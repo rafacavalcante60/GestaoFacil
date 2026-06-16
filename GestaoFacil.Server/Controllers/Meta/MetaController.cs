@@ -46,7 +46,7 @@ namespace GestaoFacil.Server.Controllers.Meta
         }
 
         [HttpPost]
-        public async Task<ActionResult<ResponseModel<MetaDto>>> Create(MetaCreateDto dto)
+        public async Task<ActionResult<ResponseModel<MetaDto>>> Create([FromBody] MetaCreateDto dto)
         {
             var result = await _metaService.CreateAsync(dto, UsuarioId);
 
@@ -59,7 +59,7 @@ namespace GestaoFacil.Server.Controllers.Meta
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<ResponseModel<bool>>> Update(int id, MetaUpdateDto dto)
+        public async Task<ActionResult<ResponseModel<bool>>> Update(int id, [FromBody] MetaUpdateDto dto)
         {
             if (id != dto.Id)
             {
