@@ -72,12 +72,14 @@ export class MetaFormComponent implements OnInit {
       return;
     }
 
+    const tipo = Number(this.tipo) as 1 | 2;
+
     const payload: Partial<Meta> = {
       nome: this.nome,
       valorMeta: Number(this.valorMeta),
-      tipo: this.tipo,
-      categoriaDespesaId: this.tipo === 1 ? (this.categoriaDespesaId ?? undefined) : undefined,
-      categoriaReceitaId: this.tipo === 2 ? (this.categoriaReceitaId ?? undefined) : undefined,
+      tipo,
+      categoriaDespesaId: tipo === 1 ? (this.categoriaDespesaId ?? undefined) : undefined,
+      categoriaReceitaId: tipo === 2 ? (this.categoriaReceitaId ?? undefined) : undefined,
       dataInicio: new Date(this.dataInicio).toISOString(),
       dataFim: new Date(this.dataFim).toISOString(),
       ativo: this.ativo
