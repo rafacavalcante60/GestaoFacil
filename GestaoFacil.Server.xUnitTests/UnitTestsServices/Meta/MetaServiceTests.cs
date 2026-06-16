@@ -125,7 +125,7 @@ namespace GestaoFacil.Server.xUnitTests.UnitTestsServices.Meta
             result.Status.Should().BeTrue();
             result.Dados!.ValorAtual.Should().Be(250m);
             result.Dados.Percentual.Should().Be(50m);
-            result.Dados.StatusMeta.Should().Be("no_limite");
+            result.Dados.StatusMeta.Should().Be("andamento");
         }
 
         [Fact]
