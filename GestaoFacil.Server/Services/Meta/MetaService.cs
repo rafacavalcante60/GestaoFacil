@@ -148,7 +148,7 @@ namespace GestaoFacil.Server.Services.Meta
             }
             else
             {
-                status = percentual >= 100 ? "atingida" : percentual >= 50 ? "em_andamento" : "abaixo";
+                status = percentual >= 100 ? "atingida" : percentual >= 50 ? "andamento" : "abaixo";
             }
 
             var dto = _mapper.Map<MetaDto>(meta);
