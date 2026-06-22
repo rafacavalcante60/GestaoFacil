@@ -12,19 +12,30 @@
     </div>
 
     <aside class="panel--light cadastro-left" id="cadastro-title" style="align-items:flex-start;">
-      <h1 class="h1" style="color:var(--orange);">Criando Cadastro</h1>
-      <p class="sub">Crie sua conta para começar a controlar suas finanças com praticidade e segurança. Leva menos de um minuto!</p>
+      <ng-container *ngIf="!success">
+        <h1 class="h1" style="color:var(--orange);">Criando Cadastro</h1>
+        <p class="sub">Crie sua conta para começar a controlar suas finanças com praticidade e segurança. Leva menos de um minuto!</p>
 
-      <form class="form" aria-label="Formulário de cadastro" (ngSubmit)="submit()">
-        <input class="input" type="text" placeholder="Nome" [(ngModel)]="nome" name="nome" [disabled]="isSubmitting" />
-        <input class="input" type="text" placeholder="Login/E-mail" [(ngModel)]="email" name="email" [disabled]="isSubmitting" />
-        <input class="input" type="password" placeholder="Senha" [(ngModel)]="senha" name="senha" [disabled]="isSubmitting" />
-        <input class="input" type="password" placeholder="Confirmar senha" [(ngModel)]="senhaConfirm" name="senhaConfirm" [disabled]="isSubmitting" />
-        <div *ngIf="errorMsg" class="error-msg">{{ errorMsg }}</div>
-        <button class="btn" type="submit" [disabled]="isSubmitting">
-          {{ isSubmitting ? 'Enviando...' : 'Confirmar' }}
-        </button>
-      </form>      
+        <form class="form" aria-label="Formulário de cadastro" (ngSubmit)="submit()">
+          <input class="input" type="text" placeholder="Nome" [(ngModel)]="nome" name="nome" [disabled]="isSubmitting" />
+          <input class="input" type="text" placeholder="Login/E-mail" [(ngModel)]="email" name="email" [disabled]="isSubmitting" />
+          <input class="input" type="password" placeholder="Senha" [(ngModel)]="senha" name="senha" [disabled]="isSubmitting" />
+          <input class="input" type="password" placeholder="Confirmar senha" [(ngModel)]="senhaConfirm" name="senhaConfirm" [disabled]="isSubmitting" />
+          <div *ngIf="errorMsg" class="error-msg">{{ errorMsg }}</div>
+          <button class="btn" type="submit" [disabled]="isSubmitting">
+            {{ isSubmitting ? 'Enviando...' : 'Confirmar' }}
+          </button>
+        </form>
+      </ng-container>
+
+      <ng-container *ngIf="success">
+        <div class="success-state">
+          <div class="success-icon">✓</div>
+          <h1 class="h1" style="color:var(--orange);">Cadastro realizado!</h1>
+          <p class="sub">Sua conta foi criada com sucesso. Agora é só entrar e começar a organizar suas finanças.</p>
+          <button class="btn" type="button" (click)="goToLogin()">Ir para o login</button>
+        </div>
+      </ng-container>
     </aside>
   </section>
 </main>
