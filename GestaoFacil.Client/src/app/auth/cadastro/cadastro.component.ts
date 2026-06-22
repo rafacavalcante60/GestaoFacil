@@ -14,12 +14,13 @@ import { finalize } from 'rxjs';
 })
 export class CadastroComponent implements OnInit, OnDestroy {
   //variaveis
-  nome = ''; 
+  nome = '';
   email = '';
   senha = '';
   senhaConfirm = '';
   errorMsg = '';
   isSubmitting = false;
+  success = false;
 
   //injecao de dependencia
   constructor(private router: Router, 
@@ -60,8 +61,7 @@ export class CadastroComponent implements OnInit, OnDestroy {
       .pipe(finalize(() => this.isSubmitting = false))
       .subscribe({
         next: () => {
-          alert("Cadastro realizado!");
-          this.router.navigate(['/auth/login']);
+          this.success = true;
         },
         error: (err) => {
           this.errorMsg = AuthService.parseError(err, 'Erro ao cadastrar. Tente novamente.');
