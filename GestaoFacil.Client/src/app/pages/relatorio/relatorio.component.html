@@ -13,7 +13,7 @@
         <div class="rel-filters">
           <div class="filter-item">
             <label class="filter-label">Tipo</label>
-            <select class="input" [(ngModel)]="filtros.tipo">
+            <select class="input" [(ngModel)]="filtros.tipo" (ngModelChange)="onTipoChange()">
               <option value="ambos">Ambos</option>
               <option value="despesa">Despesas</option>
               <option value="receita">Receitas</option>
@@ -34,7 +34,7 @@
             <label class="filter-label">Categoria</label>
             <select class="input" [(ngModel)]="filtros.categoriaId">
               <option [ngValue]="null">Todas</option>
-              <option *ngFor="let c of categorias" [ngValue]="c.id">{{ c.nome }}</option>
+              <option *ngFor="let c of categoriasDisponiveis" [ngValue]="c.id">{{ c.nome }}</option>
             </select>
           </div>
 
