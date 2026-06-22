@@ -7,6 +7,9 @@ import { ChartData, ChartOptions } from 'chart.js';
 import '../../shared/chart-config';
 import { CHART_COLORS, categoryPalette } from '../../shared/chart-colors';
 import { ReportService } from './report.service';
+import { LookupService, LookupItem } from '../../shared/lookup.service';
+import { CategoriaService } from '../../shared/categoria.service';
+import { Categoria } from '../../models/categoria.model';
 
 const brlAxisFormatter = new Intl.NumberFormat('pt-BR', {
   style: 'currency',
@@ -49,17 +52,19 @@ export class RelatorioComponent implements OnInit, OnDestroy {
     categoriaId: null as number | null,
     formaPagamentoId: null as number | null
   };
-  categorias = [
-    { id: 1, nome: 'Alimentação' },
-    { id: 2, nome: 'Transporte' },
-    { id: 3, nome: 'Moradia' }
-  ];
 
-  formasPagamento = [
-    { id: 1, nome: 'Dinheiro' },
-    { id: 2, nome: 'Cartão' },
-    { id: 4, nome: 'Pix' }
-  ];
+  categoriasDespesa: Categoria[] = [];
+  categoriasReceita: Categoria[] = [];
+
+  get categoriasDisponiveis(): Categoria[] {
+    if (this.filtros.tipo === 'despesa') return this.categoriasDespesa;
+    if (this.filtros.tipo === 'receita') return this.categoriasReceita;
+    return [];
+  }
+
+  get formasPagamento(): LookupItem[] {
+    return this.lookup.formasPagamento;
+  }
 
   // dados da API
   resumo: any = null;
@@ -164,10 +169,24 @@ export class RelatorioComponent implements OnInit, OnDestroy {
     }
   };
 
-  constructor(private svc: ReportService, private router: Router) {}
+  constructor(private svc: ReportService, private router: Router, private lookup: LookupService, private categoriaService: CategoriaService) {}
 
   ngOnInit() {
     document.body.classList.add('fullscreen-layout');
+    this.categoriaService.getDespesas().subscribe({ next: list => this.categoriasDespesa = list });
+    this.categoriaService.getReceitas().subscribe({ next: list => this.categoriasReceita = list });
+  }
+
+  onTipoChange() {
+    this.filtros.categoriaId = null;
+  }
+
+  private buildFilters() {
+    const { inicio, fim } = this.buildQueryForRange();
+    const fp = this.filtros.formaPagamentoId ?? undefined;
+    const catDesp = this.filtros.tipo === 'despesa' ? (this.filtros.categoriaId ?? undefined) : undefined;
+    const catRec  = this.filtros.tipo === 'receita' ? (this.filtros.categoriaId ?? undefined) : undefined;
+    return { inicio, fim, formaPagamentoId: fp, categoriaDespesaId: catDesp, categoriaReceitaId: catRec };
   }
 
   ngOnDestroy() {
@@ -195,7 +214,7 @@ export class RelatorioComponent implements OnInit, OnDestroy {
   }
 
   gerarRelatorio() {
-    const q = this.buildQueryForRange();
+    const q = this.buildFilters();
 
     // resumo
     this.resumoLoaded = false;
@@ -213,7 +232,7 @@ export class RelatorioComponent implements OnInit, OnDestroy {
 
     // despesas por categoria
     this.porCategoriaLoaded = false;
-    this.svc.categoria({ ...q, despesas: true }).subscribe({
+    this.svc.categoria({ ...q, despesas: true, categoriaId: q.categoriaDespesaId }).subscribe({
       next: r => {
         this.porCategoria = r;
         this.porCategoriaLoaded = true;
@@ -224,7 +243,7 @@ export class RelatorioComponent implements OnInit, OnDestroy {
 
     // receitas por categoria
     this.porCategoriaReceitaLoaded = false;
-    this.svc.categoria({ ...q, despesas: false }).subscribe({
+    this.svc.categoria({ ...q, despesas: false, categoriaId: q.categoriaReceitaId }).subscribe({
       next: r => {
         this.porCategoriaReceita = r;
         this.porCategoriaReceitaLoaded = true;
@@ -253,7 +272,7 @@ export class RelatorioComponent implements OnInit, OnDestroy {
     const mesFim    = dataFim.getMonth()    + 1;
     const anoFim    = dataFim.getFullYear();
 
-    this.svc.mensal({ ano: this.anoSelecionado }).subscribe({
+    this.svc.mensal({ ano: this.anoSelecionado, ...q }).subscribe({
       next: r => {
         this.mensal = r.filter(m => {
           const temMovimento = m.totalReceitas > 0 || m.totalDespesas > 0;
@@ -272,10 +291,10 @@ export class RelatorioComponent implements OnInit, OnDestroy {
   }
 
   atualizar() { this.gerarRelatorio(); }
-  atualizarResumo() { this.svc.resumo(this.buildQueryForRange()).subscribe({ next: r => this.resumo = r }); }
-  atualizarCategoria() { this.svc.categoria({ ...this.buildQueryForRange(), despesas: true }).subscribe({ next: r => this.porCategoria = r }); }
-  atualizarFluxo() { this.svc.fluxo(this.buildQueryForRange()).subscribe({ next: r => this.fluxo = r }); }
-  atualizarMensal() { this.svc.mensal({ ano: this.anoSelecionado }).subscribe({ next: r => this.mensal = r }); }
+  atualizarResumo() { this.svc.resumo(this.buildFilters()).subscribe({ next: r => this.resumo = r }); }
+  atualizarCategoria() { const q = this.buildFilters(); this.svc.categoria({ ...q, despesas: true, categoriaId: q.categoriaDespesaId }).subscribe({ next: r => this.porCategoria = r }); }
+  atualizarFluxo() { this.svc.fluxo(this.buildFilters()).subscribe({ next: r => this.fluxo = r }); }
+  atualizarMensal() { this.svc.mensal({ ano: this.anoSelecionado, ...this.buildFilters() }).subscribe({ next: r => this.mensal = r }); }
 
   exportar() {
     const qRange = this.buildQueryForRange();

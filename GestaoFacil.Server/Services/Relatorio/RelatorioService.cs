@@ -19,7 +19,7 @@ namespace GestaoFacil.Server.Services.Relatorio
             _logger = logger;
         }
 
-        public async Task<ResponseModel<ResumoFinanceiroDto>> ObterResumoFinanceiroAsync(int usuarioId, DateTime? inicio, DateTime? fim)
+        public async Task<ResponseModel<ResumoFinanceiroDto>> ObterResumoFinanceiroAsync(int usuarioId, DateTime? inicio, DateTime? fim, int? categoriaDespesaId = null, int? categoriaReceitaId = null, int? formaPagamentoId = null)
         {
             if (inicio.HasValue && fim.HasValue && inicio > fim)
             {
@@ -27,8 +27,8 @@ namespace GestaoFacil.Server.Services.Relatorio
                 return ResponseHelper.Falha<ResumoFinanceiroDto>("A data inicial não pode ser maior que a data final.");
             }
 
-            var despesas = await _despesaRepo.FiltrarAsync(usuarioId, new DespesaFiltroDto { DataInicial = inicio, DataFinal = fim });
-            var receitas = await _receitaRepo.FiltrarAsync(usuarioId, new ReceitaFiltroDto { DataInicial = inicio, DataFinal = fim });
+            var despesas = await _despesaRepo.FiltrarAsync(usuarioId, new DespesaFiltroDto { DataInicial = inicio, DataFinal = fim, CategoriaDespesaId = categoriaDespesaId, FormaPagamentoId = formaPagamentoId });
+            var receitas = await _receitaRepo.FiltrarAsync(usuarioId, new ReceitaFiltroDto { DataInicial = inicio, DataFinal = fim, CategoriaReceitaId = categoriaReceitaId, FormaPagamentoId = formaPagamentoId });
 
             var resumo = new ResumoFinanceiroDto
             {
@@ -39,7 +39,7 @@ namespace GestaoFacil.Server.Services.Relatorio
             return ResponseHelper.Sucesso(resumo, "Resumo financeiro calculado com sucesso.");
         }
 
-        public async Task<ResponseModel<List<CategoriaResumoDto>>> ObterResumoPorCategoriaAsync(int usuarioId, DateTime? inicio, DateTime? fim, bool despesas = true)
+        public async Task<ResponseModel<List<CategoriaResumoDto>>> ObterResumoPorCategoriaAsync(int usuarioId, DateTime? inicio, DateTime? fim, bool despesas = true, int? categoriaId = null, int? formaPagamentoId = null)
         {
             if (inicio.HasValue && fim.HasValue && inicio > fim)
             {
@@ -49,7 +49,7 @@ namespace GestaoFacil.Server.Services.Relatorio
 
             if (despesas)
             {
-                var lista = await _despesaRepo.FiltrarAsync(usuarioId, new DespesaFiltroDto { DataInicial = inicio, DataFinal = fim });
+                var lista = await _despesaRepo.FiltrarAsync(usuarioId, new DespesaFiltroDto { DataInicial = inicio, DataFinal = fim, CategoriaDespesaId = categoriaId, FormaPagamentoId = formaPagamentoId });
                 var grouped = lista
                     .GroupBy(d => d.CategoriaDespesa.Nome)
                     .Select(g => new CategoriaResumoDto { Categoria = g.Key, Total = g.Sum(x => x.Valor) })
@@ -59,7 +59,7 @@ namespace GestaoFacil.Server.Services.Relatorio
             }
             else
             {
-                var lista = await _receitaRepo.FiltrarAsync(usuarioId, new ReceitaFiltroDto { DataInicial = inicio, DataFinal = fim });
+                var lista = await _receitaRepo.FiltrarAsync(usuarioId, new ReceitaFiltroDto { DataInicial = inicio, DataFinal = fim, CategoriaReceitaId = categoriaId, FormaPagamentoId = formaPagamentoId });
                 var grouped = lista
                     .GroupBy(r => r.CategoriaReceita.Nome)
                     .Select(g => new CategoriaResumoDto { Categoria = g.Key, Total = g.Sum(x => x.Valor) })
@@ -69,7 +69,7 @@ namespace GestaoFacil.Server.Services.Relatorio
             }
         }
 
-        public async Task<ResponseModel<List<FluxoCaixaDto>>> ObterFluxoCaixaAsync(int usuarioId, DateTime? inicio, DateTime? fim)
+        public async Task<ResponseModel<List<FluxoCaixaDto>>> ObterFluxoCaixaAsync(int usuarioId, DateTime? inicio, DateTime? fim, int? categoriaDespesaId = null, int? categoriaReceitaId = null, int? formaPagamentoId = null)
         {
             if (inicio.HasValue && fim.HasValue && inicio > fim)
             {
@@ -77,8 +77,8 @@ namespace GestaoFacil.Server.Services.Relatorio
                 return ResponseHelper.Falha<List<FluxoCaixaDto>>("A data inicial não pode ser maior que a data final.");
             }
 
-            var despesas = await _despesaRepo.FiltrarAsync(usuarioId, new DespesaFiltroDto { DataInicial = inicio, DataFinal = fim });
-            var receitas = await _receitaRepo.FiltrarAsync(usuarioId, new ReceitaFiltroDto { DataInicial = inicio, DataFinal = fim });
+            var despesas = await _despesaRepo.FiltrarAsync(usuarioId, new DespesaFiltroDto { DataInicial = inicio, DataFinal = fim, CategoriaDespesaId = categoriaDespesaId, FormaPagamentoId = formaPagamentoId });
+            var receitas = await _receitaRepo.FiltrarAsync(usuarioId, new ReceitaFiltroDto { DataInicial = inicio, DataFinal = fim, CategoriaReceitaId = categoriaReceitaId, FormaPagamentoId = formaPagamentoId });
 
             var datas = despesas.Select(d => d.Data.Date)
                                 .Union(receitas.Select(r => r.Data.Date))
@@ -101,7 +101,7 @@ namespace GestaoFacil.Server.Services.Relatorio
             return ResponseHelper.Sucesso(fluxo, "Fluxo de caixa calculado com sucesso.");
         }
 
-        public async Task<ResponseModel<List<ResumoMensalDto>>> ObterResumoMensalAsync(int usuarioId, int ano)
+        public async Task<ResponseModel<List<ResumoMensalDto>>> ObterResumoMensalAsync(int usuarioId, int ano, int? categoriaDespesaId = null, int? categoriaReceitaId = null, int? formaPagamentoId = null)
         {
             if (ano < 1900 || ano > DateTime.Now.Year)
             {
@@ -112,8 +112,8 @@ namespace GestaoFacil.Server.Services.Relatorio
             var inicio = new DateTime(ano, 1, 1);
             var fim = new DateTime(ano, 12, 31);
 
-            var despesas = await _despesaRepo.FiltrarAsync(usuarioId, new DespesaFiltroDto { DataInicial = inicio, DataFinal = fim });
-            var receitas = await _receitaRepo.FiltrarAsync(usuarioId, new ReceitaFiltroDto { DataInicial = inicio, DataFinal = fim });
+            var despesas = await _despesaRepo.FiltrarAsync(usuarioId, new DespesaFiltroDto { DataInicial = inicio, DataFinal = fim, CategoriaDespesaId = categoriaDespesaId, FormaPagamentoId = formaPagamentoId });
+            var receitas = await _receitaRepo.FiltrarAsync(usuarioId, new ReceitaFiltroDto { DataInicial = inicio, DataFinal = fim, CategoriaReceitaId = categoriaReceitaId, FormaPagamentoId = formaPagamentoId });
 
             var resumoMensal = Enumerable.Range(1, 12)
                 .Select(mes =>

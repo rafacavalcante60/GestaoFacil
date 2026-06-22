@@ -14,7 +14,7 @@ namespace GestaoFacil.Server.DTOs.Filtro
         public DateTime? DataInicial { get; set; }
         public DateTime? DataFinal { get; set; }
 
-        [Range(1, 5, ErrorMessage = "O ID da categoria deve ser maior que zero.")]
+        [Range(1, int.MaxValue, ErrorMessage = "O ID da categoria deve ser maior que zero.")]
         public int? CategoriaReceitaId { get; set; }
 
         [Range(1, 7, ErrorMessage = "O ID da forma de pagamento deve ser maior que zero.")]
