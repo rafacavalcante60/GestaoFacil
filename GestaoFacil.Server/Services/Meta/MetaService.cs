@@ -144,11 +144,11 @@ namespace GestaoFacil.Server.Services.Meta
             string status;
             if (meta.Tipo == TipoMeta.Despesa)
             {
-                status = percentual >= 100 ? "excedido" : percentual >= 75 ? "atencao" : "no_limite";
+                status = percentual >= 100 ? "excedido" : percentual >= 75 ? "atencao" : "andamento";
             }
             else
             {
-                status = percentual >= 100 ? "atingida" : percentual >= 50 ? "andamento" : "abaixo";
+                status = percentual >= 100 ? "atingida" : percentual >= 50 ? "em_andamento" : "abaixo";
             }
 
             var dto = _mapper.Map<MetaDto>(meta);
