@@ -19,9 +19,9 @@ namespace GestaoFacil.Server.Controllers.Financeiro
         }
 
         [HttpGet("resumo")]
-        public async Task<ActionResult<ResponseModel<ResumoFinanceiroDto>>> ResumoFinanceiro([FromQuery] DateTime? inicio, [FromQuery] DateTime? fim)
+        public async Task<ActionResult<ResponseModel<ResumoFinanceiroDto>>> ResumoFinanceiro([FromQuery] DateTime? inicio, [FromQuery] DateTime? fim, [FromQuery] int? categoriaDespesaId, [FromQuery] int? categoriaReceitaId, [FromQuery] int? formaPagamentoId)
         {
-            var result = await _relatorioService.ObterResumoFinanceiroAsync(UsuarioId, inicio, fim);
+            var result = await _relatorioService.ObterResumoFinanceiroAsync(UsuarioId, inicio, fim, categoriaDespesaId, categoriaReceitaId, formaPagamentoId);
 
             if (!result.Status)
             {
@@ -32,9 +32,9 @@ namespace GestaoFacil.Server.Controllers.Financeiro
         }
 
         [HttpGet("categoria")]
-        public async Task<ActionResult<ResponseModel<List<CategoriaResumoDto>>>> ResumoPorCategoria([FromQuery] DateTime? inicio, [FromQuery] DateTime? fim, [FromQuery] bool despesas = true)
+        public async Task<ActionResult<ResponseModel<List<CategoriaResumoDto>>>> ResumoPorCategoria([FromQuery] DateTime? inicio, [FromQuery] DateTime? fim, [FromQuery] bool despesas = true, [FromQuery] int? categoriaId = null, [FromQuery] int? formaPagamentoId = null)
         {
-            var result = await _relatorioService.ObterResumoPorCategoriaAsync(UsuarioId, inicio, fim, despesas);
+            var result = await _relatorioService.ObterResumoPorCategoriaAsync(UsuarioId, inicio, fim, despesas, categoriaId, formaPagamentoId);
 
             if (!result.Status)
             {
@@ -45,9 +45,9 @@ namespace GestaoFacil.Server.Controllers.Financeiro
         }
 
         [HttpGet("fluxo")]
-        public async Task<ActionResult<ResponseModel<List<FluxoCaixaDto>>>> FluxoCaixa([FromQuery] DateTime? inicio, [FromQuery] DateTime? fim)
+        public async Task<ActionResult<ResponseModel<List<FluxoCaixaDto>>>> FluxoCaixa([FromQuery] DateTime? inicio, [FromQuery] DateTime? fim, [FromQuery] int? categoriaDespesaId, [FromQuery] int? categoriaReceitaId, [FromQuery] int? formaPagamentoId)
         {
-            var result = await _relatorioService.ObterFluxoCaixaAsync(UsuarioId, inicio, fim);
+            var result = await _relatorioService.ObterFluxoCaixaAsync(UsuarioId, inicio, fim, categoriaDespesaId, categoriaReceitaId, formaPagamentoId);
 
             if (!result.Status)
             {
@@ -58,9 +58,9 @@ namespace GestaoFacil.Server.Controllers.Financeiro
         }
 
         [HttpGet("mensal")]
-        public async Task<ActionResult<ResponseModel<List<ResumoMensalDto>>>> ResumoMensal([FromQuery] int ano)
+        public async Task<ActionResult<ResponseModel<List<ResumoMensalDto>>>> ResumoMensal([FromQuery] int ano, [FromQuery] int? categoriaDespesaId, [FromQuery] int? categoriaReceitaId, [FromQuery] int? formaPagamentoId)
         {
-            var result = await _relatorioService.ObterResumoMensalAsync(UsuarioId, ano);
+            var result = await _relatorioService.ObterResumoMensalAsync(UsuarioId, ano, categoriaDespesaId, categoriaReceitaId, formaPagamentoId);
 
             if (!result.Status)
             {

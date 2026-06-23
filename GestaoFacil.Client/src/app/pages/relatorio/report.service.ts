@@ -29,22 +29,22 @@ export class ReportService {
   }
 
   // retorna apenas o campo .dados do response do backend
-  resumo(query: { inicio?: string; fim?: string } = {}): Observable<{ totalReceitas: number; totalDespesas: number; saldo: number }> {
+  resumo(query: { inicio?: string; fim?: string; categoriaDespesaId?: number | null; categoriaReceitaId?: number | null; formaPagamentoId?: number | null } = {}): Observable<{ totalReceitas: number; totalDespesas: number; saldo: number }> {
     const params = this.buildParams(query);
     return this.http.get<ApiResponse<any>>(`${this.base}/resumo`, { params }).pipe(map(r => r.dados));
   }
 
-  categoria(query: { inicio?: string; fim?: string; despesas?: boolean } = {}): Observable<Array<{ categoria: string; total: number }>> {
+  categoria(query: { inicio?: string; fim?: string; despesas?: boolean; categoriaId?: number | null; formaPagamentoId?: number | null } = {}): Observable<Array<{ categoria: string; total: number }>> {
     const params = this.buildParams(query);
     return this.http.get<ApiResponse<any>>(`${this.base}/categoria`, { params }).pipe(map(r => r.dados || []));
   }
 
-  fluxo(query: { inicio?: string; fim?: string } = {}): Observable<Array<{ data: string; saldoAcumulado: number }>> {
+  fluxo(query: { inicio?: string; fim?: string; categoriaDespesaId?: number | null; categoriaReceitaId?: number | null; formaPagamentoId?: number | null } = {}): Observable<Array<{ data: string; saldoAcumulado: number }>> {
     const params = this.buildParams(query);
     return this.http.get<ApiResponse<any>>(`${this.base}/fluxo`, { params }).pipe(map(r => r.dados || []));
   }
 
-  mensal(query: { ano?: number } = {}): Observable<Array<{ mes: number; totalReceitas: number; totalDespesas: number; saldo: number }>> {
+  mensal(query: { ano?: number; categoriaDespesaId?: number | null; categoriaReceitaId?: number | null; formaPagamentoId?: number | null } = {}): Observable<Array<{ mes: number; totalReceitas: number; totalDespesas: number; saldo: number }>> {
     const params = this.buildParams(query);
     return this.http.get<ApiResponse<any>>(`${this.base}/mensal`, { params }).pipe(map(r => r.dados || []));
   }

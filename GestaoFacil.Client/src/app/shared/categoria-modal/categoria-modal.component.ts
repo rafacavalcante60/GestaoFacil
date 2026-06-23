@@ -23,6 +23,8 @@ export class CategoriaModalComponent implements OnInit {
   editandoNome = '';
   errorMsg = '';
   successMsg = '';
+  confirmacaoExclusaoAberta = false;
+  categoriaParaExcluir: Categoria | null = null;
 
   constructor(private svc: CategoriaService) {}
 
@@ -114,23 +116,38 @@ export class CategoriaModalComponent implements OnInit {
     this.errorMsg = '';
   }
 
-  deletarCategoria(id: number) {
-    if (!confirm('Deseja excluir esta categoria?')) return;
+  deletarCategoria(cat: Categoria) {
+    this.categoriaParaExcluir = cat;
+    this.confirmacaoExclusaoAberta = true;
+  }
 
-    const obs$ = this.tipo === 'despesa' 
-      ? this.svc.deleteDespesa(id) 
+  confirmarExclusao() {
+    if (!this.categoriaParaExcluir?.id) return;
+
+    const id = this.categoriaParaExcluir.id;
+    const obs$ = this.tipo === 'despesa'
+      ? this.svc.deleteDespesa(id)
       : this.svc.deleteReceita(id);
 
     obs$.subscribe({
       next: () => {
         this.successMsg = 'Categoria removida com sucesso!';
+        this.confirmacaoExclusaoAberta = false;
+        this.categoriaParaExcluir = null;
         this.carregarCategorias();
         this.atualizar.emit();
       },
       error: (err) => {
         this.errorMsg = AuthService.parseError(err, 'Erro ao deletar categoria.');
+        this.confirmacaoExclusaoAberta = false;
+        this.categoriaParaExcluir = null;
       }
     });
+  }
+
+  cancelarExclusao() {
+    this.confirmacaoExclusaoAberta = false;
+    this.categoriaParaExcluir = null;
   }
 
   fecharModal() {
