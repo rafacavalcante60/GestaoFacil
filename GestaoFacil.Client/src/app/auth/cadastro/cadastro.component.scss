@@ -51,3 +51,23 @@
         margin: 0;
     }
 }
+
+.success-state {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 420px;
+}
+
+.success-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--orange);
+  color: white;
+  font-size: 32px;
+  font-weight: 700;
+}
