@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { MetaService } from './meta.service';
@@ -72,6 +72,15 @@ export class MetaListComponent implements OnInit, OnDestroy {
     this.metaEditando = item;
     this.modoEdicao = true;
     this.modalAberto = true;
+  }
+
+  @HostListener('document:keydown.escape')
+  onEscape(): void {
+    if (this.confirmacaoExclusaoAberta) {
+      this.cancelarExclusao();
+    } else if (this.modalAberto) {
+      this.fecharModal();
+    }
   }
 
   fecharModal(): void {
