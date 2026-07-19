@@ -49,4 +49,9 @@ Client/.angular/
 *.DS_Store
 Thumbs.db
 
+# metadado que o Windows cria em arquivo baixado da internet (aparece no WSL)
+*:Zone.Identifier
+# instaladores baixados na maquina, nao pertencem ao repo
+*.deb
+
 .claude/
