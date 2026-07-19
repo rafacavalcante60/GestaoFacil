@@ -4,7 +4,7 @@ using GestaoFacil.Server.Extensions.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// serviços principais
+// serviï¿½os principais
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 builder.Services.AddEndpointsApiExplorer();
@@ -21,8 +21,11 @@ builder.Services.AddSwaggerWithJwt();
 //Rate limiting
 builder.Services.AddRateLimitingPolicies(builder.Configuration);
 
-// CORS
-builder.Services.AddCorsPolicy("AllowAngular", "http://localhost:4200");
+// CORS: so no Development. Em producao o Angular e servido pela propria API (mesma origem).
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.AddCorsPolicy("AllowAngular", "http://localhost:4200");
+}
 
 // logger
 builder.Logging.ClearProviders();
@@ -48,7 +51,10 @@ app.UseHttpsRedirection();
 app.UseBlazorFrameworkFiles();
 app.UseStaticFiles();
 
-app.UseCors("AllowAngular");
+if (app.Environment.IsDevelopment())
+{
+    app.UseCors("AllowAngular");
+}
 
 app.UseAuthentication();
 app.UseAuthorization();

@@ -36,9 +36,11 @@ namespace GestaoFacil.Server.Extensions.Service
             services.AddScoped<ISmtpClientWrapper>(sp =>
             {
                 var config = sp.GetRequiredService<IConfiguration>();
+                // SMTP e opcional: sem Email__* configurado a porta cai no padrao e o envio falha
+                // apenas quando alguem usa esqueci-senha, em vez de derrubar a requisicao.
                 return new SmtpClientWrapper(
                     config["Email:SmtpHost"],
-                    int.Parse(config["Email:SmtpPort"]),
+                    int.TryParse(config["Email:SmtpPort"], out var smtpPort) ? smtpPort : 587,
                     config["Email:SmtpUser"],
                     config["Email:SmtpPass"]);
             });
@@ -73,7 +75,10 @@ namespace GestaoFacil.Server.Extensions.Service
 
         public static IServiceCollection AddJwtAuthentication(this IServiceCollection services, IConfiguration configuration)
         {
-            var key = Encoding.ASCII.GetBytes(configuration["Jwt:Key"]);
+            var jwtKey = configuration["Jwt:Key"]
+                ?? throw new InvalidOperationException(
+                    "Jwt:Key ausente. Defina Jwt__Key como variavel de ambiente.");
+            var key = Encoding.ASCII.GetBytes(jwtKey);
 
             services.AddAuthentication(options =>
             {

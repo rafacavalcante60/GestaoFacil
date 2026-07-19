@@ -7,7 +7,9 @@ namespace GestaoFacil.Server.Extensions.Service
     {
         public static IServiceCollection AddDatabase(this IServiceCollection services, IConfiguration configuration)
         {
-            var connectionString = configuration.GetConnectionString("AppDbConnectionString");
+            var connectionString = configuration.GetConnectionString("AppDbConnectionString")
+                ?? throw new InvalidOperationException(
+                    "Connection string ausente. Defina ConnectionStrings__AppDbConnectionString como variavel de ambiente.");
             services.AddDbContext<AppDbContext>(options =>
             {
                 options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
