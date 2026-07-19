@@ -7,6 +7,7 @@ namespace GestaoFacil.Server.Repositories.Auth
         Task AddAsync(RefreshTokenModel token);
         Task<RefreshTokenModel?> GetByTokenAsync(string token);
         Task<RefreshTokenModel?> GetValidByTokenAsync(string token);
+        Task RevokeAllByUsuarioAsync(int usuarioId);
         Task SaveChangesAsync();
     }
 }

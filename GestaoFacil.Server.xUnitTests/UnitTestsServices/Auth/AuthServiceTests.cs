@@ -266,4 +266,28 @@ public class AuthServiceTests
         usuario.PasswordResetToken.Should().BeNull();
         usuario.PasswordResetTokenExpiraEm.Should().BeNull();
     }
+
+    [Fact]
+    public async Task ResetPasswordAsync_DeveRevogarSessoesAnteriores_QuandoTokenValido()
+    {
+        var usuario = new UsuarioModel
+        {
+            Id = 42,
+            Email = "teste@teste.com",
+            PasswordResetToken = "tokenvalido",
+            PasswordResetTokenExpiraEm = DateTime.UtcNow.AddMinutes(10)
+        };
+
+        _usuarioRepoMock.Setup(r => r.GetByPasswordResetTokenAsync("tokenvalido"))
+            .ReturnsAsync(usuario);
+        _usuarioRepoMock.Setup(r => r.UpdateAsync(usuario)).Returns(Task.CompletedTask);
+
+        var service = CreateService();
+        var result = await service.ResetPasswordAsync(new ResetPasswordRequestDto { Token = "tokenvalido", NewPassword = "novaSenha" });
+
+        result.Status.Should().BeTrue();
+
+        // sem esta revogacao, um refresh token roubado sobreviveria a troca de senha
+        _refreshTokenRepoMock.Verify(r => r.RevokeAllByUsuarioAsync(42), Times.Once);
+    }
 }

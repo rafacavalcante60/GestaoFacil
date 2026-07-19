@@ -216,7 +216,12 @@ namespace GestaoFacil.Server.Services.Auth
 
             await _usuarioRepository.UpdateAsync(usuario);
 
-            _logger.LogInformation("Senha redefinida com sucesso para o usuário ID {UsuarioId}", usuario.Id);
+            // Trocar a senha tem que derrubar as sessoes antigas. Sem isso, quem tivesse
+            // roubado a conta seguiria renovando o acesso via /refresh mesmo depois de a
+            // vitima redefinir a senha — justamente a reacao esperada de quem foi invadido.
+            await _refreshTokenRepository.RevokeAllByUsuarioAsync(usuario.Id);
+
+            _logger.LogInformation("Senha redefinida com sucesso para o usuário ID {UsuarioId}. Sessões anteriores revogadas.", usuario.Id);
             return ResponseHelper.Sucesso("Senha redefinida com sucesso.");
         }
     }

@@ -33,6 +33,15 @@ namespace GestaoFacil.Server.Repositories.Auth
                 .FirstOrDefaultAsync(t => t.Token == token && !t.EstaRevogado);
         }
 
+        // Revoga em lote no banco: quem troca de senha precisa expulsar as sessoes antigas,
+        // senao um refresh token roubado continua valido pelos 7 dias originais.
+        public async Task RevokeAllByUsuarioAsync(int usuarioId)
+        {
+            await _context.RefreshTokens
+                .Where(t => t.UsuarioId == usuarioId && !t.EstaRevogado)
+                .ExecuteUpdateAsync(s => s.SetProperty(t => t.EstaRevogado, true));
+        }
+
         public async Task SaveChangesAsync()
         {
             await _context.SaveChangesAsync();
