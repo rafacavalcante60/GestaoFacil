@@ -63,6 +63,8 @@ app.UseRateLimiter();
 
 app.MapRazorPages();
 app.MapControllers();
-app.MapFallbackToFile("Index.html");
+// minusculo: o arquivo gerado pelo Angular e "index.html" e o filesystem do
+// container Linux e case-sensitive (no Windows "Index.html" funcionava por acaso).
+app.MapFallbackToFile("index.html");
 
 app.Run();

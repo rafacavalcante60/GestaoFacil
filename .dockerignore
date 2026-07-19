@@ -1,0 +1,17 @@
+**/bin/
+**/obj/
+**/node_modules/
+**/dist/
+**/.angular/
+**/.vs/
+.git/
+.github/
+.claude/
+**/TestResults/
+**/*.user
+**/appsettings.Development.json
+**/*.env
+.env
+*.docx
+*.deb
+**/*:Zone.Identifier
