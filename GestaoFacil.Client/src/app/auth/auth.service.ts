@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { Observable, tap, catchError, throwError } from 'rxjs';
+import { Observable, tap, catchError, throwError, map } from 'rxjs';
 import { environment } from '../../environments/environment';
 
 interface LoginRequest {
@@ -45,21 +45,8 @@ export class AuthService {
   login(data: LoginRequest): Observable<LoginResponseRaw> {
     return this.http.post<LoginResponseRaw>(`${this.baseUrl}/login`, data).pipe(
       tap(res => {
-        console.log('Login response (raw):', res);
-        const dados = res?.dados ?? res?.Dados;
-        const token = dados?.token;
-        const refreshToken = dados?.refreshToken;
-        const expiraEm = dados?.expiraEm;
-
-        if (token) {
-          localStorage.setItem('token', token);
-          if (refreshToken) localStorage.setItem('refreshToken', refreshToken);
-          if (expiraEm) localStorage.setItem('tokenExpiraEm', expiraEm);
-          console.log('Token salvo no localStorage (length):', token.length);
-        } else {
-          localStorage.removeItem('token');
-          localStorage.removeItem('refreshToken');
-          localStorage.removeItem('tokenExpiraEm');
+        const token = this.salvarSessao(res);
+        if (!token) {
           console.error('Login response não contém token em dados.token', res);
         }
       }),
@@ -68,6 +55,51 @@ export class AuthService {
         return throwError(() => err);
       })
     );
+  }
+
+  // Troca o refresh token por um par novo. O backend rotaciona: a resposta traz
+  // um refreshToken novo e revoga o anterior, entao e obrigatorio regravar os dois.
+  refreshSession(): Observable<string> {
+    const refreshToken = this.getRefreshToken();
+
+    if (!refreshToken) {
+      return throwError(() => new Error('Sem refresh token disponível.'));
+    }
+
+    return this.http.post<LoginResponseRaw>(`${this.baseUrl}/refresh`, { refreshToken }).pipe(
+      map(res => {
+        const token = this.salvarSessao(res);
+        if (!token) {
+          throw new Error('Refresh não retornou token.');
+        }
+        return token;
+      })
+    );
+  }
+
+  // Grava token/refreshToken/expiraEm e devolve o access token (null se a resposta
+  // nao trouxe token, caso em que a sessao e limpa).
+  private salvarSessao(res: LoginResponseRaw): string | null {
+    const dados = res?.dados ?? res?.Dados;
+    const token = dados?.token;
+    const refreshToken = dados?.refreshToken;
+    const expiraEm = dados?.expiraEm;
+
+    if (!token) {
+      this.limparSessao();
+      return null;
+    }
+
+    localStorage.setItem('token', token);
+    if (refreshToken) localStorage.setItem('refreshToken', refreshToken);
+    if (expiraEm) localStorage.setItem('tokenExpiraEm', expiraEm);
+    return token;
+  }
+
+  private limparSessao(): void {
+    localStorage.removeItem('token');
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('tokenExpiraEm');
   }
 
   register(data: any): Observable<any> {
@@ -103,13 +135,10 @@ export class AuthService {
   }
 
   logout() {
-    localStorage.removeItem('token');
-    localStorage.removeItem('refreshToken');
-    localStorage.removeItem('tokenExpiraEm');
+    this.limparSessao();
     this.router.navigate(['/auth/login']);
   }
 
-  // se quiser, método para pegar refreshToken
   getRefreshToken(): string | null {
     return localStorage.getItem('refreshToken');
   }
