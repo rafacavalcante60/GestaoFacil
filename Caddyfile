@@ -1,0 +1,13 @@
+// O Caddy termina o TLS: ele obtem e renova o certificado Let's Encrypt sozinho
+// (basta o dominio apontar para o Elastic IP e as portas 80/443 abertas no SG) e
+// repassa a requisicao em HTTP puro para o app na rede interna do compose.
+{$DOMAIN} {
+	encode gzip
+
+	reverse_proxy app:8080 {
+		# o app particiona o rate limiting por IP; sem estes cabecalhos ele so
+		# enxergaria o IP do proprio Caddy e limitaria todos os usuarios juntos.
+		header_up X-Forwarded-For {remote_host}
+		header_up X-Forwarded-Proto {scheme}
+	}
+}

@@ -1,0 +1,41 @@
+# Compose da Fase 2, para rodar na EC2. Diferencas para o docker-compose.yml local:
+#  - nao ha container de MySQL: o banco e o RDS, alcancado pela rede privada da VPC
+#  - o app NAO publica porta no host: so o Caddy fica exposto (80/443)
+# Uso na EC2:  docker compose -f docker-compose.prod.yml up -d --build
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_URLS: http://+:8080
+      # host do RDS, sem acesso publico. Ex: gestaofacil.xxxx.us-east-1.rds.amazonaws.com
+      ConnectionStrings__AppDbConnectionString: "Server=${DB_HOST:?defina DB_HOST};Port=3306;Database=${DB_NAME:-gestaofacilbanco};User=${DB_USER:?defina DB_USER};Password=${DB_PASSWORD:?defina DB_PASSWORD};"
+      Jwt__Key: ${JWT_KEY:?defina JWT_KEY}
+      Frontend__BaseUrl: https://${DOMAIN:?defina DOMAIN}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:?defina ADMIN_PASSWORD}
+    expose:
+      - "8080"
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    depends_on:
+      - app
+    environment:
+      DOMAIN: ${DOMAIN:?defina DOMAIN}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      # persistem os certificados: sem isso cada "up" pede um cert novo ao
+      # Let's Encrypt e voce bate no rate limit deles (5 por semana por dominio).
+      - caddy-data:/data
+      - caddy-config:/config
+
+volumes:
+  caddy-data:
+  caddy-config:
