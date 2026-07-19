@@ -37,6 +37,13 @@ services:
       Jwt__Key: ${JWT_KEY:?defina JWT_KEY no .env}
       Frontend__BaseUrl: ${FRONTEND_BASE_URL:-http://localhost:8080}
       ADMIN_PASSWORD: ${ADMIN_PASSWORD:?defina ADMIN_PASSWORD no .env}
+      # SMTP opcional no local: sem estas variaveis o app sobe igual e so o
+      # "esqueci minha senha" falha.
+      Email__SmtpHost: ${SMTP_HOST:-smtp-relay.brevo.com}
+      Email__SmtpPort: ${SMTP_PORT:-587}
+      Email__SmtpUser: ${SMTP_USER:-}
+      Email__SmtpPass: ${SMTP_PASS:-}
+      Email__From: ${SMTP_FROM:-}
     ports:
       - "8080:8080"
 

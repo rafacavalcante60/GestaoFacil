@@ -16,6 +16,13 @@ services:
       Jwt__Key: ${JWT_KEY:?defina JWT_KEY}
       Frontend__BaseUrl: https://${DOMAIN:?defina DOMAIN}
       ADMIN_PASSWORD: ${ADMIN_PASSWORD:?defina ADMIN_PASSWORD}
+      # SMTP do "esqueci minha senha". Sem estas variaveis o envio falha so
+      # quando alguem usa o fluxo — o app sobe normalmente.
+      Email__SmtpHost: ${SMTP_HOST:-smtp-relay.brevo.com}
+      Email__SmtpPort: ${SMTP_PORT:-587}
+      Email__SmtpUser: ${SMTP_USER:?defina SMTP_USER}
+      Email__SmtpPass: ${SMTP_PASS:?defina SMTP_PASS}
+      Email__From: ${SMTP_FROM:?defina SMTP_FROM}
     expose:
       - "8080"
 
