@@ -3,6 +3,7 @@ using FluentAssertions;
 using GestaoFacil.Server.DTOs.Usuario;
 using GestaoFacil.Server.Models.Usuario;
 using GestaoFacil.Server.Pagination;
+using GestaoFacil.Server.Repositories.Auth;
 using GestaoFacil.Server.Responses;
 using GestaoFacil.Server.Services.Usuario;
 using Microsoft.Extensions.Logging;
@@ -14,6 +15,7 @@ using Xunit;
 public class UsuarioServiceTests
 {
     private readonly Mock<IUsuarioRepository> _repositoryMock;
+    private readonly Mock<IRefreshTokenRepository> _refreshTokenRepoMock;
     private readonly Mock<IMapper> _mapperMock;
     private readonly Mock<ILogger<UsuarioService>> _loggerMock;
     private readonly UsuarioService _service;
@@ -21,9 +23,10 @@ public class UsuarioServiceTests
     public UsuarioServiceTests()
     {
         _repositoryMock = new Mock<IUsuarioRepository>();
+        _refreshTokenRepoMock = new Mock<IRefreshTokenRepository>();
         _mapperMock = new Mock<IMapper>();
         _loggerMock = new Mock<ILogger<UsuarioService>>();
-        _service = new UsuarioService(_repositoryMock.Object, _mapperMock.Object, _loggerMock.Object);
+        _service = new UsuarioService(_repositoryMock.Object, _refreshTokenRepoMock.Object, _mapperMock.Object, _loggerMock.Object);
     }
 
     [Fact]
@@ -132,6 +135,38 @@ public class UsuarioServiceTests
 
         result.Status.Should().BeTrue();
         result.Dados.Should().BeTrue();
+    }
+
+    [Fact]
+    public async Task UpdateAdminAsync_DeveRevogarSessoes_QuandoTipoUsuarioMuda()
+    {
+        // usuario era Admin (2) e esta sendo rebaixado para Comum (1)
+        var usuario = new UsuarioModel { Id = 7, Nome = "Teste", Email = "teste@teste.com", TipoUsuarioId = 2 };
+        var dto = new UsuarioAdminUpdateDto { Id = 7, Nome = "Teste", Email = "teste@teste.com", TipoUsuarioId = 1 };
+
+        _repositoryMock.Setup(r => r.GetByIdAsync(7)).ReturnsAsync(usuario);
+        _repositoryMock.Setup(r => r.UpdateAsync(usuario)).Returns(Task.CompletedTask);
+
+        var result = await _service.UpdateAdminAsync(7, dto);
+
+        result.Status.Should().BeTrue();
+        _refreshTokenRepoMock.Verify(r => r.RevokeAllByUsuarioAsync(7), Times.Once);
+    }
+
+    [Fact]
+    public async Task UpdateAdminAsync_NaoDeveRevogarSessoes_QuandoTipoUsuarioNaoMuda()
+    {
+        // editar so nome/email nao e motivo para derrubar a sessao do usuario
+        var usuario = new UsuarioModel { Id = 7, Nome = "Teste", Email = "teste@teste.com", TipoUsuarioId = 1 };
+        var dto = new UsuarioAdminUpdateDto { Id = 7, Nome = "Novo Nome", Email = "novo@teste.com", TipoUsuarioId = 1 };
+
+        _repositoryMock.Setup(r => r.GetByIdAsync(7)).ReturnsAsync(usuario);
+        _repositoryMock.Setup(r => r.UpdateAsync(usuario)).Returns(Task.CompletedTask);
+
+        var result = await _service.UpdateAdminAsync(7, dto);
+
+        result.Status.Should().BeTrue();
+        _refreshTokenRepoMock.Verify(r => r.RevokeAllByUsuarioAsync(It.IsAny<int>()), Times.Never);
     }
 
     [Fact]
