@@ -38,11 +38,23 @@ builder.Logging.AddDebug();
 builder.Services.Configure<ForwardedHeadersOptions>(options =>
 {
     options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
-    // o proxy e o Caddy no mesmo host, em rede docker: nao ha lista fixa de IPs
-    // para confiar, entao limpamos as redes/proxies conhecidos. So e seguro porque
-    // a porta 8080 do app nunca fica exposta fora da rede do compose.
+
     options.KnownNetworks.Clear();
     options.KnownProxies.Clear();
+
+    // Confiamos apenas na faixa privada da rede do compose (o Caddy), nao em
+    // qualquer remetente: X-Forwarded-For vem do cliente e e trivial de forjar.
+    // qualificado: System.Net tambem tem um IPNetwork (.NET 8) e o KnownNetworks
+    // espera o do HttpOverrides — sem isto o compilador acusa ambiguidade.
+    options.KnownNetworks.Add(new IPNetwork(System.Net.IPAddress.Parse("172.16.0.0"), 12));
+    options.KnownNetworks.Add(new IPNetwork(System.Net.IPAddress.Parse("192.168.0.0"), 16));
+    options.KnownNetworks.Add(new IPNetwork(System.Net.IPAddress.Parse("10.0.0.0"), 8));
+
+    // O ponto central: le so o valor mais a direita da cadeia — o que o Caddy
+    // escreveu — e descarta o que o cliente tenha injetado antes. Sem este limite,
+    // dava para trocar de IP a cada requisicao e zerar o rate limit de login,
+    // liberando forca bruta de senha sem freio.
+    options.ForwardLimit = 1;
 });
 
 var app = builder.Build();
