@@ -4,10 +4,8 @@
 {$DOMAIN} {
 	encode gzip
 
-	reverse_proxy app:8080 {
-		# o app particiona o rate limiting por IP; sem estes cabecalhos ele so
-		# enxergaria o IP do proprio Caddy e limitaria todos os usuarios juntos.
-		header_up X-Forwarded-For {remote_host}
-		header_up X-Forwarded-Proto {scheme}
-	}
+	# o Caddy ja envia X-Forwarded-For e X-Forwarded-Proto por padrao. O app
+	# depende deles: particiona o rate limiting por IP e, sem esses cabecalhos,
+	# enxergaria so o IP do proprio Caddy e limitaria todos os usuarios juntos.
+	reverse_proxy app:8080
 }
