@@ -1,3 +1,4 @@
+using GestaoFacil.Server.Controllers;
 using GestaoFacil.Server.Data;
 using GestaoFacil.Server.DTOs.Financeiro;
 using GestaoFacil.Server.Models.Domain;
@@ -11,7 +12,7 @@ namespace GestaoFacil.Server.Controllers.Financeiro
     [Authorize]
     [ApiController]
     [Route("api/[controller]")]
-    public class CategoriaReceitaController : ControllerBase
+    public class CategoriaReceitaController : BaseController
     {
         private readonly AppDbContext _context;
 
@@ -20,10 +21,18 @@ namespace GestaoFacil.Server.Controllers.Financeiro
             _context = context;
         }
 
+        //categorias de sistema (UsuarioId null) + as do proprio usuario
+        private IQueryable<CategoriaReceitaModel> Visiveis() =>
+            _context.CategoriasReceita.Where(c => c.UsuarioId == null || c.UsuarioId == UsuarioId);
+
+        //somente as proprias podem ser alteradas
+        private IQueryable<CategoriaReceitaModel> Editaveis() =>
+            _context.CategoriasReceita.Where(c => c.UsuarioId == UsuarioId);
+
         [HttpGet]
         public async Task<ActionResult<ResponseModel<List<CategoriaDto>>>> GetAll()
         {
-            var list = await _context.CategoriasReceita
+            var list = await Visiveis()
                 .AsNoTracking()
                 .OrderBy(c => c.Nome)
                 .ToListAsync();
@@ -35,7 +44,7 @@ namespace GestaoFacil.Server.Controllers.Financeiro
         [HttpGet("{id}")]
         public async Task<ActionResult<ResponseModel<CategoriaDto>>> GetById(int id)
         {
-            var entity = await _context.CategoriasReceita.FindAsync(id);
+            var entity = await Visiveis().AsNoTracking().FirstOrDefaultAsync(c => c.Id == id);
             if (entity == null)
                 return NotFound(ResponseHelper.Falha<CategoriaDto>("Categoria não encontrada."));
 
@@ -49,11 +58,13 @@ namespace GestaoFacil.Server.Controllers.Financeiro
             if (string.IsNullOrWhiteSpace(dto.Nome))
                 return BadRequest(ResponseHelper.Falha<CategoriaDto>("Nome é obrigatório."));
 
-            var exists = await _context.CategoriasReceita.AnyAsync(c => c.Nome.ToLower() == dto.Nome.Trim().ToLower());
+            var nome = dto.Nome.Trim();
+
+            var exists = await Visiveis().AnyAsync(c => c.Nome.ToLower() == nome.ToLower());
             if (exists)
                 return BadRequest(ResponseHelper.Falha<CategoriaDto>("Já existe uma categoria com esse nome."));
 
-            var entity = new CategoriaReceitaModel { Nome = dto.Nome.Trim(), Ativo = true };
+            var entity = new CategoriaReceitaModel { Nome = nome, Ativo = true, UsuarioId = UsuarioId };
             _context.CategoriasReceita.Add(entity);
             await _context.SaveChangesAsync();
 
@@ -67,21 +78,22 @@ namespace GestaoFacil.Server.Controllers.Financeiro
             if (id != dto.Id)
                 return BadRequest(ResponseHelper.Falha<bool>("ID inválido."));
 
-            var entity = await _context.CategoriasReceita.FindAsync(id);
+            var entity = await Editaveis().FirstOrDefaultAsync(c => c.Id == id);
             if (entity == null)
                 return NotFound(ResponseHelper.Falha<bool>("Categoria não encontrada."));
 
             if (string.IsNullOrWhiteSpace(dto.Nome))
                 return BadRequest(ResponseHelper.Falha<bool>("Nome é obrigatório."));
 
-            var exists = await _context.CategoriasReceita.AnyAsync(c => c.Id != id && c.Nome.ToLower() == dto.Nome.Trim().ToLower());
+            var nome = dto.Nome.Trim();
+
+            var exists = await Visiveis().AnyAsync(c => c.Id != id && c.Nome.ToLower() == nome.ToLower());
             if (exists)
                 return BadRequest(ResponseHelper.Falha<bool>("Já existe uma categoria com esse nome."));
 
-            entity.Nome = dto.Nome.Trim();
+            entity.Nome = nome;
             entity.Ativo = dto.Ativo;
 
-            _context.CategoriasReceita.Update(entity);
             await _context.SaveChangesAsync();
 
             return Ok(ResponseHelper.Sucesso(true));
@@ -90,13 +102,12 @@ namespace GestaoFacil.Server.Controllers.Financeiro
         [HttpDelete("{id}")]
         public async Task<ActionResult<ResponseModel<bool>>> Delete(int id)
         {
-            var entity = await _context.CategoriasReceita.FindAsync(id);
+            var entity = await Editaveis().FirstOrDefaultAsync(c => c.Id == id);
             if (entity == null)
                 return NotFound(ResponseHelper.Falha<bool>("Categoria não encontrada."));
 
             // Marca como inativa para preservar histórico
             entity.Ativo = false;
-            _context.CategoriasReceita.Update(entity);
             await _context.SaveChangesAsync();
 
             return Ok(ResponseHelper.Sucesso(true));

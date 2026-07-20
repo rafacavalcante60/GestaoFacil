@@ -58,6 +58,28 @@ namespace GestaoFacil.Server.Data
                 .HasForeignKey(r => r.CategoriaReceitaId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            //categorias com UsuarioId null sao de sistema e pertencem a todos
+            modelBuilder.Entity<CategoriaDespesaModel>()
+                .HasOne(cd => cd.Usuario)
+                .WithMany()
+                .HasForeignKey(cd => cd.UsuarioId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<CategoriaReceitaModel>()
+                .HasOne(cr => cr.Usuario)
+                .WithMany()
+                .HasForeignKey(cr => cr.UsuarioId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            //nome unico por dono, sem impedir que dois usuarios usem o mesmo nome
+            modelBuilder.Entity<CategoriaDespesaModel>()
+                .HasIndex(cd => new { cd.UsuarioId, cd.Nome })
+                .IsUnique();
+
+            modelBuilder.Entity<CategoriaReceitaModel>()
+                .HasIndex(cr => new { cr.UsuarioId, cr.Nome })
+                .IsUnique();
+
             modelBuilder.Entity<TipoUsuarioModel>()
                 .HasMany(tu => tu.Usuarios)
                 .WithOne(u => u.TipoUsuario)

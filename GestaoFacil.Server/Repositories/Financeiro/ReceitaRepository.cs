@@ -1,4 +1,4 @@
-﻿using GestaoFacil.Server.Data;
+using GestaoFacil.Server.Data;
 using GestaoFacil.Server.DTOs.Filtro;
 using GestaoFacil.Server.Models.Principais;
 using GestaoFacil.Server.Pagination;
@@ -13,6 +13,13 @@ namespace GestaoFacil.Server.Repositories.Financeiro
         public ReceitaRepository(AppDbContext context)
         {
             _context = context;
+        }
+
+        //categoria de sistema (UsuarioId null) ou do proprio usuario
+        public async Task<bool> CategoriaAcessivelAsync(int categoriaId, int usuarioId)
+        {
+            return await _context.CategoriasReceita
+                .AnyAsync(c => c.Id == categoriaId && (c.UsuarioId == null || c.UsuarioId == usuarioId));
         }
 
         public async Task<ReceitaModel?> GetByIdAsync(int id, int usuarioId)

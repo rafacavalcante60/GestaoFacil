@@ -5,5 +5,6 @@ namespace GestaoFacil.Server.Repositories.Financeiro
 {
     public interface IReceitaRepository : IFinanceiroRepository<ReceitaModel, ReceitaFiltroDto>
     {
+        Task<bool> CategoriaAcessivelAsync(int categoriaId, int usuarioId);
     }
 }

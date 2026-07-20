@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using FluentAssertions;
 using GestaoFacil.Server.DTOs.Despesa;
 using GestaoFacil.Server.DTOs.Filtro;
@@ -71,6 +71,7 @@ namespace GestaoFacil.Server.xUnitTests.UnitTestsServices.Financeiro
 
             _mapperMock.Setup(m => m.Map<DespesaModel>(dtoCreate)).Returns(despesa);
             _repositoryMock.Setup(r => r.AddAsync(It.IsAny<DespesaModel>())).ReturnsAsync(despesa);
+            _repositoryMock.Setup(r => r.CategoriaAcessivelAsync(It.IsAny<int>(), 10)).ReturnsAsync(true);
             _mapperMock.Setup(m => m.Map<DespesaDto>(despesa)).Returns(dtoResult);
 
             // Act
@@ -80,6 +81,25 @@ namespace GestaoFacil.Server.xUnitTests.UnitTestsServices.Financeiro
             result.Status.Should().BeTrue();
             result.Dados.Should().BeEquivalentTo(dtoResult);
             result.Mensagem.Should().Be("Despesa criada com sucesso.");
+        }
+
+        [Fact]
+        public async Task CreateAsync_DeveFalharQuandoCategoriaNaoPertenceAoUsuario()
+        {
+            // Arrange
+            var dtoCreate = new DespesaCreateDto { Nome = "Nova Despesa" };
+            var despesa = new DespesaModel { Id = 1, Nome = "Nova Despesa", UsuarioId = 10 };
+
+            _mapperMock.Setup(m => m.Map<DespesaModel>(dtoCreate)).Returns(despesa);
+            _repositoryMock.Setup(r => r.CategoriaAcessivelAsync(It.IsAny<int>(), 10)).ReturnsAsync(false);
+
+            // Act
+            var result = await _service.CreateAsync(dtoCreate, 10);
+
+            // Assert
+            result.Status.Should().BeFalse();
+            result.Mensagem.Should().Be("Categoria inválida.");
+            _repositoryMock.Verify(r => r.AddAsync(It.IsAny<DespesaModel>()), Times.Never);
         }
 
         [Fact]

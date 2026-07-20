@@ -24,6 +24,9 @@ namespace GestaoFacil.Server.Services.Financeiro
         protected abstract int GetEntityId(TModel entity);
         protected abstract Func<TModel, string> GetCategoriaNome { get; }
 
+        //impede referenciar a categoria de outro usuario; por padrao nao valida nada
+        protected virtual Task<bool> CategoriaAcessivelAsync(TModel entity, int usuarioId) => Task.FromResult(true);
+
         protected BaseFinanceiroService(IFinanceiroRepository<TModel, TFiltro> repository, IMapper mapper, ILogger logger)
         {
             Repository = repository;
@@ -112,6 +115,12 @@ namespace GestaoFacil.Server.Services.Financeiro
             var entity = Mapper.Map<TModel>(dto);
             SetEntityUsuarioId(entity, usuarioId);
 
+            if (!await CategoriaAcessivelAsync(entity, usuarioId))
+            {
+                Logger.LogWarning("Categoria inacessível ao usuário {UsuarioId} ao criar {Entity}", usuarioId, EntityName);
+                return ResponseHelper.Falha<TDto>("Categoria inválida.");
+            }
+
             var criada = await Repository.AddAsync(entity);
 
             var dtoResult = Mapper.Map<TDto>(criada);
@@ -136,6 +145,13 @@ namespace GestaoFacil.Server.Services.Financeiro
             }
 
             Mapper.Map(dto, entity);
+
+            if (!await CategoriaAcessivelAsync(entity, usuarioId))
+            {
+                Logger.LogWarning("Categoria inacessível ao usuário {UsuarioId} ao atualizar {Entity} {Id}", usuarioId, EntityName, id);
+                return ResponseHelper.Falha<bool>("Categoria inválida.");
+            }
+
             await Repository.UpdateAsync(entity);
 
             Logger.LogInformation("{Entity} {Id} atualizada para o usuário {UsuarioId}", EntityName, id, usuarioId);

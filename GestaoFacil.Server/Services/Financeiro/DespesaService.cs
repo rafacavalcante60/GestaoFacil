@@ -27,5 +27,8 @@ namespace GestaoFacil.Server.Services.Financeiro
         protected override Func<DespesaModel, string> GetCategoriaNome => d => d.CategoriaDespesa?.Nome ?? "";
         protected override string GetFormaPagamentoNome(DespesaModel entity) => entity.FormaPagamento?.Nome ?? "";
         protected override decimal GetValor(DespesaModel entity) => entity.Valor;
+
+        protected override Task<bool> CategoriaAcessivelAsync(DespesaModel entity, int usuarioId) =>
+            ((IDespesaRepository)Repository).CategoriaAcessivelAsync(entity.CategoriaDespesaId, usuarioId);
     }
 }
