@@ -1,6 +1,6 @@
-// O Caddy termina o TLS: ele obtem e renova o certificado Let's Encrypt sozinho
-// (basta o dominio apontar para o Elastic IP e as portas 80/443 abertas no SG) e
-// repassa a requisicao em HTTP puro para o app na rede interna do compose.
+# O Caddy termina o TLS: ele obtem e renova o certificado Let's Encrypt sozinho
+# (basta o dominio apontar para o Elastic IP e as portas 80/443 abertas no SG) e
+# repassa a requisicao em HTTP puro para o app na rede interna do compose.
 {$DOMAIN} {
 	encode gzip
 
