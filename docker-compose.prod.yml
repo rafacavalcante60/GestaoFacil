@@ -1,43 +1,22 @@
 # Compose da Fase 2, para rodar na VM da nuvem. Diferencas para o docker-compose.yml local:
 #  - o Caddy entra na frente, termina o TLS e faz proxy para o app
-#  - nem o app nem o banco publicam porta no host: so o Caddy fica exposto (80/443)
-#  - o MySQL usa um usuario dedicado, nao root
+#  - nao ha container de MySQL: o banco e o "Azure Database for MySQL - flexible
+#    server" (equivalente ao RDS), alcancado pela rede privada da VNet
+#  - o app NAO publica porta no host: so o Caddy fica exposto (80/443)
 # Uso na VM:  docker compose -f docker-compose.prod.yml up -d --build
 services:
-  db:
-    image: mysql:8.0
-    restart: unless-stopped
-    environment:
-      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:?defina DB_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${DB_NAME:-gestaofacilbanco}
-      MYSQL_USER: ${DB_USER:?defina DB_USER}
-      MYSQL_PASSWORD: ${DB_PASSWORD:?defina DB_PASSWORD}
-    volumes:
-      # os dados vivem aqui. Este volume e o unico estado que nao esta no git:
-      # sem backup dele, recriar a VM significa perder o banco.
-      - db-data:/var/lib/mysql
-    healthcheck:
-      # o app usa ServerVersion.AutoDetect e conecta ja no startup, entao precisa
-      # esperar o banco aceitar conexao de verdade. "mysqladmin ping" responde OK
-      # ainda durante a inicializacao do entrypoint, por isso rodamos um SELECT.
-      test: ["CMD", "mysql", "-h", "127.0.0.1", "-u${DB_USER}", "-p${DB_PASSWORD}", "-e", "SELECT 1"]
-      interval: 5s
-      timeout: 5s
-      retries: 30
-      start_period: 30s
-
   app:
     build:
       context: .
       dockerfile: Dockerfile
     restart: unless-stopped
-    depends_on:
-      db:
-        condition: service_healthy
     environment:
       ASPNETCORE_ENVIRONMENT: Production
       ASPNETCORE_URLS: http://+:8080
-      ConnectionStrings__AppDbConnectionString: "Server=db;Port=3306;Database=${DB_NAME:-gestaofacilbanco};User=${DB_USER:?defina DB_USER};Password=${DB_PASSWORD:?defina DB_PASSWORD};"
+      # SslMode=Required e obrigatorio: o flexible server sobe com
+      # require_secure_transport=ON e recusa conexao em texto puro. Sem isso o
+      # app morre no startup (AutoDetect) com erro de conexao pouco obvio.
+      ConnectionStrings__AppDbConnectionString: "Server=${DB_HOST:?defina DB_HOST};Port=3306;Database=${DB_NAME:-gestaofacilbanco};User=${DB_USER:?defina DB_USER};Password=${DB_PASSWORD:?defina DB_PASSWORD};SslMode=Required;"
       Jwt__Key: ${JWT_KEY:?defina JWT_KEY}
       Frontend__BaseUrl: https://${DOMAIN:?defina DOMAIN}
       ADMIN_PASSWORD: ${ADMIN_PASSWORD:?defina ADMIN_PASSWORD}
@@ -69,6 +48,5 @@ services:
       - caddy-config:/config
 
 volumes:
-  db-data:
   caddy-data:
   caddy-config:
