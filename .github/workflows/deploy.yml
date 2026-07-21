@@ -1,0 +1,50 @@
+# Deploy continuo da Fase 4.
+# Dispara SO em push na main (fork nenhum consegue disparar push na main deste
+# repo, entao um PR malicioso de fork nao roda no self-hosted runner da VM).
+# Fluxo: roda os testes num runner do GitHub -> se passarem, um self-hosted
+# runner que vive DENTRO da VM Azure repete o deploy manual que ja funciona.
+name: Deploy
+
+on:
+  push:
+    branches: ["main"]
+
+# nunca deixar dois deploys se atropelarem: se chegar push novo enquanto um
+# deploy roda, cancela o antigo e vale o mais recente.
+concurrency:
+  group: deploy-producao
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - name: Restore
+        run: dotnet restore GestaoFacil.Server/GestaoFacil.Server.sln
+      - name: Build
+        run: dotnet build GestaoFacil.Server/GestaoFacil.Server.sln --no-restore
+      - name: Test
+        run: dotnet test GestaoFacil.Server/GestaoFacil.Server.sln --no-build --verbosity normal
+
+  deploy:
+    # so publica se os testes passarem
+    needs: test
+    # roda no runner instalado na VM (label "self-hosted"); nao usa runner do GitHub
+    runs-on: [self-hosted, linux, gestaofacil]
+    steps:
+      # nao usamos actions/checkout de proposito: o deploy roda contra a copia
+      # do repo em ~/GestaoFacil, onde vive o .env com os segredos (fora do git).
+      # O runner so serve de gatilho para rodar o mesmo comando manual de sempre.
+      - name: Atualizar codigo e subir os containers
+        run: |
+          set -euo pipefail
+          cd ~/GestaoFacil
+          git fetch origin main
+          git reset --hard origin/main
+          docker compose -f docker-compose.prod.yml up -d --build
+          docker image prune -f
