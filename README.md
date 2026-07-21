@@ -1,139 +1,146 @@
 # GestãoFácil
+
 <p align="center">
-  <img src="https://i.imgur.com/Dp5plyS.png" alt="GestãoFácil Logo" width="180">
+  <img src="https://i.imgur.com/Dp5plyS.png" alt="GestãoFácil Logo" width="160">
 </p>
 
-**GestãoFácil** é um sistema de controle financeiro desenvolvido para **microempreendedores**, como **comerciantes**, **indústrias** e **prestadores de serviços**, que buscam uma plataforma simples e eficiente para registrar **receitas** e **despesas** com clareza.
+<p align="center">
+  Sistema de controle financeiro para <b>microempreendedores</b> registrarem receitas e despesas com clareza — dashboard, relatórios e indicadores mensais.
+</p>
 
-Está sendo desenvolvido com **ASP.NET Core** e **Angular**.
+<p align="center">
+  <img src="https://img.shields.io/badge/.NET-8.0-512BD4?logo=dotnet&logoColor=white">
+  <img src="https://img.shields.io/badge/Angular-19-DD0031?logo=angular&logoColor=white">
+  <img src="https://img.shields.io/badge/MySQL-8.0-4479A1?logo=mysql&logoColor=white">
+  <img src="https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=white">
+  <img src="https://img.shields.io/badge/Caddy-HTTPS-1F88C0?logo=caddy&logoColor=white">
+</p>
 
 ---
 
-## Tecnologias usadas
+## 🔗 Demonstração ao vivo
 
-Frontend:
--Framework: **Angular**
+**https://gestaofacil.northcentralus.cloudapp.azure.com**
 
-Backend:  
--API: **ASP.NET Core Web API**  
--Dados: **Entity Framework Core + MySQL**  
--Autenticação e autorização: **JWT**  
--Mapeamento de DTOs: **AutoMapper**  
--Testes unitários: **xUnit + Moq + Fluent Assertions**
+Entre com o usuário de demonstração (já vem com dados de exemplo de 3 meses):
 
-## Como Rodar
+| Campo | Valor |
+|-------|-------|
+| **E-mail** | `demo@gestaofacil.com` |
+| **Senha** | `Demo@2026` |
 
-### 1. Clonar o repositório
+> Site com HTTPS válido (certificado Let's Encrypt). Hospedado no Microsoft Azure. Como é uma conta de demonstração, sinta-se à vontade para criar, editar e apagar registros.
+
+---
+
+## 🧰 Stack
+
+**Frontend** — Angular 19 (SPA, servida pela própria API)
+**Backend** — ASP.NET Core 8 Web API · Entity Framework Core (Pomelo) · MySQL 8
+**Auth** — JWT + BCrypt · rate limiting por IP
+**Outros** — AutoMapper · Swagger · e-mail SMTP (recuperação de senha)
+**Testes** — xUnit + Moq + FluentAssertions
+**Infra** — Docker (multi-stage) · Caddy (HTTPS automático) · Azure VM Linux
+
+---
+
+## 🏗️ Arquitetura do deploy
+
+Aplicação única: o backend serve a API em `/api` **e** a SPA Angular na mesma origem (sem CORS em produção). Uma VM Linux na Azure roda três containers Docker atrás do Caddy, que termina o TLS.
+
+```mermaid
+flowchart LR
+    User([Usuário]) -->|HTTPS :443| Caddy
+    subgraph VM["Azure VM Linux · Docker Compose"]
+        Caddy[Caddy<br/>TLS + reverse proxy] -->|HTTP :8080| App[Container .NET 8<br/>API /api + Angular SPA]
+        App -->|:3306| DB[(Container MySQL 8<br/>volume persistente)]
+    end
+    Caddy -.->|ACME| LE[Let's Encrypt]
+    Backup[cron diário<br/>mysqldump] -.-> DB
+```
+
+**Decisões de infra que valem destacar:**
+
+- **Caddy termina o TLS** e obtém/renova o certificado Let's Encrypt sozinho; o app fala HTTP puro na rede interna. `UseHttpsRedirection` fica só em Development e `UseForwardedHeaders` garante que o rate limiting por IP enxergue o IP real do cliente (`X-Forwarded-For`), não o do proxy.
+- **Build reprodutível** via `Dockerfile` multi-stage (Node compila o Angular → SDK .NET publica → runtime enxuto), o mesmo que roda local e em produção.
+- **Segredos por variável de ambiente** (fora do git), com *fail-fast*: sem `ConnectionStrings__AppDbConnectionString` ou `Jwt__Key` o app não sobe.
+- **Backup do banco** via `mysqldump --single-transaction` agendado em cron, com rotação das últimas 7 cópias — o volume do MySQL é o único estado fora do versionamento.
+
+---
+
+## 🚀 Rodando localmente
+
+### Com Docker (recomendado — sobe tudo)
+
+Pré-requisito: [Docker](https://docs.docker.com/get-docker/) com Compose.
 
 ```bash
 git clone https://github.com/rafacavalcante60/GestaoFacil
+cd GestaoFacil
+cp .env.example .env      # ajuste as senhas se quiser
+docker compose up --build
 ```
 
-> O projeto virá sem o `appsettings.Development.json` pois contém dados sensíveis — ele deve ser adicionado manualmente (veja o passo 3 depois).
+Acesse **http://localhost:8080**. O MySQL sobe junto, as migrations rodam sozinhas no startup e um usuário admin é criado a partir da variável `ADMIN_PASSWORD`.
+
+### Sem Docker (desenvolvimento)
+
+<details>
+<summary>Passo a passo manual (.NET SDK + Node + MySQL)</summary>
+
+Pré-requisitos: [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0), [Node.js 20 LTS](https://nodejs.org/), MySQL local.
+
+1. Crie um banco MySQL local e renomeie `appsettings.Example.json` para `appsettings.Development.json` em `GestaoFacil.Server`, ajustando a connection string.
+2. Backend, em `GestaoFacil.Server`:
+   ```bash
+   dotnet restore
+   dotnet run --launch-profile "https"
+   ```
+   (se der erro de certificado: `dotnet dev-certs https --trust`)
+3. Frontend, em `GestaoFacil.Client`:
+   ```bash
+   npm install
+   ng serve
+   ```
+
+O envio de e-mail (recuperação de senha) é opcional — sem a seção `Email` configurada, o app funciona normalmente, só não envia e-mails.
+
+</details>
 
 ---
 
-### 2. Pré-requisitos
+## ✨ Funcionalidades
 
-Baixe e instale pelo navegador:
+- Cadastro e login de usuários (JWT + hash BCrypt)
+- Registro de **receitas** e **despesas** por categoria e forma de pagamento
+- Dashboard com **resumo mensal**, saldo, totais de entradas e saídas
+- Relatórios e indicadores financeiros, com **exportação para Excel**
+- Filtros e paginação
+- Recuperação de senha por e-mail
 
-- [.NET 8.0 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
-- [Node.js 20 LTS](https://nodejs.org/)
-- [MySQL Workbench](https://dev.mysql.com/downloads/workbench/)
+## 🖼️ Telas
 
----
+![Telas 1](https://i.imgur.com/vImgN5r.png)
+![Telas 2](https://i.imgur.com/T6lRzbg.png)
+![Telas 3](https://i.imgur.com/lUpdgB4.png)
+![Telas 4](https://i.imgur.com/ulDJRcj.png)
+![Telas 5](https://i.imgur.com/R6Jog21.png)
+![Telas 6](https://i.imgur.com/EXyr1Af.png)
 
-### 3. Banco de dados (MySQL)
+## 📚 Documentação da API
 
-Abra o MySQL Workbench e crie uma nova conexão com as credenciais:  
-`server=localhost; User=root; Password=@Password123;`
+Swagger disponível em `/swagger` quando rodando.
 
-Renomeie o arquivo `appsettings.Example.json` para `appsettings.Development.json` dentro da pasta `GestaoFacil.Server`.
-
----
-
-### 4. Variável de ambiente
-
-```bash
-setx ADMIN_PASSWORD "<3K5g£1p8z5VDYa8"
-```
-
----
-
-### 5. Backend
-
-Dentro da pasta `GestaoFacil.Server`, rode no CMD:
-
-```bash
-dotnet restore
-dotnet run --launch-profile "https"
-```
-
-> Caso ocorra erro de certificado, execute antes:
-> ```bash
-> dotnet dev-certs https --trust
-> ```
+![Swagger 1](https://i.imgur.com/hmPj6CJ.png)
+![Swagger 2](https://i.imgur.com/kdc1yrZ.png)
 
 ---
 
-### 6. Frontend
+## 🗺️ Roadmap
 
-Dentro da pasta `GestaoFacil.Client`, rode no CMD:
-
-```bash
-npm install -g @angular/cli
-npm install
-ng serve
-```
-
----
-
-### (Opcional) Envio de e-mail
-
-O sistema suporta envio de e-mails via SMTP (ex: [Brevo](https://www.brevo.com/)). Para ativar, preencha a seção `Email` no `appsettings.Development.json`:
-```json
-"Email": {
-  "SmtpHost": "smtp-relay.brevo.com",
-  "SmtpPort": "587",
-  "SmtpUser": "SEU_USUARIO_SMTP",
-  "SmtpPass": "SUA_SENHA_SMTP",
-  "From": "SEU_EMAIL"
-}
-```
-
-> Sem essas configurações o sistema funciona normalmente, apenas sem envio de e-mails.
-
----
-
-## Telas
-![Print das telas 1](https://i.imgur.com/vImgN5r.png)
-![Print das telas 2](https://i.imgur.com/T6lRzbg.png)
-![Print das telas 3](https://i.imgur.com/lUpdgB4.png)
-![Print das telas 4](https://i.imgur.com/ulDJRcj.png)
-![Print das telas 5](https://i.imgur.com/R6Jog21.png)
-![Print das telas 6](https://i.imgur.com/EXyr1Af.png)
-
-## Lista de funcionalidades
-
-- Cadastro de usuários
-- Login utilizando JWT
-- Hash seguro de senhas
-- Cadastro de receitas
-- Cadastro de despesas
-- Resumo mensal de receitas e despesas
-- Cálculo de saldo
-- Totais de entradas e saídas
-- Indicadores financeiros básicos
-
----
-
-## Documentação da API
-
-![Print do Swagger 1](https://i.imgur.com/hmPj6CJ.png)
-![Print do Swagger 2](https://i.imgur.com/kdc1yrZ.png)
-
-## Próximas etapas
-
-- **Serilog** (Monitorar logging)
-- **Docker** (containerização do sistema)
-- Deploy contínuo na **AWS**, com CI/CD via **Azure DevOps** ou **GitHub Actions**
+- [x] Containerização com Docker (multi-stage)
+- [x] Deploy em produção com HTTPS e domínio (Azure + Caddy)
+- [x] Backup automatizado do banco
+- [ ] CI/CD com GitHub Actions (build → push de imagem → deploy)
+- [ ] Cache distribuído com Redis
+- [ ] Infraestrutura como código (Terraform)
