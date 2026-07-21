@@ -18,7 +18,7 @@
 
 ---
 
-## 🔗 Demonstração ao vivo
+## Demonstração ao vivo
 
 **https://gestaofacil.northcentralus.cloudapp.azure.com**
 
@@ -29,11 +29,15 @@ Entre com o usuário de demonstração (já vem com dados de exemplo de 3 meses)
 | **E-mail** | `demo@gestaofacil.com` |
 | **Senha** | `Demo@2026` |
 
-> Site com HTTPS válido (certificado Let's Encrypt). Hospedado no Microsoft Azure. Como é uma conta de demonstração, sinta-se à vontade para criar, editar e apagar registros.
+> Site com HTTPS válido (certificado Let's Encrypt), hospedado no Microsoft Azure. Como é uma conta de demonstração, sinta-se à vontade para criar, editar e apagar registros.
+
+<p align="center">
+  <img src="docs/demo.gif" alt="Demonstração do GestãoFácil" width="800">
+</p>
 
 ---
 
-## 🧰 Stack
+## Stack
 
 **Frontend** — Angular 19 (SPA, servida pela própria API)
 **Backend** — ASP.NET Core 8 Web API · Entity Framework Core (Pomelo) · MySQL 8
@@ -44,7 +48,7 @@ Entre com o usuário de demonstração (já vem com dados de exemplo de 3 meses)
 
 ---
 
-## 🏗️ Arquitetura do deploy
+## Arquitetura do deploy
 
 Aplicação única: o backend serve a API em `/api` **e** a SPA Angular na mesma origem (sem CORS em produção). Uma VM Linux na Azure roda três containers Docker atrás do Caddy, que termina o TLS.
 
@@ -68,7 +72,7 @@ flowchart LR
 
 ---
 
-## 🚀 Rodando localmente
+## Rodando localmente
 
 ### Com Docker (recomendado — sobe tudo)
 
@@ -109,7 +113,7 @@ O envio de e-mail (recuperação de senha) é opcional — sem a seção `Email`
 
 ---
 
-## ✨ Funcionalidades
+## Funcionalidades
 
 - Cadastro e login de usuários (JWT + hash BCrypt)
 - Registro de **receitas** e **despesas** por categoria e forma de pagamento
@@ -118,25 +122,13 @@ O envio de e-mail (recuperação de senha) é opcional — sem a seção `Email`
 - Filtros e paginação
 - Recuperação de senha por e-mail
 
-## 🖼️ Telas
+## Documentação da API
 
-![Telas 1](https://i.imgur.com/vImgN5r.png)
-![Telas 2](https://i.imgur.com/T6lRzbg.png)
-![Telas 3](https://i.imgur.com/lUpdgB4.png)
-![Telas 4](https://i.imgur.com/ulDJRcj.png)
-![Telas 5](https://i.imgur.com/R6Jog21.png)
-![Telas 6](https://i.imgur.com/EXyr1Af.png)
-
-## 📚 Documentação da API
-
-Swagger disponível em `/swagger` quando rodando.
-
-![Swagger 1](https://i.imgur.com/hmPj6CJ.png)
-![Swagger 2](https://i.imgur.com/kdc1yrZ.png)
+Swagger disponível em `/swagger` quando a aplicação está rodando.
 
 ---
 
-## 🗺️ Roadmap
+## Roadmap
 
 - [x] Containerização com Docker (multi-stage)
 - [x] Deploy em produção com HTTPS e domínio (Azure + Caddy)
