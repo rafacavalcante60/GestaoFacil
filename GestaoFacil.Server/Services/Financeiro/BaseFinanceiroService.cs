@@ -3,6 +3,7 @@ using GestaoFacil.Server.DTOs.Filtro;
 using GestaoFacil.Server.Pagination;
 using GestaoFacil.Server.Repositories.Financeiro;
 using GestaoFacil.Server.Responses;
+using GestaoFacil.Server.Services.Cache;
 
 namespace GestaoFacil.Server.Services.Financeiro
 {
@@ -16,6 +17,9 @@ namespace GestaoFacil.Server.Services.Financeiro
         protected readonly IFinanceiroRepository<TModel, TFiltro> Repository;
         protected readonly IMapper Mapper;
         protected readonly ILogger Logger;
+        // Gravar/editar/remover uma despesa ou receita muda os relatorios do usuario,
+        // entao o cache dele precisa ser invalidado nesses tres pontos.
+        protected readonly IRelatorioCache RelatorioCache;
 
         protected abstract string EntityName { get; }
         protected abstract int GetUpdateDtoId(TUpdateDto dto);
@@ -27,11 +31,12 @@ namespace GestaoFacil.Server.Services.Financeiro
         //impede referenciar a categoria de outro usuario; por padrao nao valida nada
         protected virtual Task<bool> CategoriaAcessivelAsync(TModel entity, int usuarioId) => Task.FromResult(true);
 
-        protected BaseFinanceiroService(IFinanceiroRepository<TModel, TFiltro> repository, IMapper mapper, ILogger logger)
+        protected BaseFinanceiroService(IFinanceiroRepository<TModel, TFiltro> repository, IMapper mapper, ILogger logger, IRelatorioCache relatorioCache)
         {
             Repository = repository;
             Mapper = mapper;
             Logger = logger;
+            RelatorioCache = relatorioCache;
         }
 
         public async Task<ResponseModel<TDto?>> GetByIdAsync(int id, int usuarioId)
@@ -125,6 +130,8 @@ namespace GestaoFacil.Server.Services.Financeiro
 
             var dtoResult = Mapper.Map<TDto>(criada);
 
+            await RelatorioCache.InvalidarAsync(usuarioId);
+
             Logger.LogInformation("{Entity} criada com ID {Id} para o usuário {UsuarioId}", EntityName, GetEntityId(criada), usuarioId);
             return ResponseHelper.Sucesso(dtoResult, $"{EntityName} criada com sucesso.");
         }
@@ -154,6 +161,8 @@ namespace GestaoFacil.Server.Services.Financeiro
 
             await Repository.UpdateAsync(entity);
 
+            await RelatorioCache.InvalidarAsync(usuarioId);
+
             Logger.LogInformation("{Entity} {Id} atualizada para o usuário {UsuarioId}", EntityName, id, usuarioId);
             return ResponseHelper.Sucesso(true, $"{EntityName} atualizada com sucesso.");
         }
@@ -168,6 +177,8 @@ namespace GestaoFacil.Server.Services.Financeiro
             }
 
             await Repository.DeleteAsync(entity);
+
+            await RelatorioCache.InvalidarAsync(usuarioId);
 
             Logger.LogInformation("{Entity} {Id} removida para o usuário {UsuarioId}", EntityName, id, usuarioId);
             return ResponseHelper.Sucesso(true, $"{EntityName} removida com sucesso.");

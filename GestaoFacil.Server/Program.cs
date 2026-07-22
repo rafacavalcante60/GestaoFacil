@@ -14,6 +14,7 @@ builder.Services.AddDatabase(builder.Configuration);
 
 // injecoes
 builder.Services.AddCustomServices();
+builder.Services.AddRelatorioCache(builder.Configuration);
 builder.Services.AddCustomRepositories();
 builder.Services.AddCustomAutoMapper();
 builder.Services.AddJwtAuthentication(builder.Configuration);

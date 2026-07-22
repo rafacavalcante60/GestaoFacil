@@ -4,6 +4,7 @@ using GestaoFacil.Server.DTOs.Filtro;
 using GestaoFacil.Server.DTOs.Financeiro;
 using GestaoFacil.Server.Models.Principais;
 using GestaoFacil.Server.Repositories.Financeiro;
+using GestaoFacil.Server.Services.Cache;
 using GestaoFacil.Server.Services.Financeiro;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -15,6 +16,7 @@ namespace GestaoFacil.Server.xUnitTests.UnitTestsServices.Financeiro
         private readonly Mock<IReceitaRepository> _repositoryMock;
         private readonly Mock<IMapper> _mapperMock;
         private readonly Mock<ILogger<ReceitaService>> _loggerMock;
+        private readonly Mock<IRelatorioCache> _cacheMock;
         private readonly ReceitaService _service;
 
         public ReceitaServiceTests()
@@ -22,8 +24,9 @@ namespace GestaoFacil.Server.xUnitTests.UnitTestsServices.Financeiro
             _repositoryMock = new Mock<IReceitaRepository>();
             _mapperMock = new Mock<IMapper>();
             _loggerMock = new Mock<ILogger<ReceitaService>>();
+            _cacheMock = new Mock<IRelatorioCache>();
 
-            _service = new ReceitaService(_repositoryMock.Object, _mapperMock.Object, _loggerMock.Object);
+            _service = new ReceitaService(_repositoryMock.Object, _mapperMock.Object, _loggerMock.Object, _cacheMock.Object);
         }
 
         [Fact]
@@ -144,6 +147,23 @@ namespace GestaoFacil.Server.xUnitTests.UnitTestsServices.Financeiro
             result.Status.Should().BeTrue();
             result.Dados.Should().NotBeNull();
             result.Dados.Length.Should().BeGreaterThan(0);
+        }
+
+        [Fact]
+        public async Task CreateAsync_DeveInvalidarCacheDeRelatorios()
+        {
+            var dtoCreate = new ReceitaCreateDto { Nome = "Nova Receita" };
+            var receita = new ReceitaModel { Id = 1, Nome = "Nova Receita", UsuarioId = 10 };
+
+            _mapperMock.Setup(m => m.Map<ReceitaModel>(dtoCreate)).Returns(receita);
+            _repositoryMock.Setup(r => r.AddAsync(It.IsAny<ReceitaModel>())).ReturnsAsync(receita);
+            _repositoryMock.Setup(r => r.CategoriaAcessivelAsync(It.IsAny<int>(), 10)).ReturnsAsync(true);
+            _mapperMock.Setup(m => m.Map<ReceitaDto>(receita)).Returns(new ReceitaDto());
+
+            await _service.CreateAsync(dtoCreate, 10);
+
+            // gravar uma receita muda os relatorios: o cache do usuario tem que ser invalidado
+            _cacheMock.Verify(c => c.InvalidarAsync(10, It.IsAny<CancellationToken>()), Times.Once);
         }
     }
 }

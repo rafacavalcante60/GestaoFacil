@@ -4,6 +4,7 @@ using GestaoFacil.Server.DTOs.Despesa;
 using GestaoFacil.Server.DTOs.Filtro;
 using GestaoFacil.Server.Models.Principais;
 using GestaoFacil.Server.Repositories.Despesa;
+using GestaoFacil.Server.Services.Cache;
 using GestaoFacil.Server.Services.Despesa;
 using GestaoFacil.Server.Services.Financeiro;
 using Microsoft.Extensions.Logging;
@@ -16,6 +17,7 @@ namespace GestaoFacil.Server.xUnitTests.UnitTestsServices.Financeiro
         private readonly Mock<IDespesaRepository> _repositoryMock;
         private readonly Mock<IMapper> _mapperMock;
         private readonly Mock<ILogger<DespesaService>> _loggerMock;
+        private readonly Mock<IRelatorioCache> _cacheMock;
         private readonly DespesaService _service;
 
         public DespesaServiceTests()
@@ -23,8 +25,9 @@ namespace GestaoFacil.Server.xUnitTests.UnitTestsServices.Financeiro
             _repositoryMock = new Mock<IDespesaRepository>();
             _mapperMock = new Mock<IMapper>();
             _loggerMock = new Mock<ILogger<DespesaService>>();
+            _cacheMock = new Mock<IRelatorioCache>();
 
-            _service = new DespesaService(_repositoryMock.Object, _mapperMock.Object, _loggerMock.Object);
+            _service = new DespesaService(_repositoryMock.Object, _mapperMock.Object, _loggerMock.Object, _cacheMock.Object);
         }
 
         [Fact]
@@ -166,6 +169,34 @@ namespace GestaoFacil.Server.xUnitTests.UnitTestsServices.Financeiro
             result.Status.Should().BeTrue();
             result.Dados.Should().NotBeNull();
             result.Dados.Length.Should().BeGreaterThan(0); // Excel gerado
+        }
+
+        [Fact]
+        public async Task CreateAsync_DeveInvalidarCacheDeRelatorios()
+        {
+            var dtoCreate = new DespesaCreateDto { Nome = "Nova Despesa" };
+            var despesa = new DespesaModel { Id = 1, Nome = "Nova Despesa", UsuarioId = 10 };
+
+            _mapperMock.Setup(m => m.Map<DespesaModel>(dtoCreate)).Returns(despesa);
+            _repositoryMock.Setup(r => r.AddAsync(It.IsAny<DespesaModel>())).ReturnsAsync(despesa);
+            _repositoryMock.Setup(r => r.CategoriaAcessivelAsync(It.IsAny<int>(), 10)).ReturnsAsync(true);
+            _mapperMock.Setup(m => m.Map<DespesaDto>(despesa)).Returns(new DespesaDto());
+
+            await _service.CreateAsync(dtoCreate, 10);
+
+            // gravar uma despesa muda os relatorios: o cache do usuario tem que ser invalidado
+            _cacheMock.Verify(c => c.InvalidarAsync(10, It.IsAny<CancellationToken>()), Times.Once);
+        }
+
+        [Fact]
+        public async Task DeleteAsync_DeveInvalidarCacheDeRelatorios()
+        {
+            _repositoryMock.Setup(r => r.GetByIdAsync(1, 10))
+                .ReturnsAsync(new DespesaModel { Id = 1, UsuarioId = 10 });
+
+            await _service.DeleteAsync(1, 10);
+
+            _cacheMock.Verify(c => c.InvalidarAsync(10, It.IsAny<CancellationToken>()), Times.Once);
         }
     }
 }

@@ -20,6 +20,12 @@ services:
       retries: 30
       start_period: 30s
 
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--save", "", "--appendonly", "no"]
+    ports:
+      - "6379:6379" # exposto no host para inspecionar com redis-cli durante o desenvolvimento
+
   app:
     build:
       context: .
@@ -27,6 +33,8 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      redis:
+        condition: service_started
     # rede de seguranca: se o banco ainda nao estiver pronto o app morre no
     # startup (AutoDetect + Migrate), e o restart resolve sozinho
     restart: unless-stopped
@@ -34,6 +42,7 @@ services:
       ASPNETCORE_ENVIRONMENT: Production
       ASPNETCORE_URLS: http://+:8080
       ConnectionStrings__AppDbConnectionString: "Server=db;Port=3306;Database=${MYSQL_DATABASE:-gestaofacilbanco};User=root;Password=${MYSQL_ROOT_PASSWORD:-rootlocal};"
+      ConnectionStrings__Redis: "redis:6379"
       Jwt__Key: ${JWT_KEY:?defina JWT_KEY no .env}
       Frontend__BaseUrl: ${FRONTEND_BASE_URL:-http://localhost:8080}
       ADMIN_PASSWORD: ${ADMIN_PASSWORD:?defina ADMIN_PASSWORD no .env}

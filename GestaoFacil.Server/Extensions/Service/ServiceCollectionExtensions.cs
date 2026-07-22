@@ -1,4 +1,5 @@
 ﻿using GestaoFacil.Server.Mappings;
+using GestaoFacil.Server.Services.Cache;
 using GestaoFacil.Server.Repositories.Despesa;
 using GestaoFacil.Server.Repositories.Auth;
 using GestaoFacil.Server.Repositories.Financeiro;
@@ -52,6 +53,33 @@ namespace GestaoFacil.Server.Extensions.Service
                 Func<ISmtpClientWrapper> factory = () => sp.GetRequiredService<ISmtpClientWrapper>();
                 return new EmailService(config, factory);
             });
+
+            return services;
+        }
+
+        // Cache distribuido dos relatorios. Com Redis configurado (producao/compose) usa Redis;
+        // sem ele (dotnet run local, testes) cai num cache em memoria do proprio processo — mesma
+        // interface IDistributedCache, so nao e compartilhado. Assim o app nunca depende do Redis
+        // estar de pe para subir.
+        public static IServiceCollection AddRelatorioCache(this IServiceCollection services, IConfiguration configuration)
+        {
+            var redis = configuration.GetConnectionString("Redis");
+            if (!string.IsNullOrWhiteSpace(redis))
+            {
+                services.AddStackExchangeRedisCache(options =>
+                {
+                    options.Configuration = redis;
+                    // prefixo nas chaves: deixa claro no redis-cli quem gravou e evita colisao
+                    // se outra coisa um dia dividir a mesma instancia.
+                    options.InstanceName = "gestaofacil:";
+                });
+            }
+            else
+            {
+                services.AddDistributedMemoryCache();
+            }
+
+            services.AddSingleton<IRelatorioCache, RelatorioCache>();
 
             return services;
         }

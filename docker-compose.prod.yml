@@ -26,6 +26,14 @@ services:
       retries: 30
       start_period: 30s
 
+  # Cache dos relatorios. Cache puro: sem persistencia (--save "" / --appendonly no) e
+  # com teto de memoria + politica LRU, para nunca competir com o resto da VM de 1 GB.
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: ["redis-server", "--save", "", "--appendonly", "no", "--maxmemory", "64mb", "--maxmemory-policy", "allkeys-lru"]
+    # nao publica porta no host: so o app na rede interna do compose alcanca o Redis.
+
   app:
     build:
       context: .
@@ -34,10 +42,14 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      redis:
+        condition: service_started
     environment:
       ASPNETCORE_ENVIRONMENT: Production
       ASPNETCORE_URLS: http://+:8080
       ConnectionStrings__AppDbConnectionString: "Server=db;Port=3306;Database=${DB_NAME:-gestaofacilbanco};User=${DB_USER:?defina DB_USER};Password=${DB_PASSWORD:?defina DB_PASSWORD};"
+      # sem esta connection string o app cai no cache em memoria; com ela usa o Redis acima.
+      ConnectionStrings__Redis: "redis:6379"
       Jwt__Key: ${JWT_KEY:?defina JWT_KEY}
       Frontend__BaseUrl: https://${DOMAIN:?defina DOMAIN}
       ADMIN_PASSWORD: ${ADMIN_PASSWORD:?defina ADMIN_PASSWORD}

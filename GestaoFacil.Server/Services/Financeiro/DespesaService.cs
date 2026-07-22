@@ -3,6 +3,7 @@ using GestaoFacil.Server.DTOs.Despesa;
 using GestaoFacil.Server.DTOs.Filtro;
 using GestaoFacil.Server.Models.Principais;
 using GestaoFacil.Server.Repositories.Despesa;
+using GestaoFacil.Server.Services.Cache;
 using GestaoFacil.Server.Services.Despesa;
 
 namespace GestaoFacil.Server.Services.Financeiro
@@ -11,8 +12,8 @@ namespace GestaoFacil.Server.Services.Financeiro
         : BaseFinanceiroService<DespesaModel, DespesaDto, DespesaCreateDto, DespesaUpdateDto, DespesaFiltroDto>,
           IDespesaService
     {
-        public DespesaService(IDespesaRepository repository, IMapper mapper, ILogger<DespesaService> logger)
-            : base(repository, mapper, logger) { }
+        public DespesaService(IDespesaRepository repository, IMapper mapper, ILogger<DespesaService> logger, IRelatorioCache relatorioCache)
+            : base(repository, mapper, logger, relatorioCache) { }
 
         protected override string EntityName => "Despesa";
 

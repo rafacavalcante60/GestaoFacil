@@ -5,8 +5,13 @@ using GestaoFacil.Server.Models.Domain;
 using GestaoFacil.Server.Models.Principais;
 using GestaoFacil.Server.Repositories.Despesa;
 using GestaoFacil.Server.Repositories.Financeiro;
+using GestaoFacil.Server.Services.Cache;
 using GestaoFacil.Server.Services.Relatorio;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -20,6 +25,7 @@ namespace GestaoFacil.Tests.Services
         private readonly Mock<IDespesaRepository> _despesaRepoMock;
         private readonly Mock<IReceitaRepository> _receitaRepoMock;
         private readonly Mock<ILogger<RelatorioService>> _loggerMock;
+        private readonly IRelatorioCache _cache;
         private readonly RelatorioService _service;
 
         public RelatorioServiceTests()
@@ -27,12 +33,24 @@ namespace GestaoFacil.Tests.Services
             _despesaRepoMock = new Mock<IDespesaRepository>();
             _receitaRepoMock = new Mock<IReceitaRepository>();
             _loggerMock = new Mock<ILogger<RelatorioService>>();
+            // Cache real backed por memoria: exercita de verdade serializacao, chave e
+            // invalidacao, sem precisar de um Redis rodando nos testes.
+            _cache = CriarCacheReal();
 
             _service = new RelatorioService(
                 _despesaRepoMock.Object,
                 _receitaRepoMock.Object,
+                _cache,
                 _loggerMock.Object
             );
+        }
+
+        private static IRelatorioCache CriarCacheReal()
+        {
+            var distributed = new MemoryDistributedCache(
+                Options.Create(new MemoryDistributedCacheOptions()));
+            var config = new ConfigurationBuilder().Build();
+            return new RelatorioCache(distributed, config, Mock.Of<ILogger<RelatorioCache>>());
         }
 
         [Fact]
@@ -204,6 +222,77 @@ namespace GestaoFacil.Tests.Services
             result.Dados[1].Saldo.Should().Be(-10);
 
             result.Mensagem.Should().Be("Resumo mensal calculado com sucesso.");
+        }
+
+        // --- Cache (Fase 5b / Redis) ---
+
+        [Fact]
+        public async Task ObterResumoFinanceiroAsync_DeveConsultarBancoUmaVez_QuandoChamadoDuasVezes()
+        {
+            var inicio = new DateTime(2025, 1, 1);
+            var fim = new DateTime(2025, 1, 31);
+
+            _despesaRepoMock.Setup(r => r.FiltrarAsync(1, It.IsAny<DespesaFiltroDto>()))
+                .ReturnsAsync(new List<DespesaModel> { new() { Valor = 100 } });
+            _receitaRepoMock.Setup(r => r.FiltrarAsync(1, It.IsAny<ReceitaFiltroDto>()))
+                .ReturnsAsync(new List<ReceitaModel> { new() { Valor = 300 } });
+
+            var primeira = await _service.ObterResumoFinanceiroAsync(1, inicio, fim);
+            var segunda = await _service.ObterResumoFinanceiroAsync(1, inicio, fim);
+
+            // segunda chamada veio do cache: mesmo resultado, mas o banco so foi consultado uma vez
+            segunda.Dados!.Saldo.Should().Be(primeira.Dados!.Saldo);
+            _despesaRepoMock.Verify(r => r.FiltrarAsync(1, It.IsAny<DespesaFiltroDto>()), Times.Once);
+            _receitaRepoMock.Verify(r => r.FiltrarAsync(1, It.IsAny<ReceitaFiltroDto>()), Times.Once);
+        }
+
+        [Fact]
+        public async Task ObterResumoFinanceiroAsync_DeveIsolarCachePorUsuario()
+        {
+            _despesaRepoMock.Setup(r => r.FiltrarAsync(It.IsAny<int>(), It.IsAny<DespesaFiltroDto>()))
+                .ReturnsAsync(new List<DespesaModel> { new() { Valor = 100 } });
+            _receitaRepoMock.Setup(r => r.FiltrarAsync(It.IsAny<int>(), It.IsAny<ReceitaFiltroDto>()))
+                .ReturnsAsync(new List<ReceitaModel> { new() { Valor = 300 } });
+
+            await _service.ObterResumoFinanceiroAsync(1, null, null);
+            await _service.ObterResumoFinanceiroAsync(2, null, null);
+
+            // usuarios diferentes nao compartilham cache: cada um consulta o banco
+            _despesaRepoMock.Verify(r => r.FiltrarAsync(1, It.IsAny<DespesaFiltroDto>()), Times.Once);
+            _despesaRepoMock.Verify(r => r.FiltrarAsync(2, It.IsAny<DespesaFiltroDto>()), Times.Once);
+        }
+
+        [Fact]
+        public async Task ObterResumoFinanceiroAsync_DeveRecalcular_AposInvalidarCache()
+        {
+            _despesaRepoMock.Setup(r => r.FiltrarAsync(1, It.IsAny<DespesaFiltroDto>()))
+                .ReturnsAsync(new List<DespesaModel> { new() { Valor = 100 } });
+            _receitaRepoMock.Setup(r => r.FiltrarAsync(1, It.IsAny<ReceitaFiltroDto>()))
+                .ReturnsAsync(new List<ReceitaModel> { new() { Valor = 300 } });
+
+            await _service.ObterResumoFinanceiroAsync(1, null, null);
+
+            // simula o que Create/Update/Delete de despesa/receita fazem
+            await _cache.InvalidarAsync(1);
+
+            await _service.ObterResumoFinanceiroAsync(1, null, null);
+
+            // depois de invalidar, a chamada seguinte tem que bater no banco de novo
+            _despesaRepoMock.Verify(r => r.FiltrarAsync(1, It.IsAny<DespesaFiltroDto>()), Times.Exactly(2));
+        }
+
+        [Fact]
+        public async Task ObterResumoFinanceiroAsync_NaoDeveCachearFalha()
+        {
+            var inicio = new DateTime(2025, 2, 1);
+            var fim = new DateTime(2025, 1, 1); // inicio > fim => falha, nao pode ser cacheada
+
+            var falha = await _service.ObterResumoFinanceiroAsync(1, inicio, fim);
+            falha.Status.Should().BeFalse();
+
+            var valor = await _cache.ObterAsync<GestaoFacil.Server.DTOs.Relatorio.ResumoFinanceiroDto>(
+                1, $"resumo:{inicio:o}:{fim:o}:::");
+            valor.Should().BeNull();
         }
     }
 }

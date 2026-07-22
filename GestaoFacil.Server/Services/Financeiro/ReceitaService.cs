@@ -3,6 +3,7 @@ using GestaoFacil.Server.DTOs.Filtro;
 using GestaoFacil.Server.DTOs.Financeiro;
 using GestaoFacil.Server.Models.Principais;
 using GestaoFacil.Server.Repositories.Financeiro;
+using GestaoFacil.Server.Services.Cache;
 
 namespace GestaoFacil.Server.Services.Financeiro
 {
@@ -10,8 +11,8 @@ namespace GestaoFacil.Server.Services.Financeiro
         : BaseFinanceiroService<ReceitaModel, ReceitaDto, ReceitaCreateDto, ReceitaUpdateDto, ReceitaFiltroDto>,
           IReceitaService
     {
-        public ReceitaService(IReceitaRepository repository, IMapper mapper, ILogger<ReceitaService> logger)
-            : base(repository, mapper, logger) { }
+        public ReceitaService(IReceitaRepository repository, IMapper mapper, ILogger<ReceitaService> logger, IRelatorioCache relatorioCache)
+            : base(repository, mapper, logger, relatorioCache) { }
 
         protected override string EntityName => "Receita";
 

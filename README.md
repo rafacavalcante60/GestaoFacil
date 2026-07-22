@@ -12,8 +12,15 @@
   <img src="https://img.shields.io/badge/.NET-8.0-512BD4?logo=dotnet&logoColor=white">
   <img src="https://img.shields.io/badge/Angular-19-DD0031?logo=angular&logoColor=white">
   <img src="https://img.shields.io/badge/MySQL-8.0-4479A1?logo=mysql&logoColor=white">
+  <img src="https://img.shields.io/badge/Redis-7-DC382D?logo=redis&logoColor=white">
   <img src="https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=white">
   <img src="https://img.shields.io/badge/Caddy-HTTPS-1F88C0?logo=caddy&logoColor=white">
+</p>
+
+<p align="center">
+  <a href="https://github.com/rafacavalcante60/GestaoFacil/actions/workflows/dotnet.yml">
+    <img src="https://github.com/rafacavalcante60/GestaoFacil/actions/workflows/dotnet.yml/badge.svg" alt="Testes">
+  </a>
 </p>
 
 ---
@@ -41,6 +48,7 @@ Entre com o usuário de demonstração (já vem com dados de exemplo de 3 meses)
 
 **Frontend** — Angular 19 (SPA, servida pela própria API)
 **Backend** — ASP.NET Core 8 Web API · Entity Framework Core (Pomelo) · MySQL 8
+**Cache** — Redis 7 (`IDistributedCache`) para os relatórios
 **Auth** — JWT + BCrypt · rate limiting por IP
 **Outros** — AutoMapper · Swagger · e-mail SMTP (recuperação de senha)
 **Testes** — xUnit + Moq + FluentAssertions
@@ -58,6 +66,7 @@ flowchart LR
     subgraph VM["Azure VM Linux · Docker Compose"]
         Caddy[Caddy<br/>TLS + reverse proxy] -->|HTTP :8080| App[Container .NET 8<br/>API /api + Angular SPA]
         App -->|:3306| DB[(Container MySQL 8<br/>volume persistente)]
+        App -->|:6379| Redis[(Container Redis 7<br/>cache de relatórios)]
     end
     Caddy -.->|ACME| LE[Let's Encrypt]
     Backup[cron diário<br/>mysqldump] -.-> DB
@@ -69,6 +78,7 @@ flowchart LR
 - **Build reprodutível** via `Dockerfile` multi-stage (Node compila o Angular → SDK .NET publica → runtime enxuto), o mesmo que roda local e em produção.
 - **Segredos por variável de ambiente** (fora do git), com *fail-fast*: sem `ConnectionStrings__AppDbConnectionString` ou `Jwt__Key` o app não sobe.
 - **Backup do banco** via `mysqldump --single-transaction` agendado em cron, com rotação das últimas 7 cópias — o volume do MySQL é o único estado fora do versionamento.
+- **Cache de relatórios com Redis:** os 4 relatórios varrem todas as despesas e receitas do usuário e agregam em memória. O resultado é guardado no Redis (`IDistributedCache`) com TTL curto e **invalidado no momento em que o usuário grava/edita/remove** uma despesa ou receita — a invalidação troca uma "versão" por usuário (O(1), sem varrer chaves). Sem Redis configurado, o app cai num cache em memória do processo, então nunca depende dele para subir.
 
 ---
 
