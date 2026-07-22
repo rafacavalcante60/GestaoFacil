@@ -52,7 +52,7 @@ Entre com o usuário de demonstração (já vem com dados de exemplo de 3 meses)
 **Auth** — JWT + BCrypt · rate limiting por IP
 **Outros** — AutoMapper · Swagger · e-mail SMTP (recuperação de senha)
 **Testes** — xUnit + Moq + FluentAssertions
-**Infra** — Docker (multi-stage) · Caddy (HTTPS automático) · Azure VM Linux
+**Infra** — Docker (multi-stage) · Caddy (HTTPS automático) · Azure VM Linux · Terraform (IaC)
 
 ---
 
@@ -87,6 +87,27 @@ flowchart LR
   | Tempo de resposta | ~255 ms | ~40 ms |
 
   ≈ **6× mais rápido**. O ganho cresce com o volume de dados: no volume pequeno da conta de demonstração a diferença é irrelevante — cache de relatório rende quando há muito o que agregar.
+
+---
+
+## Infraestrutura como código (Terraform)
+
+Toda a infra da Azure — Resource Group, rede virtual, firewall (NSG), IP público com FQDN e a VM Linux — está descrita como código em [`infra/terraform/`](infra/terraform/). O que foi criado à mão no portal durante o desenvolvimento passou a ser **reproduzível, versionado e revisável**: `terraform apply` recria a stack inteira do zero.
+
+```hcl
+resource "azurerm_network_security_group" "nsg" {
+  # SSH só do meu IP; 80/443 abertos (é um site público).
+  # As portas internas (8080, 3306, 6379) nunca são expostas — só o Caddy fala com o mundo.
+  security_rule {
+    name                  = "SSH"
+    destination_port_range = "22"
+    source_address_prefix = var.meu_ip_ssh
+    # ...
+  }
+}
+```
+
+Validado com `terraform validate` e `terraform plan` contra a API real da Azure (`Plan: 8 to add`). O provisionamento da infra (o "onde roda") fica separado da configuração da VM (o "o que roda dentro" — Docker, `.env`, containers), mantendo a fronteira limpa. Detalhes de uso e o caminho de `import` no [README da pasta](infra/terraform/README.md).
 
 ---
 
@@ -151,6 +172,6 @@ Swagger disponível em `/swagger` quando a aplicação está rodando.
 - [x] Containerização com Docker (multi-stage)
 - [x] Deploy em produção com HTTPS e domínio (Azure + Caddy)
 - [x] Backup automatizado do banco
-- [ ] CI/CD com GitHub Actions (build → push de imagem → deploy)
-- [ ] Cache distribuído com Redis
-- [ ] Infraestrutura como código (Terraform)
+- [x] CI/CD com GitHub Actions (push na `main` → deploy via self-hosted runner)
+- [x] Cache distribuído com Redis
+- [x] Infraestrutura como código (Terraform)
