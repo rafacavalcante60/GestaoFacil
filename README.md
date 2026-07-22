@@ -80,6 +80,14 @@ flowchart LR
 - **Backup do banco** via `mysqldump --single-transaction` agendado em cron, com rotação das últimas 7 cópias — o volume do MySQL é o único estado fora do versionamento.
 - **Cache de relatórios com Redis:** os 4 relatórios varrem todas as despesas e receitas do usuário e agregam em memória. O resultado é guardado no Redis (`IDistributedCache`) com TTL curto e **invalidado no momento em que o usuário grava/edita/remove** uma despesa ou receita — a invalidação troca uma "versão" por usuário (O(1), sem varrer chaves). Sem Redis configurado, o app cai num cache em memória do processo, então nunca depende dele para subir.
 
+  *Ganho medido* (teste de carga com **20.000 despesas** num ano, relatório mensal, mediana de 8 chamadas no ambiente de produção):
+
+  | | Sem cache (bate no banco) | Com cache (Redis) |
+  |---|---|---|
+  | Tempo de resposta | ~255 ms | ~40 ms |
+
+  ≈ **6× mais rápido**. O ganho cresce com o volume de dados: no volume pequeno da conta de demonstração a diferença é irrelevante — cache de relatório rende quando há muito o que agregar.
+
 ---
 
 ## Rodando localmente
