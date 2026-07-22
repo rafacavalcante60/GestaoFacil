@@ -1,0 +1,21 @@
+# Copie para `terraform.tfvars` e ajuste. terraform.tfvars é lido automaticamente
+# e está no .gitignore — nunca commite o seu (o IP de SSH é um dado seu).
+#
+#   cp terraform.tfvars.example terraform.tfvars
+#
+# Todos os campos têm default em variables.tf refletindo a infra atual; só
+# preencha o que quiser mudar.
+
+# IP público de onde você faz SSH (dinâmico — atualize se o SSH parar).
+meu_ip_ssh = "179.134.117.56"
+
+# Sua chave PÚBLICA SSH (o conteúdo do .pub). Pública não é segredo.
+# ssh_public_key = "ssh-ed25519 AAAA... voce@maquina"
+
+# Rótulo do FQDN gratuito (precisa ser único na região).
+# dns_label = "gestaofacil"
+
+# Se quiser recriar num nome/região diferentes pra testar sem colidir:
+# prefixo   = "gestaofacil-teste"
+# location  = "eastus2"
+# dns_label = "gestaofacil-teste"

@@ -1,0 +1,14 @@
+# Estado do Terraform: pode conter dados sensíveis e é específico da sua conta.
+# Nunca versionar.
+*.tfstate
+*.tfstate.*
+.terraform/
+.terraform.lock.hcl.bak
+
+# Suas variáveis reais (IP de SSH etc.).
+terraform.tfvars
+*.auto.tfvars
+
+# Planos salvos.
+*.tfplan
+crash.log
